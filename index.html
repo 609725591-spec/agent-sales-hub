@@ -6,889 +6,373 @@
 <title>智能体销售赋能工作台</title>
 <style>
 :root {
-  --primary: #2563eb;
-  --primary-light: #3b82f6;
-  --primary-dark: #1d4ed8;
-  --primary-bg: #eff6ff;
-  --primary-50: #dbeafe;
-  --success: #059669;
-  --success-bg: #ecfdf5;
-  --warning: #d97706;
-  --warning-bg: #fffbeb;
-  --danger: #dc2626;
-  --danger-bg: #fef2f2;
-  --bg: #f8fafc;
-  --card: #ffffff;
-  --border: #e2e8f0;
-  --text: #1e293b;
-  --text-secondary: #64748b;
-  --text-light: #94a3b8;
-  --radius: 12px;
-  --radius-sm: 8px;
-  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
-  --shadow-md: 0 4px 6px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.04);
-  --shadow-lg: 0 10px 15px rgba(0,0,0,.08), 0 4px 6px rgba(0,0,0,.03);
-  --transition: all .2s ease;
+  --primary:#2563eb;--primary-light:#3b82f6;--primary-dark:#1d4ed8;--primary-bg:#eff6ff;--primary-50:#dbeafe;
+  --success:#059669;--success-bg:#ecfdf5;--warning:#d97706;--warning-bg:#fffbeb;--danger:#dc2626;--danger-bg:#fef2f2;
+  --bg:#f8fafc;--card:#fff;--border:#e2e8f0;--text:#1e293b;--text-secondary:#64748b;--text-light:#94a3b8;
+  --radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.08);--shadow-md:0 4px 6px rgba(0,0,0,.07);
+  --transition:all .2s ease;
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.header{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;padding:20px 32px;position:sticky;top:0;z-index:100}
+.header-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.header h1{font-size:20px;font-weight:700}.header-sub{font-size:13px;opacity:.8;margin-top:2px}
+.role-switch{display:flex;gap:4px;background:rgba(255,255,255,.15);border-radius:8px;padding:3px}
+.role-btn{padding:6px 16px;border:none;background:0 0;color:rgba(255,255,255,.7);border-radius:6px;cursor:pointer;font-size:13px;transition:var(--transition)}
+.role-btn.active{background:rgba(255,255,255,.25);color:#fff;font-weight:600}.role-btn:hover{color:#fff}
+.tabs{background:var(--card);border-bottom:1px solid var(--border);padding:0 32px;position:sticky;top:68px;z-index:99}
+.tabs-inner{max-width:1280px;margin:0 auto;display:flex;gap:0;overflow-x:auto}
+.tab{padding:14px 20px;border:none;background:0 0;color:var(--text-secondary);cursor:pointer;font-size:14px;font-weight:500;border-bottom:2px solid transparent;transition:var(--transition);white-space:nowrap}
+.tab:hover{color:var(--primary)}.tab.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+.tab .badge{display:inline-block;background:var(--primary);color:#fff;font-size:11px;padding:1px 7px;border-radius:10px;margin-left:4px;font-weight:600}
+.tab .badge.p0{background:var(--danger)}.tab .badge.p1{background:var(--warning)}
+.main{max-width:1280px;margin:0 auto;padding:24px 32px}
+.panel{display:none;animation:fadeIn .3s ease}.panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:24px;margin-bottom:16px;box-shadow:var(--shadow)}
+.card-title{font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card-title .icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.card-title .icon.blue{background:var(--primary-bg);color:var(--primary)}.card-title .icon.green{background:var(--success-bg);color:var(--success)}.card-title .icon.orange{background:var(--warning-bg);color:var(--warning)}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-label{font-size:13px;font-weight:600;color:var(--text-secondary)}
+.form-input,.form-select{padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;color:var(--text);background:var(--card);transition:var(--transition);outline:none;width:100%}
+.form-input:focus,.form-select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.form-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.radio-group{display:flex;gap:8px;flex-wrap:wrap}
+.radio-opt{padding:8px 16px;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:13px;transition:var(--transition);user-select:none}
+.radio-opt:hover{border-color:var(--primary-light)}.radio-opt.active{background:var(--primary-bg);border-color:var(--primary);color:var(--primary);font-weight:600}
+.check-group{display:flex;gap:8px;flex-wrap:wrap}
+.check-opt{padding:8px 16px;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:13px;transition:var(--transition);user-select:none}
+.check-opt:hover{border-color:var(--primary-light)}.check-opt.active{background:var(--primary-bg);border-color:var(--primary);color:var(--primary);font-weight:600}
+.btn{padding:10px 24px;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;transition:var(--transition);display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark);box-shadow:var(--shadow-md)}
+.btn-secondary{background:var(--primary-bg);color:var(--primary)}.btn-secondary:hover{background:var(--primary-50)}
+.btn-outline{background:0 0;color:var(--text-secondary);border:1px solid var(--border)}.btn-outline:hover{border-color:var(--primary);color:var(--primary)}
+.btn-sm{padding:6px 14px;font-size:13px}.btn-xs{padding:4px 10px;font-size:12px}
+.btn-group{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.result-card{border:2px solid var(--primary);border-radius:var(--radius);padding:24px;background:linear-gradient(135deg,var(--primary-bg),#fff);margin-top:20px;animation:slideUp .4s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.result-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.result-badge{padding:4px 14px;border-radius:20px;font-size:13px;font-weight:700}
+.badge-starter{background:#dbeafe;color:#1d4ed8}.badge-growth{background:#d1fae5;color:#065f46}.badge-flagship{background:#fef3c7;color:#92400e}
+.priority-tag{padding:3px 10px;border-radius:4px;font-size:12px;font-weight:600}
+.priority-high{background:var(--danger-bg);color:var(--danger)}.priority-medium{background:var(--warning-bg);color:var(--warning)}.priority-low{background:var(--bg);color:var(--text-secondary)}
+.result-amount{font-size:28px;font-weight:800;color:var(--primary);margin:8px 0}.result-amount span{font-size:14px;font-weight:500;color:var(--text-secondary)}
+.result-reason{font-size:14px;color:var(--text-secondary);padding:12px 16px;background:var(--card);border-radius:var(--radius-sm);border-left:3px solid var(--primary);margin-top:12px;line-height:1.7}
+.pkg-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.pkg-card{border:2px solid var(--border);border-radius:var(--radius);padding:20px;cursor:pointer;transition:var(--transition);position:relative;overflow:hidden}
+.pkg-card:hover{border-color:var(--primary-light);box-shadow:var(--shadow-md)}.pkg-card.selected{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.pkg-card.recommended::before{content:"推荐";position:absolute;top:12px;right:-24px;background:var(--primary);color:#fff;font-size:11px;font-weight:700;padding:2px 28px;transform:rotate(45deg)}
+.pkg-name{font-size:18px;font-weight:800;margin-bottom:4px}.pkg-combo{font-size:13px;color:var(--text-secondary);margin-bottom:12px}
+.pkg-logic{font-size:13px;color:var(--text);line-height:1.7;padding:10px 12px;background:var(--bg);border-radius:var(--radius-sm)}
+.pkg-logic .arrow{color:var(--primary);font-weight:700;margin:0 4px}
+.pricing-table{width:100%;border-collapse:collapse;margin-top:16px}
+.pricing-table th{background:var(--bg);padding:10px 14px;text-align:left;font-size:13px;font-weight:600;color:var(--text-secondary);border-bottom:2px solid var(--border)}
+.pricing-table td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:14px}
+.pricing-table .amount{font-weight:700;color:var(--primary)}
+.pricing-total{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:var(--primary-bg);border-radius:var(--radius-sm);margin-top:12px}
+.pricing-total-label{font-size:14px;color:var(--text-secondary)}.pricing-total-amount{font-size:24px;font-weight:800;color:var(--primary)}
+.script-steps{display:flex;flex-direction:column;gap:2px}
+.script-step{border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
+.script-step-header{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;background:var(--card);transition:var(--transition)}
+.script-step-header:hover{background:var(--bg)}
+.script-step-header .step-num{width:28px;height:28px;border-radius:50%;background:var(--primary-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.script-step-header .step-name{font-weight:600;font-size:14px}
+.script-step-header .step-time{margin-left:auto;font-size:12px;color:var(--text-light);background:var(--bg);padding:2px 8px;border-radius:4px}
+.script-step-header .chevron{transition:transform .2s;color:var(--text-light)}
+.script-step.open .chevron{transform:rotate(180deg)}
+.script-step-body{display:none;padding:16px 18px;background:var(--bg);border-top:1px solid var(--border)}
+.script-step.open .script-step-body{display:block}
+.script-text{font-size:14px;line-height:1.8;white-space:pre-wrap}.script-text .hl{color:var(--primary);font-weight:700}
+.objection-search{margin-top:20px}
+.objection-input{width:100%;padding:12px 16px 12px 40px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;transition:var(--transition);background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E") no-repeat 14px center}
+.objection-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.objection-list{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.objection-item{padding:14px 18px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition)}
+.objection-item:hover{border-color:var(--primary-light)}.objection-item .q{font-weight:700;font-size:14px;color:var(--danger);margin-bottom:4px}.objection-item .a{font-size:13px;color:var(--text-secondary);line-height:1.6}
+.objection-item.hidden{display:none}.objection-item.expanded .a{color:var(--text)}
+.flow-bar{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--primary-bg);border-radius:var(--radius-sm);margin-bottom:20px;font-size:13px;color:var(--primary)}
+.flow-step{display:flex;align-items:center;gap:6px}.flow-step.current{font-weight:700}.flow-step.done{color:var(--success)}.flow-arrow{color:var(--text-light)}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-light)}.empty-state .icon{font-size:48px;margin-bottom:12px}.empty-state p{font-size:14px}
 
-/* ===== Header ===== */
-.header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: #fff; padding: 20px 32px; position: sticky; top: 0; z-index: 100; }
-.header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-.header h1 { font-size: 20px; font-weight: 700; letter-spacing: .5px; }
-.header-sub { font-size: 13px; opacity: .8; margin-top: 2px; }
-.role-switch { display: flex; gap: 4px; background: rgba(255,255,255,.15); border-radius: 8px; padding: 3px; }
-.role-btn { padding: 6px 16px; border: none; background: transparent; color: rgba(255,255,255,.7); border-radius: 6px; cursor: pointer; font-size: 13px; transition: var(--transition); }
-.role-btn.active { background: rgba(255,255,255,.25); color: #fff; font-weight: 600; }
-.role-btn:hover { color: #fff; }
+/* ===== Phase 2: Pipeline ===== */
+.pipeline-board{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;min-height:400px}
+.pipeline-col{background:var(--bg);border-radius:var(--radius);padding:12px;min-height:300px;border:2px dashed transparent;transition:var(--transition)}
+.pipeline-col.drag-over{border-color:var(--primary);background:var(--primary-bg)}
+.pipeline-col-header{text-align:center;padding:8px;margin-bottom:12px;border-radius:var(--radius-sm);font-weight:700;font-size:13px;color:#fff}
+.pipeline-col-header .count{display:inline-block;background:rgba(255,255,255,.3);padding:1px 8px;border-radius:10px;margin-left:6px;font-size:11px}
+.stage-1{background:var(--primary)}.stage-2{background:#7c3aed}.stage-3{background:#0891b2}.stage-4{background:var(--warning)}.stage-5{background:var(--success)}
+.deal-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px;cursor:grab;transition:var(--transition);position:relative}
+.deal-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}.deal-card:active{cursor:grabbing}
+.deal-card.warn{border-color:var(--warning);background:var(--warning-bg)}.deal-card.danger{border-color:var(--danger);background:var(--danger-bg)}
+.deal-card .name{font-weight:700;font-size:14px;margin-bottom:4px}.deal-card .meta{font-size:12px;color:var(--text-secondary)}
+.deal-card .days{position:absolute;top:8px;right:8px;font-size:11px;padding:2px 6px;border-radius:4px;background:var(--bg);color:var(--text-secondary)}
+.deal-card.warn .days{background:var(--warning-bg);color:var(--warning)}.deal-card.danger .days{background:var(--danger-bg);color:var(--danger)}
+.deal-card .pkg-tag{display:inline-block;font-size:11px;padding:1px 8px;border-radius:4px;margin-top:4px}
+.deal-card .next-action{font-size:12px;color:var(--text-light);margin-top:6px;padding-top:6px;border-top:1px solid var(--border)}
+.add-deal-btn{width:100%;padding:8px;border:1px dashed var(--border);border-radius:var(--radius-sm);background:0 0;color:var(--text-light);cursor:pointer;font-size:13px;transition:var(--transition);margin-top:8px}
+.add-deal-btn:hover{border-color:var(--primary);color:var(--primary)}
+.followup-list{margin-top:8px;border-top:1px solid var(--border);padding-top:8px}
+.followup-item{font-size:12px;color:var(--text-secondary);padding:4px 0;border-bottom:1px dotted var(--border)}
+.followup-item:last-child{border-bottom:none}
 
-/* ===== Tabs ===== */
-.tabs { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 32px; position: sticky; top: 68px; z-index: 99; }
-.tabs-inner { max-width: 1200px; margin: 0 auto; display: flex; gap: 0; }
-.tab { padding: 14px 24px; border: none; background: transparent; color: var(--text-secondary); cursor: pointer; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent; transition: var(--transition); position: relative; }
-.tab:hover { color: var(--primary); }
-.tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
-.tab .badge { display: inline-block; background: var(--primary); color: #fff; font-size: 11px; padding: 1px 7px; border-radius: 10px; margin-left: 6px; font-weight: 600; }
-.tab .badge.p0 { background: var(--danger); }
+/* ===== Phase 2: Modal ===== */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:200;display:flex;align-items:center;justify-content:center;animation:fadeIn .2s}
+.modal{background:var(--card);border-radius:var(--radius);padding:28px;width:90%;max-width:500px;box-shadow:var(--shadow-lg);max-height:80vh;overflow-y:auto}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:20px}
+.modal-close{position:absolute;top:16px;right:16px;background:0 0;border:none;font-size:20px;cursor:pointer;color:var(--text-light)}
 
-/* ===== Main ===== */
-.main { max-width: 1200px; margin: 0 auto; padding: 24px 32px; }
-.panel { display: none; animation: fadeIn .3s ease; }
-.panel.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+/* ===== Phase 2: Sale Summary ===== */
+.summary-list{display:flex;flex-direction:column;gap:8px}
+.summary-item{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);transition:var(--transition)}
+.summary-item:hover{border-color:var(--primary-light)}
+.summary-item .tag{font-size:11px;padding:2px 8px;border-radius:4px;font-weight:600}
+.summary-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{padding:16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);text-align:center}
+.stat-card .num{font-size:24px;font-weight:800;color:var(--primary)}.stat-card .label{font-size:12px;color:var(--text-secondary);margin-top:4px}
 
-/* ===== Cards ===== */
-.card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); padding: 24px; margin-bottom: 16px; box-shadow: var(--shadow); }
-.card-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-.card-title .icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
-.card-title .icon.blue { background: var(--primary-bg); color: var(--primary); }
-.card-title .icon.green { background: var(--success-bg); color: var(--success); }
-.card-title .icon.orange { background: var(--warning-bg); color: var(--warning); }
+/* ===== Phase 2: Case Card ===== */
+.case-preview{border-radius:var(--radius);overflow:hidden;max-width:400px;margin:0 auto}
+.case-card-html{border-radius:var(--radius);overflow:hidden;background:#030712;color:#fff;font-family:inherit}
+.case-hero{padding:40px 32px 24px;text-align:center;background:linear-gradient(180deg,#0f172a,#030712)}
+.case-category{font-size:13px;opacity:.6;margin-bottom:8px}.case-headline{font-size:36px;font-weight:900;color:#fbbf24;margin-bottom:4px}
+.case-subline{font-size:14px;opacity:.7}
+.case-body{padding:24px 32px}
+.case-section{margin-bottom:20px}.case-section-title{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:#fbbf24;margin-bottom:8px;opacity:.8}
+.case-pain{padding:12px 16px;background:rgba(220,38,38,.15);border-radius:8px;border-left:3px solid var(--danger);font-size:13px;line-height:1.7}
+.case-sell{padding:12px 16px;background:rgba(251,191,36,.1);border-radius:8px;border-left:3px solid #fbbf24;font-size:13px;line-height:1.7;font-weight:600}
+.case-metric{display:flex;gap:16px;margin-top:12px}.case-metric-item{flex:1;text-align:center}
+.case-metric-item .val{font-size:28px;font-weight:900;color:#fbbf24}.case-metric-item .desc{font-size:11px;opacity:.6}
+.case-footer{padding:16px 32px;background:#0f172a;text-align:center;font-size:12px;opacity:.5}
 
-/* ===== Forms ===== */
-.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-.form-group { display: flex; flex-direction: column; gap: 6px; }
-.form-label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
-.form-input, .form-select { padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; color: var(--text); background: var(--card); transition: var(--transition); outline: none; width: 100%; }
-.form-input:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
-.form-select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
-.radio-group { display: flex; gap: 8px; flex-wrap: wrap; }
-.radio-opt { padding: 8px 16px; border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; font-size: 13px; transition: var(--transition); user-select: none; }
-.radio-opt:hover { border-color: var(--primary-light); }
-.radio-opt.active { background: var(--primary-bg); border-color: var(--primary); color: var(--primary); font-weight: 600; }
-
-/* ===== Buttons ===== */
-.btn { padding: 10px 24px; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 8px; }
-.btn-primary { background: var(--primary); color: #fff; }
-.btn-primary:hover { background: var(--primary-dark); box-shadow: var(--shadow-md); }
-.btn-secondary { background: var(--primary-bg); color: var(--primary); }
-.btn-secondary:hover { background: var(--primary-50); }
-.btn-outline { background: transparent; color: var(--text-secondary); border: 1px solid var(--border); }
-.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
-.btn-sm { padding: 6px 14px; font-size: 13px; }
-.btn-block { width: 100%; justify-content: center; }
-.btn-group { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
-
-/* ===== Result Card ===== */
-.result-card { border: 2px solid var(--primary); border-radius: var(--radius); padding: 24px; background: linear-gradient(135deg, var(--primary-bg) 0%, #fff 100%); margin-top: 20px; animation: slideUp .4s ease; }
-@keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-.result-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-.result-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; }
-.badge-starter { background: #dbeafe; color: #1d4ed8; }
-.badge-growth { background: #d1fae5; color: #065f46; }
-.badge-flagship { background: #fef3c7; color: #92400e; }
-.priority-tag { padding: 3px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; }
-.priority-high { background: var(--danger-bg); color: var(--danger); }
-.priority-medium { background: var(--warning-bg); color: var(--warning); }
-.priority-low { background: var(--bg); color: var(--text-secondary); }
-.result-amount { font-size: 28px; font-weight: 800; color: var(--primary); margin: 8px 0; }
-.result-amount span { font-size: 14px; font-weight: 500; color: var(--text-secondary); }
-.result-reason { font-size: 14px; color: var(--text-secondary); padding: 12px 16px; background: var(--card); border-radius: var(--radius-sm); border-left: 3px solid var(--primary); margin-top: 12px; line-height: 1.7; }
-
-/* ===== Product Package Cards ===== */
-.pkg-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-.pkg-card { border: 2px solid var(--border); border-radius: var(--radius); padding: 20px; cursor: pointer; transition: var(--transition); position: relative; overflow: hidden; }
-.pkg-card:hover { border-color: var(--primary-light); box-shadow: var(--shadow-md); }
-.pkg-card.selected { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,.15); }
-.pkg-card.recommended::before { content: "推荐"; position: absolute; top: 12px; right: -24px; background: var(--primary); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 28px; transform: rotate(45deg); }
-.pkg-name { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
-.pkg-combo { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; }
-.pkg-logic { font-size: 13px; color: var(--text); line-height: 1.7; padding: 10px 12px; background: var(--bg); border-radius: var(--radius-sm); }
-.pkg-logic .arrow { color: var(--primary); font-weight: 700; margin: 0 4px; }
-
-/* ===== Pricing Table ===== */
-.pricing-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
-.pricing-table th { background: var(--bg); padding: 10px 14px; text-align: left; font-size: 13px; font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid var(--border); }
-.pricing-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 14px; }
-.pricing-table .amount { font-weight: 700; color: var(--primary); }
-.pricing-total { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: var(--primary-bg); border-radius: var(--radius-sm); margin-top: 12px; }
-.pricing-total-label { font-size: 14px; color: var(--text-secondary); }
-.pricing-total-amount { font-size: 24px; font-weight: 800; color: var(--primary); }
-
-/* ===== Script ===== */
-.script-steps { display: flex; flex-direction: column; gap: 2px; }
-.script-step { border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
-.script-step-header { display: flex; align-items: center; gap: 12px; padding: 14px 18px; cursor: pointer; background: var(--card); transition: var(--transition); }
-.script-step-header:hover { background: var(--bg); }
-.script-step-header .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--primary-bg); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
-.script-step-header .step-name { font-weight: 600; font-size: 14px; }
-.script-step-header .step-time { margin-left: auto; font-size: 12px; color: var(--text-light); background: var(--bg); padding: 2px 8px; border-radius: 4px; }
-.script-step-header .chevron { transition: transform .2s; color: var(--text-light); }
-.script-step.open .chevron { transform: rotate(180deg); }
-.script-step-body { display: none; padding: 16px 18px; background: var(--bg); border-top: 1px solid var(--border); }
-.script-step.open .script-step-body { display: block; }
-.script-text { font-size: 14px; line-height: 1.8; color: var(--text); white-space: pre-wrap; }
-.script-text .hl { color: var(--primary); font-weight: 700; }
-.script-copy { margin-top: 10px; }
-
-/* ===== Objection Search ===== */
-.objection-search { margin-top: 20px; }
-.objection-input { width: 100%; padding: 12px 16px 12px 40px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; outline: none; transition: var(--transition); background: var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E") no-repeat 14px center; }
-.objection-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
-.objection-list { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
-.objection-item { padding: 14px 18px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition); }
-.objection-item:hover { border-color: var(--primary-light); }
-.objection-item .q { font-weight: 700; font-size: 14px; color: var(--danger); margin-bottom: 4px; }
-.objection-item .a { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
-.objection-item.hidden { display: none; }
-.objection-item.expanded .a { color: var(--text); }
-
-/* ===== Flow Indicator ===== */
-.flow-bar { display: flex; align-items: center; gap: 8px; padding: 12px 20px; background: var(--primary-bg); border-radius: var(--radius-sm); margin-bottom: 20px; font-size: 13px; color: var(--primary); }
-.flow-step { display: flex; align-items: center; gap: 6px; }
-.flow-step.current { font-weight: 700; }
-.flow-step.done { color: var(--success); }
-.flow-arrow { color: var(--text-light); }
-
-/* ===== Empty State ===== */
-.empty-state { text-align: center; padding: 60px 20px; color: var(--text-light); }
-.empty-state .icon { font-size: 48px; margin-bottom: 12px; }
-.empty-state p { font-size: 14px; }
-
-/* ===== Responsive ===== */
-@media (max-width: 768px) {
-  .header { padding: 16px 20px; }
-  .tabs { padding: 0 20px; }
-  .main { padding: 16px 20px; }
-  .pkg-cards { grid-template-columns: 1fr; }
-  .form-grid { grid-template-columns: 1fr; }
-  .tab { padding: 12px 14px; font-size: 13px; }
+@media(max-width:768px){
+  .header{padding:16px 20px}.tabs{padding:0 12px}.main{padding:16px 20px}
+  .pkg-cards{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}
+  .pipeline-board{grid-template-columns:1fr;gap:16px}.summary-stats{grid-template-columns:repeat(2,1fr)}
+  .tab{padding:12px 10px;font-size:12px}
 }
 </style>
 </head>
 <body>
-
-<!-- ===== HEADER ===== -->
-<div class="header">
-  <div class="header-inner">
-    <div>
-      <h1>智能体销售赋能工作台</h1>
-      <div class="header-sub">Agent Sales Hub · 学 · 卖 · 盘 · 传</div>
-    </div>
-    <div class="role-switch">
-      <button class="role-btn active" onclick="switchRole('bd')">服务商BD</button>
-      <button class="role-btn" onclick="switchRole('manager')">渠道经理</button>
-    </div>
-  </div>
-</div>
-
-<!-- ===== TABS ===== -->
-<div class="tabs">
-  <div class="tabs-inner">
-    <button class="tab active" data-tab="picker" onclick="switchTab('picker')">
-      ① 客户挑选 <span class="badge p0">P0</span>
-    </button>
-    <button class="tab" data-tab="matcher" onclick="switchTab('matcher')">
-      ② 产品搭配 <span class="badge p0">P0</span>
-    </button>
-    <button class="tab" data-tab="script" onclick="switchTab('script')">
-      ③ 售卖话术 <span class="badge p0">P0</span>
-    </button>
-  </div>
-</div>
-
-<!-- ===== MAIN ===== -->
+<div class="header"><div class="header-inner"><div><h1>智能体销售赋能工作台</h1><div class="header-sub">Agent Sales Hub · 学 · 卖 · 盘 · 传</div></div><div class="role-switch"><button class="role-btn active" onclick="switchRole('bd')">服务商BD</button><button class="role-btn" onclick="switchRole('manager')">渠道经理</button></div></div></div>
+<div class="tabs"><div class="tabs-inner">
+  <button class="tab active" data-tab="picker" onclick="switchTab('picker')">① 客户挑选 <span class="badge p0">P0</span></button>
+  <button class="tab" data-tab="matcher" onclick="switchTab('matcher')">② 产品搭配 <span class="badge p0">P0</span></button>
+  <button class="tab" data-tab="script" onclick="switchTab('script')">③ 售卖话术 <span class="badge p0">P0</span></button>
+  <button class="tab" data-tab="pipeline" onclick="switchTab('pipeline')">④ 售卖节奏 <span class="badge p1">P1</span></button>
+  <button class="tab" data-tab="summary" onclick="switchTab('summary')">⑤ 售卖总结 <span class="badge p1">P1</span></button>
+  <button class="tab" data-tab="casegen" onclick="switchTab('casegen')">⑥ 案例生成 <span class="badge p1">P1</span></button>
+</div></div>
 <div class="main">
 
-  <!-- ========== PANEL 1: 客户挑选 ========== -->
-  <div id="panel-picker" class="panel active">
-    <div class="flow-bar">
-      <span class="flow-step current">① 客户挑选</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step">② 产品搭配</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step">③ 售卖话术</span>
+<!-- ===== PANEL 1: 客户挑选 ===== -->
+<div id="panel-picker" class="panel active">
+  <div class="flow-bar"><span class="flow-step current">① 客户挑选</span><span class="flow-arrow">→</span><span class="flow-step">② 产品搭配</span><span class="flow-arrow">→</span><span class="flow-step">③ 售卖话术</span></div>
+  <div class="card"><div class="card-title"><span class="icon blue">📋</span>输入商户基本信息</div>
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">品类</label><select id="f-category" class="form-select"><option value="">请选择品类</option><option>中餐</option><option>火锅</option><option>烧烤</option><option>茶饮</option><option>西餐</option><option>日料</option><option>快餐</option><option>小吃</option><option>其他</option></select></div>
+      <div class="form-group"><label class="form-label">门店数</label><input id="f-stores" class="form-input" type="number" min="1" max="9999" placeholder="如：5"></div>
+      <div class="form-group"><label class="form-label">城市</label><input id="f-city" class="form-input" type="text" placeholder="如：杭州"></div>
+      <div class="form-group"><label class="form-label">当前是否有广告</label><div class="radio-group" id="f-ads"><div class="radio-opt" data-val="no" onclick="setRadio('f-ads',this)">否</div><div class="radio-opt" data-val="yes" onclick="setRadio('f-ads',this)">是</div></div></div>
+      <div class="form-group"><label class="form-label">商户意向度</label><div class="radio-group" id="f-intent"><div class="radio-opt" data-val="high" onclick="setRadio('f-intent',this)">高（主动咨询）</div><div class="radio-opt" data-val="medium" onclick="setRadio('f-intent',this)">中（有过接触）</div><div class="radio-opt" data-val="low" onclick="setRadio('f-intent',this)">低（冷启动）</div></div></div>
     </div>
-
-    <div class="card">
-      <div class="card-title">
-        <span class="icon blue">📋</span>
-        输入商户基本信息
-      </div>
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">品类</label>
-          <select id="f-category" class="form-select" onchange="updatePicker()">
-            <option value="">请选择品类</option>
-            <option value="中餐">中餐</option>
-            <option value="火锅">火锅</option>
-            <option value="烧烤">烧烤</option>
-            <option value="茶饮">茶饮</option>
-            <option value="西餐">西餐</option>
-            <option value="日料">日料</option>
-            <option value="快餐">快餐</option>
-            <option value="小吃">小吃</option>
-            <option value="其他">其他</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">门店数</label>
-          <input id="f-stores" class="form-input" type="number" min="1" max="9999" placeholder="如：5" oninput="updatePicker()">
-        </div>
-        <div class="form-group">
-          <label class="form-label">城市</label>
-          <input id="f-city" class="form-input" type="text" placeholder="如：杭州" oninput="updatePicker()">
-        </div>
-        <div class="form-group">
-          <label class="form-label">当前是否有广告</label>
-          <div class="radio-group" id="f-ads">
-            <div class="radio-opt" data-val="no" onclick="setRadio('f-ads',this)">否</div>
-            <div class="radio-opt" data-val="yes" onclick="setRadio('f-ads',this)">是</div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">商户意向度</label>
-          <div class="radio-group" id="f-intent">
-            <div class="radio-opt" data-val="high" onclick="setRadio('f-intent',this)">高（主动咨询）</div>
-            <div class="radio-opt" data-val="medium" onclick="setRadio('f-intent',this)">中（有过接触）</div>
-            <div class="radio-opt" data-val="low" onclick="setRadio('f-intent',this)">低（冷启动）</div>
-          </div>
-        </div>
-      </div>
-      <div class="btn-group">
-        <button class="btn btn-primary" onclick="analyzeClient()">分析推荐</button>
-        <button class="btn btn-outline" onclick="resetPicker()">重置</button>
-      </div>
-    </div>
-
-    <div id="picker-result"></div>
+    <div class="btn-group"><button class="btn btn-primary" onclick="analyzeClient()">分析推荐</button><button class="btn btn-outline" onclick="resetPicker()">重置</button></div>
   </div>
-
-  <!-- ========== PANEL 2: 产品搭配 ========== -->
-  <div id="panel-matcher" class="panel">
-    <div class="flow-bar">
-      <span class="flow-step done">① 客户挑选 ✓</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step current">② 产品搭配</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step">③ 售卖话术</span>
-    </div>
-
-    <div id="matcher-client-info"></div>
-
-    <div class="card">
-      <div class="card-title">
-        <span class="icon green">📦</span>
-        选择售卖包
-      </div>
-      <div id="pkg-cards-container" class="pkg-cards"></div>
-    </div>
-
-    <div class="card" id="pricing-card" style="display:none">
-      <div class="card-title">
-        <span class="icon orange">💰</span>
-        定价明细
-      </div>
-      <div id="pricing-content"></div>
-    </div>
-
-    <div class="card" id="logic-card" style="display:none">
-      <div class="card-title">
-        <span class="icon blue">🔗</span>
-        推荐理由链
-      </div>
-      <div id="logic-content"></div>
-    </div>
-
-    <div class="btn-group" id="matcher-actions" style="display:none">
-      <button class="btn btn-primary" onclick="goToScript()">生成话术 →</button>
-      <button class="btn btn-secondary btn-sm" onclick="copyPlanText()">复制方案摘要</button>
-    </div>
-  </div>
-
-  <!-- ========== PANEL 3: 售卖话术 ========== -->
-  <div id="panel-script" class="panel">
-    <div class="flow-bar">
-      <span class="flow-step done">① 客户挑选 ✓</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step done">② 产品搭配 ✓</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step current">③ 售卖话术</span>
-    </div>
-
-    <div id="script-info" class="card" style="display:none">
-      <div class="card-title">
-        <span class="icon blue">🎯</span>
-        话术概览
-      </div>
-      <div id="script-overview"></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">
-        <span class="icon green">📝</span>
-        7步售卖话术
-      </div>
-      <div id="script-steps" class="script-steps"></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">
-        <span class="icon orange">🛡️</span>
-        异议速查手册
-      </div>
-      <div class="objection-search">
-        <input class="objection-input" type="text" placeholder="搜索异议关键词，如：太贵、竞品、效果..." oninput="filterObjections(this.value)">
-        <div id="objection-list" class="objection-list"></div>
-      </div>
-    </div>
-
-    <div class="btn-group">
-      <button class="btn btn-primary" onclick="copyAllScript()">复制全部话术</button>
-      <button class="btn btn-secondary" onclick="printScript()">打印话术（A4）</button>
-    </div>
-  </div>
-
+  <div id="picker-result"></div>
 </div>
+
+<!-- ===== PANEL 2: 产品搭配 ===== -->
+<div id="panel-matcher" class="panel">
+  <div class="flow-bar"><span class="flow-step done">① 客户挑选 ✓</span><span class="flow-arrow">→</span><span class="flow-step current">② 产品搭配</span><span class="flow-arrow">→</span><span class="flow-step">③ 售卖话术</span></div>
+  <div id="matcher-client-info"></div>
+  <div class="card"><div class="card-title"><span class="icon green">📦</span>选择售卖包</div><div id="pkg-cards-container" class="pkg-cards"></div></div>
+  <div class="card" id="pricing-card" style="display:none"><div class="card-title"><span class="icon orange">💰</span>定价明细</div><div id="pricing-content"></div></div>
+  <div class="card" id="logic-card" style="display:none"><div class="card-title"><span class="icon blue">🔗</span>推荐理由链</div><div id="logic-content"></div></div>
+  <div class="btn-group" id="matcher-actions" style="display:none"><button class="btn btn-primary" onclick="goToScript()">生成话术 →</button><button class="btn btn-secondary btn-sm" onclick="copyPlanText()">复制方案摘要</button></div>
+</div>
+
+<!-- ===== PANEL 3: 售卖话术 ===== -->
+<div id="panel-script" class="panel">
+  <div class="flow-bar"><span class="flow-step done">① ✓</span><span class="flow-arrow">→</span><span class="flow-step done">② ✓</span><span class="flow-arrow">→</span><span class="flow-step current">③ 售卖话术</span></div>
+  <div id="script-info" class="card" style="display:none"><div class="card-title"><span class="icon blue">🎯</span>话术概览</div><div id="script-overview"></div></div>
+  <div class="card"><div class="card-title"><span class="icon green">📝</span>7步售卖话术</div><div id="script-steps" class="script-steps"></div></div>
+  <div class="card"><div class="card-title"><span class="icon orange">🛡️</span>异议速查手册</div><div class="objection-search"><input class="objection-input" type="text" placeholder="搜索异议关键词..." oninput="filterObjections(this.value)"><div id="objection-list" class="objection-list"></div></div></div>
+  <div class="btn-group"><button class="btn btn-primary" onclick="copyAllScript()">复制全部话术</button><button class="btn btn-secondary" onclick="window.print()">打印话术（A4）</button></div>
+</div>
+
+<!-- ===== PANEL 4: 售卖节奏 Pipeline ===== -->
+<div id="panel-pipeline" class="panel">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <h2 style="font-size:18px;font-weight:700">售卖节奏 · Pipeline</h2>
+    <div class="btn-group" style="margin:0"><button class="btn btn-primary btn-sm" onclick="showAddDealModal()">+ 添加客户</button></div>
+  </div>
+  <div id="pipeline-board" class="pipeline-board"></div>
+</div>
+
+<!-- ===== PANEL 5: 售卖总结 ===== -->
+<div id="panel-summary" class="panel">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <h2 style="font-size:18px;font-weight:700">售卖总结 · 成交记录</h2>
+  </div>
+  <div id="summary-stats" class="summary-stats"></div>
+  <div class="card"><div class="card-title"><span class="icon green">📊</span>成交记录列表</div><div id="summary-list" class="summary-list"></div></div>
+</div>
+
+<!-- ===== PANEL 6: 案例生成 ===== -->
+<div id="panel-casegen" class="panel">
+  <h2 style="font-size:18px;font-weight:700;margin-bottom:16px">案例生成器</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+    <div>
+      <div class="card"><div class="card-title"><span class="icon blue">✏️</span>填写案例信息</div>
+        <div class="form-grid" style="grid-template-columns:1fr">
+          <div class="form-group"><label class="form-label">品类</label><select id="c-category" class="form-select" onchange="updateCasePreview()"><option value="中餐">中餐</option><option value="火锅">火锅</option><option value="烧烤">烧烤</option><option value="茶饮">茶饮</option><option value="海鲜">海鲜</option><option value="西餐">西餐</option><option value="快餐">快餐</option></select></div>
+          <div class="form-group"><label class="form-label">售卖包类型</label><select id="c-pkg" class="form-select" onchange="updateCasePreview()"><option value="starter">入门包（智能体+获客宝）</option><option value="growth">增长包（智能体+效果广告）</option><option value="flagship">旗舰包（全链路）</option></select></div>
+          <div class="form-group"><label class="form-label">核心数据亮点1（如点击率提升）</label><input id="c-metric1-val" class="form-input" placeholder="如：+133%" oninput="updateCasePreview()"><input id="c-metric1-desc" class="form-input" style="margin-top:4px" placeholder="描述，如：点击率提升" oninput="updateCasePreview()"></div>
+          <div class="form-group"><label class="form-label">核心数据亮点2（如转化率提升）</label><input id="c-metric2-val" class="form-input" placeholder="如：+31.6%" oninput="updateCasePreview()"><input id="c-metric2-desc" class="form-input" style="margin-top:4px" placeholder="描述，如：转化率提升" oninput="updateCasePreview()"></div>
+          <div class="form-group"><label class="form-label">痛点描述</label><textarea id="c-pain" class="form-input" rows="2" placeholder="如：线上曝光不足，自然客流持续下降" oninput="updateCasePreview()"></textarea></div>
+          <div class="form-group"><label class="form-label">卖点金句</label><input id="c-slogan" class="form-input" placeholder="如：让AI替你揽客" oninput="updateCasePreview()"></div>
+          <div class="form-group"><label class="form-label">售卖核心（一句话打法）</label><input id="c-strategy" class="form-input" placeholder="如：做好新品介绍，讲好商户故事" oninput="updateCasePreview()"></div>
+        </div>
+        <div class="btn-group"><button class="btn btn-primary" onclick="downloadCaseHTML()">导出HTML卡片</button><button class="btn btn-secondary" onclick="copyCaseHTML()">复制HTML源码</button></div>
+      </div>
+    </div>
+    <div>
+      <div class="card"><div class="card-title"><span class="icon orange">👁️</span>实时预览</div><div id="case-preview"></div></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end .main -->
+
+<div id="modal-container"></div>
 
 <script>
 // ===== STATE =====
-const S = {
-  role: 'bd',
-  tab: 'picker',
-  client: {},
-  pkg: '',
-  pricing: {}
-};
+const S={role:'bd',tab:'picker',client:{},pkg:'',pricing:{},pipeline:[],summaries:[]};
+let dealIdCounter=1;
 
 // ===== DATA =====
-const CATEGORIES = ['中餐','火锅','烧烤','茶饮','西餐','日料','快餐','小吃','其他'];
+const PKG_DEF={starter:{name:'入门包',badge:'badge-starter',combo:'品牌智能体 + 获客宝',logic:['智能体让门店24小时有AI服务员接待','获客宝放大曝光让更多人看到你','先花小钱试效果，验证再加码'],forWhom:'首次接触广告的小微商户'},growth:{name:'增长包',badge:'badge-growth',combo:'品牌智能体 + 效果广告',logic:['效果广告买来精准流量','智能体接住每一个咨询并促转化','转化+31.6%让广告费不白花'],forWhom:'有流量基础但转化不理想的商户'},flagship:{name:'旗舰包',badge:'badge-flagship',combo:'品牌智能体 + 效果广告 + 品牌广告',logic:['品广打品牌认知，扩大影响力','效广做精准获客，带来高意向客户','智能体完成转化锁客，全链路闭环'],forWhom:'连锁品牌或高客单品类商户'}};
+const AD_BUDGETS={hkb:{name:'获客宝',opts:[3000,5000,10000]},effect:{name:'效果广告',opts:[5000,10000,20000]}};
+const OBJECTIONS=[{q:'太贵了',a:'用"日均成本"话术化解。对比数据：同类商户使用后年省约6万元人力成本。话术参考："每天不到一杯咖啡的钱，相当于雇了一个24小时不休息的AI服务员，比招个兼职便宜10倍。"'},{q:'我用美团/抖音了',a:'不排斥，讲差异。高德是到店导航场景——用户已经出门了、正在找地方吃饭，转化率远高于刷短视频时的冲动消费。'},{q:'我门店够大了不需要',a:'大店更需要维护口碑。品牌智能体帮您24小时回复顾客咨询，AI组菜、AI预订锁客。'},{q:'效果能保证吗',a:'区间表达+免责："根据同类商户实测数据，预计曝光提升2-4倍，转化率提升约30%。"'},{q:'我考虑考虑',a:'"现在签约可锁定当前价格，后续调价后享受原价。您的同行已经有不少在用了。"'},{q:'AI我不太懂',a:'"您不需要懂AI，开通后系统自动运行，您只管接单做菜就行。"'},{q:'跟门店智能体有什么区别',a:'品牌智能体30+项能力 vs 门店智能体仅8项，22项专属差异能力，含同行分析、AI组菜等。'},{q:'我已经在用其他工具了',a:'"不冲突，智能体是高德独有的到店场景入口，帮您从地图上获客。"'},{q:'签约后能退吗',a:'"支持解约，按实际使用天数折算退款，不满一个月按10天保底计算。"'},{q:'开发中的功能什么时候上',a:'"套餐已包含这些权益，上线后自动开通。现在签约=提前锁价占位。"'}];
+const HOOKS={'中餐':'周边写字楼的白领都在搜"中餐"，您的店排第几？','火锅':'天气一冷火锅搜索量翻倍，您准备好接住这波流量了吗？','烧烤':'夏天烧烤是夜宵搜索第一名，您的门店在地图上够显眼吗？','茶饮':'奶茶店竞争这么激烈，怎么让用户搜"奶茶"第一眼看到您？','西餐':'约会聚餐搜西餐的用户消费力强，您的门店展示够吸引人吗？','日料':'日料客单价高，一个客户价值顶三个快餐客户。','快餐':'快餐讲究快和方便，AI帮您30秒内完成推荐+下单。','小吃':'小吃店靠口碑和曝光，AI帮您把路过的人都变成进店客。','其他':'高德每天有数百万用户在搜美食，您的门店准备好了吗？'};
+const SP={starter:{p1:'流量壁垒：品牌智能体在POI页和泛搜中优先展示，比门店智能体多出22项专属能力',p2:'C端40秒获客：用户从搜索到下单全程不到40秒',p3:'低门槛试错：获客宝首充¥3,000起，总投入可控'},growth:{p1:'转化+31.6%：品牌智能体实测转化率提升31.6%',p2:'年省6万：AI替代人工客服，一个门店年省约6万元人力成本',p3:'流量+转化双引擎：效果广告"拉人"，智能体"留人"，1+1>2'},flagship:{p1:'全链路闭环：品广做认知→效广做获客→智能体做转化',p2:'复购+12.5%：品牌智能体实测复购率提升12.5%',p3:'品牌溢价：品牌定制形象+颜色，形成辨识度壁垒'}};
+const STAGES=[{id:1,name:'初访',color:'var(--primary)',action:'分析商户画像，准备方案',signal:'完成首次拜访/电话'},{id:2,name:'需求确认',color:'#7c3aed',action:'挖需求4问',signal:'商户表达痛点/兴趣'},{id:3,name:'方案呈现',color:'#0891b2',action:'生成方案，现场演示',signal:'商户认可方案方向'},{id:4,name:'报价谈判',color:'var(--warning)',action:'报价+异议处理',signal:'价格共识/进入审批'},{id:5,name:'签约完成',color:'var(--success)',action:'引导扫码签约',signal:'签约成功'}];
+const CASE_THEMES={火锅:{accent:'#ef4444',bg1:'#1a0000',label:'🍲'},中餐:{accent:'#f59e0b',bg1:'#1a1000',label:'🥢'},烧烤:{accent:'#d97706',bg1:'#1a0e00',label:'🔥'},茶饮:{accent:'#10b981',bg1:'#001a0e',label:'🍵'},海鲜:{accent:'#3b82f6',bg1:'#000a1a',label:'🦐'},西餐:{accent:'#8b5cf6',bg1:'#0e001a',label:'🍷'},快餐:{accent:'#f97316',bg1:'#1a0800',label:'🍔'}};
+const NEXT_ACTIONS={1:'准备方案，安排首次拜访',2:'深挖需求，了解痛点',3:'演示方案，获取认可',4:'报价谈判，处理异议',5:'引导签约，完成配置'};
 
-const PKG_DEF = {
-  starter: {
-    name: '入门包',
-    badge: 'badge-starter',
-    combo: '品牌智能体 + 获客宝',
-    logic: ['智能体让门店24小时有AI服务员接待','获客宝放大曝光让更多人看到你','先花小钱试效果，验证再加码'],
-    forWhom: '首次接触广告的小微商户'
-  },
-  growth: {
-    name: '增长包',
-    badge: 'badge-growth',
-    combo: '品牌智能体 + 效果广告',
-    logic: ['效果广告买来精准流量','智能体接住每一个咨询并促转化','转化+31.6%让广告费不白花'],
-    forWhom: '有流量基础但转化不理想的商户'
-  },
-  flagship: {
-    name: '旗舰包',
-    badge: 'badge-flagship',
-    combo: '品牌智能体 + 效果广告 + 品牌广告',
-    logic: ['品广打品牌认知，扩大影响力','效广做精准获客，带来高意向客户','智能体完成转化锁客，全链路闭环'],
-    forWhom: '连锁品牌或高客单品类商户'
-  }
-};
-
-const AD_BUDGETS = {
-  hkb: { name: '获客宝', opts: [3000, 5000, 10000] },
-  effect: { name: '效果广告', opts: [5000, 10000, 20000] },
-  brand: { name: '品牌广告（顶展/钻展）', note: '5折起，月封顶400W，需单独沟通' }
-};
-
-const OBJECTIONS = [
-  { q: '太贵了', a: '用"日均成本"话术化解：以5店入门包为例，智能体月费¥495+获客宝首充¥3,000，日均不到20元。对比数据：同类商户使用后年省约6万元人力成本。话术参考："每天不到一杯咖啡的钱，相当于雇了一个24小时不休息的AI服务员，比招个兼职便宜10倍。"' },
-  { q: '我用美团/抖音了', a: '不排斥，讲差异。高德是到店导航场景——用户已经出门了、正在找地方吃饭，转化率远高于刷短视频时的冲动消费。话术参考："美团抖音是种草，高德是拔草。用户在地图上搜餐厅的时候，已经准备好要消费了，这个场景的转化率最高。"' },
-  { q: '我门店够大了不需要', a: '大店更需要维护口碑。品牌智能体帮您24小时回复顾客咨询，AI组菜、AI预订锁客，让每一个搜索到您门店的用户都能获得专业服务。话术参考："越是知名门店，搜索量越大，靠人工回复不过来，AI帮您一个不漏地接住。"' },
-  { q: '效果能保证吗', a: '使用区间表达+免责。话术参考："根据同类商户实测数据，预计曝光提升2-4倍，转化率提升约30%。具体效果因门店位置和品类有所不同，建议您先试6个月看数据。" 注意：不做绝对承诺。' },
-  { q: '我考虑考虑', a: '制造紧迫感+锁价话术。"理解，不过目前是新上线推广期，价格有优势。后续产品迭代调价后，现在签约的客户可以继续享受当前价格。早签约早受益，您的同行已经有不少在用了。"' },
-  { q: 'AI我不太懂', a: '降低认知门槛。"您完全不需要懂AI，开通后系统自动运行——顾客在高德上看到您的店，点进来问问题，AI自动回复推荐菜品、引导下单。您只管接单做菜就行，跟开了个自动接待员一样。"' },
-  { q: '跟门店智能体有什么区别', a: '权益对比是核心武器。品牌智能体30+项能力 vs 门店智能体仅8项，有22项专属差异能力。核心差异包括：同行分析（商圈竞争诊断）、经营洞察（客流/画像/转化分析）、AI组菜、AI预订、品牌色定制、语音播报等。话术参考："门店版是基础款，品牌版是旗舰款，能力差了好几倍。"' },
-  { q: '我已经在用其他工具了', a: '不冲突，讲增量价值。"智能体和您现有的收银/管理工具完全不冲突，它是高德地图独有的到店场景入口。别的工具帮您管店，智能体帮您从地图上获客，是增量不是替代。"' },
-  { q: '签约后能退吗', a: '降低决策风险。"支持解约，按实际使用天数折算退款，不满一个月按10天保底计算。比如用了15天退，只扣15天的费用，剩余全部退还。没有任何隐性条款。"' },
-  { q: '开发中的功能什么时候上', a: '化劣势为促单理由。"套餐已经包含了这些权益，功能上线后自动开通，不需要额外付费。现在签约等于提前锁价占位——等全部功能上线后再买，价格只会更高不会更低。"' }
-];
-
-const CATEGORY_HOOKS = {
-  '中餐': '现在周边写字楼的白领都在搜"中餐"，您的店排第几？',
-  '火锅': '天气一冷火锅搜索量翻倍，您准备好接住这波流量了吗？',
-  '烧烤': '夏天烧烤是夜宵搜索第一名，您的门店在地图上够显眼吗？',
-  '茶饮': '奶茶店竞争这么激烈，怎么让用户搜"奶茶"第一眼看到您？',
-  '西餐': '约会聚餐搜西餐的用户消费力强，您的门店展示够吸引人吗？',
-  '日料': '日料客单价高，一个客户价值顶三个快餐客户，值得好好经营。',
-  '快餐': '快餐讲究快和方便，AI帮您30秒内完成推荐+下单全流程。',
-  '小吃': '小吃店靠口碑和曝光，AI帮您把路过的人都变成进店客。',
-  '其他': '高德每天有数百万用户在搜美食，您的门店准备好了吗？'
-};
-
-const SELLING_POINTS = {
-  starter: {
-    point1: '流量壁垒：品牌智能体在POI页和泛搜中优先展示，比门店智能体多出22项专属能力',
-    point2: 'C端40秒获客：用户从搜索到下单全程不到40秒，AI自动推荐菜品、引导团购',
-    point3: '低门槛试错：获客宝首充¥3,000起，搭配智能体月费，总投入可控'
-  },
-  growth: {
-    point1: '转化+31.6%：品牌智能体实测转化率提升31.6%，广告带来的流量不再浪费',
-    point2: '年省6万：AI替代人工客服和推荐，一个门店年省约6万元人力成本',
-    point3: '流量+转化双引擎：效果广告负责"拉人"，智能体负责"留人"，1+1>2'
-  },
-  flagship: {
-    point1: '全链路闭环：品广做认知→效广做获客→智能体做转化，三位一体',
-    point2: '复购+12.5%：品牌智能体实测复购率提升12.5%，长期价值远超单次投放',
-    point3: '品牌溢价：品牌定制形象+颜色，在高德上形成品牌辨识度壁垒'
-  }
-};
-
-// ===== NAVIGATION =====
-function switchRole(r) {
-  S.role = r;
-  document.querySelectorAll('.role-btn').forEach(b => b.classList.toggle('active', b.textContent.includes(r === 'bd' ? 'BD' : '经理')));
-}
-
-function switchTab(t) {
-  S.tab = t;
-  document.querySelectorAll('.tab').forEach(el => el.classList.toggle('active', el.dataset.tab === t));
-  document.querySelectorAll('.panel').forEach(el => el.classList.toggle('active', el.id === 'panel-' + t));
-  if (t === 'matcher') renderMatcher();
-  if (t === 'script') renderScript();
-}
+// ===== NAV =====
+function switchRole(r){S.role=r;document.querySelectorAll('.role-btn').forEach(b=>b.classList.toggle('active',b.textContent.includes(r==='bd'?'BD':'经理')))}
+function switchTab(t){S.tab=t;document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===t));document.querySelectorAll('.panel').forEach(el=>el.classList.toggle('active',el.id==='panel-'+t));if(t==='matcher')renderMatcher();if(t==='script')renderScript();if(t==='pipeline')renderPipeline();if(t==='summary')renderSummary();if(t==='casegen')updateCasePreview();}
 
 // ===== FORM HELPERS =====
-function setRadio(groupId, el) {
-  document.querySelectorAll('#' + groupId + ' .radio-opt').forEach(o => o.classList.remove('active'));
-  el.classList.add('active');
-  updatePicker();
-}
+function setRadio(g,el){document.querySelectorAll('#'+g+' .radio-opt').forEach(o=>o.classList.remove('active'));el.classList.add('active')}
+function getRadio(g){const a=document.querySelector('#'+g+' .radio-opt.active');return a?a.dataset.val:''}
 
-function getRadio(groupId) {
-  const active = document.querySelector('#' + groupId + ' .radio-opt.active');
-  return active ? active.dataset.val : '';
-}
+// ===== PICKER =====
+function getClient(){return{category:document.getElementById('f-category').value||'其他',stores:parseInt(document.getElementById('f-stores').value)||1,city:document.getElementById('f-city').value||'未知',hasAds:getRadio('f-ads')==='yes',intent:getRadio('f-intent')||'medium'}}
+function recommendPackage(c){let pkg,reason;if(c.stores>=100){pkg='flagship';reason='百店以上大品牌，建议定制旗舰方案。'}else if(c.stores>=10&&c.hasAds){pkg='flagship';reason='连锁品牌且已有广告，成熟度高，适合全链路旗舰方案。'}else if(c.stores>=10){pkg='growth';reason='连锁品牌有预算基础，智能体+效果广告组合投放效果更佳。'}else if(c.hasAds){pkg='growth';reason='已有广告基础，搭配智能体可提升转化率+31.6%。'}else{pkg='starter';reason='首次接触广告，先用AI接住自然流量+获客宝放大曝光。'}
+let pri='medium',priL='中（正常跟进）';if(c.intent==='high'){pri='high';priL='高（立即跟进）'}else if(c.intent==='low'){pri='low';priL='低（先培育）'}
+const mf=c.stores<=9?c.stores*99:c.stores*89;const ab=pkg==='starter'?3000:pkg==='growth'?5000:10000;const t=mf*6+ab;return{pkg,reason,priority:pri,priorityLabel:priL,monthlyFee:mf,sixMonth:mf*6,adBase:ab,total:t}}
+function analyzeClient(){const c=getClient();if(!document.getElementById('f-category').value){alert('请选择品类');return}if(!document.getElementById('f-stores').value){alert('请输入门店数');return}if(!getRadio('f-ads')){alert('请选择是否有广告');return}
+S.client=c;const r=recommendPackage(c);
+document.getElementById('picker-result').innerHTML=`<div class="result-card"><div class="result-header"><span class="result-badge ${PKG_DEF[r.pkg].badge}">${PKG_DEF[r.pkg].name}</span><span class="priority-tag priority-${r.priority}">${r.priorityLabel}</span></div><div style="font-size:14px;color:var(--text-secondary);margin-bottom:8px">${c.category} · ${c.stores}店 · ${c.city} · ${c.hasAds?'有广告':'无广告'} · 意向${c.intent==='high'?'高':c.intent==='medium'?'中':'低'}</div><div class="result-amount">¥${r.total.toLocaleString()} <span>（6个月预估总价）</span></div><div style="font-size:13px;color:var(--text-secondary)">智能体月费¥${r.monthlyFee} × 6月 = ¥${r.sixMonth.toLocaleString()} + ${PKG_DEF[r.pkg].name.includes('入门')?'获客宝':'效果广告'}首充¥${r.adBase.toLocaleString()}</div><div class="result-reason"><strong>推荐理由：</strong>${r.reason}</div><div class="btn-group"><button class="btn btn-primary" onclick="useRecommendation('${r.pkg}')">进入产品搭配 →</button><button class="btn btn-outline btn-sm" onclick="addDealFromPicker()">加入Pipeline</button></div></div>`}
+function useRecommendation(p){S.pkg=p;switchTab('matcher')}
+function addDealFromPicker(){const c=S.client;const r=recommendPackage(c);addDeal(c.category+c.stores+'店',c.category,r.pkg,1);switchTab('pipeline')}
+function resetPicker(){document.getElementById('f-category').value='';document.getElementById('f-stores').value='';document.getElementById('f-city').value='';document.querySelectorAll('#f-ads .radio-opt,#f-intent .radio-opt').forEach(o=>o.classList.remove('active'));document.getElementById('picker-result').innerHTML='';S.client={}}
 
-function updatePicker() {} // placeholder for live validation
+// ===== MATCHER =====
+function renderMatcher(){const c=S.client;const has=!!c.category;
+document.getElementById('matcher-client-info').innerHTML=has?`<div class="card" style="background:var(--primary-bg);border-color:var(--primary)"><div style="display:flex;align-items:center;gap:12px;font-size:14px"><span style="font-size:20px">🏪</span><span><strong>${c.category}</strong> · ${c.stores}店 · ${c.city} · ${c.hasAds?'有广告':'无广告'}</span><button class="btn btn-outline btn-sm" style="margin-left:auto" onclick="switchTab('picker')">修改</button></div></div>`:`<div class="card"><div class="empty-state"><div class="icon">📋</div><p>请先在"客户挑选"中填写商户信息</p><div class="btn-group" style="justify-content:center"><button class="btn btn-primary btn-sm" onclick="switchTab('picker')">去填写</button></div></div></div>`;
+const rec=has?recommendPackage(c).pkg:'';let h='';for(const[k,p]of Object.entries(PKG_DEF)){const sel=S.pkg===k||(!S.pkg&&rec===k);h+=`<div class="pkg-card ${sel?'selected':''} ${rec===k?'recommended':''}" onclick="selectPkg('${k}')"><div class="pkg-name">${p.name}</div><div class="pkg-combo">${p.combo}</div><div style="font-size:12px;color:var(--text-light);margin-bottom:10px">${p.forWhom}</div><div class="pkg-logic">${p.logic.map((l,i)=>`${i>0?'<span class="arrow">→</span>':''}${l}`).join('')}</div></div>`}
+document.getElementById('pkg-cards-container').innerHTML=h;if(!S.pkg&&rec)selectPkg(rec);if(S.pkg)renderPricing()}
+function selectPkg(p){S.pkg=p;document.querySelectorAll('.pkg-card').forEach(el=>{el.classList.toggle('selected',el.querySelector('.pkg-name').textContent===PKG_DEF[p].name)});renderPricing()}
+function renderPricing(){const c=S.client,p=S.pkg;if(!c.stores||!p)return;const mf=c.stores<=9?c.stores*99:c.stores*89;const at=mf*6;
+let ap,ao,ad;if(p==='starter'){ap=AD_BUDGETS.hkb;ao=ap.opts;ad=ao[0]}else if(p==='growth'){ap=AD_BUDGETS.effect;ao=ap.opts;ad=ao[0]}else{ap=AD_BUDGETS.effect;ao=ap.opts;ad=ao[1]}
+S.pricing={monthlyFee:mf,agentTotal:at,adProduct:ap.name,adDefault:ad,adOpts:ao};
+const sa=S.pricing.selectedAd||ad;const gt=at+sa;
+const rows=ao.map(o=>`<tr onclick="selectAdBudget(${o})" style="cursor:pointer;${o===sa?'background:var(--primary-bg)':''}"><td>${ap.name}</td><td>¥${o.toLocaleString()}</td><td class="amount">¥${(at+o).toLocaleString()}</td></tr>`).join('');
+let br='';if(p==='flagship')br=`<tr><td>品牌广告（顶展/钻展）</td><td colspan="2" style="color:var(--warning);font-size:13px">5折起，月封顶400W，需单独沟通</td></tr>`;
+document.getElementById('pricing-card').style.display='';
+document.getElementById('pricing-content').innerHTML=`<table class="pricing-table"><thead><tr><th>产品</th><th>费用</th><th>合计</th></tr></thead><tbody><tr><td>品牌智能体</td><td>¥${mf}/月（${c.stores}店×¥${c.stores<=9?'99':'89'}）</td><td class="amount">¥${at.toLocaleString()}（6个月）</td></tr>${rows}${br}</tbody></table><div class="pricing-total"><div class="pricing-total-label">6个月预估总投入</div><div class="pricing-total-amount">¥${gt.toLocaleString()}</div></div><div style="font-size:12px;color:var(--text-light);margin-top:8px">* 点击广告行可切换首充档位 · 日均成本约¥${Math.round(gt/180)}</div>`;
+document.getElementById('logic-card').style.display='';const lg=PKG_DEF[p].logic;
+document.getElementById('logic-content').innerHTML=`<div style="display:flex;flex-direction:column;gap:12px">${lg.map((l,i)=>`<div style="display:flex;align-items:flex-start;gap:12px"><div style="width:32px;height:32px;border-radius:50%;background:${i===0?'var(--primary)':i===lg.length-1?'var(--success)':'var(--primary-light)'};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0">${i+1}</div><div style="padding-top:5px;font-size:14px">${l}</div></div>`).join('')}</div><div style="margin-top:16px;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm);font-size:13px;color:var(--text-secondary)"><strong>一句话：</strong>${lg.join(' → ')}</div>`;
+document.getElementById('matcher-actions').style.display=''}
+function selectAdBudget(o){S.pricing.selectedAd=o;renderPricing()}
+function copyPlanText(){const c=S.client,p=PKG_DEF[S.pkg],pr=S.pricing,ad=pr.selectedAd||pr.adDefault;const t=`【售卖方案】${p.name}\n产品：${p.combo}\n适用：${c.category} · ${c.stores}店 · ${c.city}\n智能体：¥${pr.monthlyFee}/月 × 6月 = ¥${pr.agentTotal.toLocaleString()}\n${pr.adProduct}：首充¥${ad.toLocaleString()}\n合计：¥${(pr.agentTotal+ad).toLocaleString()}\n理由：${p.logic.join(' → ')}`;navigator.clipboard.writeText(t).then(()=>alert('已复制'))}
+function goToScript(){switchTab('script')}
 
-function resetPicker() {
-  document.getElementById('f-category').value = '';
-  document.getElementById('f-stores').value = '';
-  document.getElementById('f-city').value = '';
-  document.querySelectorAll('#f-ads .radio-opt, #f-intent .radio-opt').forEach(o => o.classList.remove('active'));
-  document.getElementById('picker-result').innerHTML = '';
-  S.client = {};
-}
+// ===== SCRIPT =====
+function renderScript(){const c=S.client,p=S.pkg;if(!c.category||!p){document.getElementById('script-info').style.display='none';document.getElementById('script-steps').innerHTML='<div class="empty-state"><div class="icon">📋</div><p>请先完成客户挑选和产品搭配</p></div>';renderObjections();return}
+const daily=Math.round((S.pricing.agentTotal+(S.pricing.selectedAd||S.pricing.adDefault))/180);const hook=HOOKS[c.category]||HOOKS['其他'];const sp=SP[p];const mn=PKG_DEF[p].name;
+document.getElementById('script-info').style.display='';
+document.getElementById('script-overview').innerHTML=`<div style="display:flex;gap:16px;flex-wrap:wrap"><div style="flex:1;min-width:120px;padding:12px 16px;background:var(--primary-bg);border-radius:var(--radius-sm)"><div style="font-size:12px;color:var(--text-secondary)">售卖包</div><div style="font-size:18px;font-weight:700;color:var(--primary)">${mn}</div></div><div style="flex:1;min-width:120px;padding:12px 16px;background:var(--success-bg);border-radius:var(--radius-sm)"><div style="font-size:12px;color:var(--text-secondary)">日均成本</div><div style="font-size:18px;font-weight:700;color:var(--success)">¥${daily}</div></div><div style="flex:1;min-width:120px;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm)"><div style="font-size:12px;color:var(--text-secondary)">客户</div><div style="font-size:18px;font-weight:700">${c.category} ${c.stores}店</div></div></div>`;
+const mf=S.pricing.monthlyFee,st=S.pricing.agentTotal,an=S.pricing.adProduct,af=S.pricing.selectedAd||S.pricing.adDefault;
+const steps=[{name:'开场白',time:'30秒',text:`您好！我是高德地图的[您的名字]，负责咱们${c.city||'本地'}美食商家的线上服务。\n\n今天过来是想跟您聊一个事——${hook}\n\n我们刚上线了"品牌智能体"，帮您的门店在高德上实现AI自动接待，已有不少${c.category}同行在用了。`},{name:'挖需求',time:'2分钟',text:`我想先了解一下：\n\n1. 您这边日均大概多少客人到店？线上搜索来的多不多？\n2. 有没有觉得线上获客比较难？\n3. 目前有在美团、抖音投广告吗？效果怎么样？\n4. 周边竞品有什么新的推广动作？\n\n（认真听回答，记录痛点）`},{name:'三大卖点',time:'3分钟',text:`推荐我们的【${mn}】方案，三个核心价值：\n\n一、${sp.p1}\n\n二、${sp.p2}\n\n三、${sp.p3}\n\n有家做${c.category}的门店，规模差不多，用了之后曝光提升3.6倍，转化提升31.6%，年省约6万。`},{name:'前后对比',time:'1分钟',text:`【开通前】\n- 顾客搜"${c.category}"，您的店排在后面\n- 点进来没有互动，顾客又划走了\n- 全靠自然客流\n\n【开通后】\n- 品牌智能体优先展示，有专属AI服务员\n- 顾客问什么AI秒回：推荐菜品、引导团购、帮忙预订\n- ${p==='starter'?'获客宝持续放大曝光':p==='growth'?'效果广告精准投放+智能体高效转化':'全链路闭环：品广+效广+智能体'}`},{name:'报价',time:'1分钟',text:`价格很划算：\n\n智能体月费：¥${mf}（${c.stores}家门店）\n${an}首充：¥${af.toLocaleString()}\n6个月总投入：¥${(st+af).toLocaleString()}\n\n每天只要¥${daily}——不到一杯咖啡的钱。\n年省6万+曝光3.6倍+转化31.6%，投入产出比非常高。\n现在签约可锁定推广期价格。`},{name:'异议处理',time:'按需',text:`常见异议速答：\n- "太贵了" → 每天¥${daily}，比雇兼职便宜10倍\n- "我用美团/抖音" → 高德到店场景，转化率更高\n- "效果能保证吗" → 实测曝光+3.6x、转化+31.6%\n- "AI不懂" → 全自动运行，您只管接单\n\n（更多异议请查看下方速查手册）`},{name:'促单金句',time:'30秒',text:`"现在签约锁定推广期价格，后续只会涨不会降。"\n\n"您的同行已经有不少在用了，早用早受益。"\n\n"我帮您现场开通，5分钟搞定。来，扫这个码就行。"\n\n（掏出签约二维码）`}];
+document.getElementById('script-steps').innerHTML=steps.map((s,i)=>`<div class="script-step ${i===0?'open':''}" onclick="toggleStep(this)"><div class="script-step-header"><span class="step-num">${i+1}</span><span class="step-name">${s.name}</span><span class="step-time">${s.time}</span><span class="chevron">▾</span></div><div class="script-step-body"><div class="script-text">${fmtScript(s.text)}</div><button class="btn btn-outline btn-sm" style="margin-top:10px" onclick="event.stopPropagation();navigator.clipboard.writeText(\`${escTpl(s.text)}\`).then(()=>{this.textContent='已复制 ✓';setTimeout(()=>this.textContent='复制本段',2e3)})">复制本段</button></div></div>`).join('');
+renderObjections()}
+function fmtScript(t){return t.replace(/\n/g,'<br>').replace(/【([^】]+)】/g,'<strong>【$1】</strong>').replace(/（([^）]+)）/g,'<span style="color:var(--text-light);font-size:13px">（$1）</span>').replace(/"([^"]+)"/g,'<span class="hl">"$1"</span>')}
+function escTpl(s){return s.replace(/`/g,'\\`').replace(/\$/g,'\\$')}
+function toggleStep(el){el.classList.toggle('open')}
+function renderObjections(){document.getElementById('objection-list').innerHTML=OBJECTIONS.map(o=>`<div class="objection-item" data-q="${o.q}" onclick="this.classList.toggle('expanded')"><div class="q">"${o.q}"</div><div class="a">${o.a}</div></div>`).join('')}
+function filterObjections(kw){const k=kw.toLowerCase();document.querySelectorAll('.objection-item').forEach(el=>{const q=el.dataset.q.toLowerCase(),a=el.querySelector('.a').textContent.toLowerCase();el.classList.toggle('hidden',k&&!q.includes(k)&&!a.includes(k))})}
+function copyAllScript(){const steps=document.querySelectorAll('.script-step-body .script-text');const titles=['一、开场白','二、挖需求','三、三大卖点','四、前后对比','五、报价','六、异议处理','七、促单金句'];let t='【智能体售卖话术】\n\n';steps.forEach((s,i)=>{t+=titles[i]+'\n'+s.textContent.trim()+'\n\n'});t+='【异议速查】\n';OBJECTIONS.forEach(o=>{t+=`Q: "${o.q}"\nA: ${o.a}\n\n`});navigator.clipboard.writeText(t).then(()=>alert('已复制全部话术'))}
 
-// ===== PICKER LOGIC =====
-function getClient() {
-  return {
-    category: document.getElementById('f-category').value || '其他',
-    stores: parseInt(document.getElementById('f-stores').value) || 1,
-    city: document.getElementById('f-city').value || '未知',
-    hasAds: getRadio('f-ads') === 'yes',
-    intent: getRadio('f-intent') || 'medium'
-  };
-}
+// ===== PIPELINE =====
+function addDeal(name,cat,pkg,stage){S.pipeline.push({id:dealIdCounter++,name,category:cat,pkg,stage,createdAt:Date.now(),followups:[]})}
+function getDealDays(deal){return Math.max(1,Math.ceil((Date.now()-deal.createdAt)/864e5))}
+function getDealClass(deal){const d=getDealDays(deal);return d>=7?'danger':d>=3?'warn':''}
+function renderPipeline(){const board=document.getElementById('pipeline-board');
+board.innerHTML=STAGES.map(st=>{const deals=S.pipeline.filter(d=>d.stage===st.id);return`<div class="pipeline-col" data-stage="${st.id}" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="dropDeal(event,${st.id});this.classList.remove('drag-over')"><div class="pipeline-col-header stage-${st.id}">${st.name} <span class="count">${deals.length}</span></div>${deals.map(d=>{const days=getDealDays(d);const cls=getDealClass(d);const p=PKG_DEF[d.pkg];return`<div class="deal-card ${cls}" draggable="true" ondragstart="event.dataTransfer.setData('text','${d.id}')" onclick="showDealDetail(${d.id})"><div class="name">${d.name}</div><div class="meta">${d.category} · ${p?p.name:''}</div><div class="days">${days}天</div>${d.followups.length?`<div class="followup-list">${d.followups.slice(-2).map(f=>`<div class="followup-item">${f.date}: ${f.text}</div>`).join('')}</div>`:''}<div class="next-action">→ ${NEXT_ACTIONS[st.id]}</div></div>`}).join('')}</div>`}).join('')}
+function dropDeal(e,stage){e.preventDefault();const id=parseInt(e.dataTransfer.getData('text'));const deal=S.pipeline.find(d=>d.id===id);if(deal){deal.stage=stage;renderPipeline()}}
+function showDealDetail(id){const d=S.pipeline.find(x=>x.id===id);if(!d)return;const st=STAGES.find(s=>s.id===d.stage);
+const mc=document.getElementById('modal-container');
+mc.innerHTML=`<div class="modal-overlay" onclick="if(event.target===this)this.remove()"><div class="modal" style="position:relative"><button class="modal-close" onclick="this.closest('.modal-overlay').remove()">×</button><div class="modal-title">${d.name}</div><div style="font-size:14px;color:var(--text-secondary);margin-bottom:16px">${d.category} · ${PKG_DEF[d.pkg]?.name||''} · 第${d.stage}阶段（${st.name}）· ${getDealDays(d)}天</div>
+<div class="form-group" style="margin-bottom:16px"><label class="form-label">添加跟进记录</label><div style="display:flex;gap:8px"><input id="followup-input" class="form-input" placeholder="如：商户表示感兴趣，下周再聊"><button class="btn btn-primary btn-sm" onclick="addFollowup(${d.id})">添加</button></div></div>
+${d.followups.length?`<div style="margin-bottom:16px"><label class="form-label" style="margin-bottom:8px;display:block">跟进记录</label>${d.followups.map(f=>`<div style="padding:8px 12px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:4px;font-size:13px"><span style="color:var(--text-light)">${f.date}</span> ${f.text}</div>`).join('')}</div>`:''}
+<div class="btn-group"><button class="btn btn-secondary btn-sm" onclick="moveDealToSummary(${d.id})">标记签约 → 售卖总结</button>${d.stage<5?`<button class="btn btn-outline btn-sm" onclick="advanceDeal(${d.id})">推进到下一阶段</button>`:''}</div></div></div>`}
+function addFollowup(id){const inp=document.getElementById('followup-input');if(!inp.value.trim())return;const d=S.pipeline.find(x=>x.id===id);d.followups.push({date:new Date().toLocaleDateString('zh-CN',{month:'short',day:'numeric'}),text:inp.value.trim()});showDealDetail(id);renderPipeline()}
+function advanceDeal(id){const d=S.pipeline.find(x=>x.id===id);if(d&&d.stage<5){d.stage++;renderPipeline();document.querySelector('.modal-overlay')?.remove()}}
+function moveDealToSummary(id){const d=S.pipeline.find(x=>x.id===id);if(!d)return;
+S.summaries.push({...d,signedAt:Date.now(),dealReason:[],objection:[],summaryText:''});
+S.pipeline=S.pipeline.filter(x=>x.id!==id);
+document.querySelector('.modal-overlay')?.remove();renderPipeline();switchTab('summary')}
+function showAddDealModal(){const mc=document.getElementById('modal-container');
+mc.innerHTML=`<div class="modal-overlay" onclick="if(event.target===this)this.remove()"><div class="modal" style="position:relative"><button class="modal-close" onclick="this.closest('.modal-overlay').remove()">×</button><div class="modal-title">添加客户到Pipeline</div>
+<div class="form-grid" style="grid-template-columns:1fr;margin-bottom:16px"><div class="form-group"><label class="form-label">商户名称</label><input id="ad-name" class="form-input" placeholder="如：老王火锅5店"></div><div class="form-group"><label class="form-label">品类</label><select id="ad-cat" class="form-select"><option>中餐</option><option>火锅</option><option>烧烤</option><option>茶饮</option><option>西餐</option><option>快餐</option><option>小吃</option><option>其他</option></select></div><div class="form-group"><label class="form-label">推荐售卖包</label><select id="ad-pkg" class="form-select"><option value="starter">入门包</option><option value="growth">增长包</option><option value="flagship">旗舰包</option></select></div></div>
+<div class="btn-group"><button class="btn btn-primary" onclick="confirmAddDeal()">添加</button></div></div></div>`}
+function confirmAddDeal(){const n=document.getElementById('ad-name').value;if(!n){alert('请输入商户名称');return}addDeal(n,document.getElementById('ad-cat').value,document.getElementById('ad-pkg').value,1);document.querySelector('.modal-overlay')?.remove();renderPipeline()}
 
-function recommendPackage(c) {
-  let pkg, reason;
-  if (c.stores >= 100) {
-    pkg = 'flagship';
-    reason = '百店以上大品牌，建议定制旗舰方案，联系渠道经理协助报价。';
-  } else if (c.stores >= 10 && c.hasAds) {
-    pkg = 'flagship';
-    reason = '连锁品牌且已有广告投放，成熟度高，适合全链路旗舰方案。';
-  } else if (c.stores >= 10) {
-    pkg = 'growth';
-    reason = '连锁品牌有预算基础，智能体+效果广告组合投放效果更佳。';
-  } else if (c.hasAds) {
-    pkg = 'growth';
-    reason = '已有广告基础，搭配智能体可提升转化率+31.6%，让广告费不白花。';
-  } else {
-    pkg = 'starter';
-    reason = '首次接触广告的小微商户，先用AI接住自然流量+获客宝放大曝光，低门槛试水验证效果。';
-  }
+// ===== SUMMARY =====
+function renderSummary(){const sums=S.summaries;
+const stats=document.getElementById('summary-stats');
+const totalDeals=sums.length;const reasons={};const objections={};
+sums.forEach(s=>{s.dealReason.forEach(r=>{reasons[r]=(reasons[r]||0)+1});s.objection.forEach(o=>{objections[o]=(objections[o]||0)+1})});
+stats.innerHTML=`<div class="stat-card"><div class="num">${totalDeals}</div><div class="label">成交总数</div></div><div class="stat-card"><div class="num">${Object.keys(reasons).length?Object.entries(reasons).sort((a,b)=>b[1]-a[1])[0][0]:'-'}</div><div class="label">最常成交原因</div></div><div class="stat-card"><div class="num">${sums.filter(s=>s.pkg==='starter').length}/${sums.filter(s=>s.pkg==='growth').length}/${sums.filter(s=>s.pkg==='flagship').length}</div><div class="label">入门/增长/旗舰</div></div><div class="stat-card"><div class="num">${totalDeals?Math.round(sums.reduce((a,s)=>a+getDealDays(s),0)/totalDeals):'-'}天</div><div class="label">平均跟进天数</div></div>`;
+document.getElementById('summary-list').innerHTML=sums.length?sums.map((s,i)=>`<div class="summary-item"><span class="tag ${PKG_DEF[s.pkg]?.badge||''}">${PKG_DEF[s.pkg]?.name||s.pkg}</span><div style="flex:1"><div style="font-weight:700;font-size:14px">${s.name}</div><div style="font-size:12px;color:var(--text-secondary)">${s.category} · ${getDealDays(s)}天跟进 · ${s.dealReason.length?s.dealReason.join('/'):'未填写原因'} ${s.summaryText?'· '+s.summaryText:''}</div></div><div class="btn-group" style="margin:0"><button class="btn btn-outline btn-xs" onclick="editSummary(${i})">编辑</button><button class="btn btn-outline btn-xs" onclick="genCaseFromSummary(${i})">生成案例</button></div></div>`).join(''):'<div class="empty-state"><div class="icon">📊</div><p>暂无成交记录。在Pipeline中推进客户至"签约完成"后自动归档。</p></div>'}
+function editSummary(i){const s=S.summaries[i];const mc=document.getElementById('modal-container');
+mc.innerHTML=`<div class="modal-overlay" onclick="if(event.target===this)this.remove()"><div class="modal" style="position:relative"><button class="modal-close" onclick="this.closest('.modal-overlay').remove()">×</button><div class="modal-title">编辑售卖总结 · ${s.name}</div>
+<div class="form-group" style="margin-bottom:12px"><label class="form-label">成交原因（多选）</label><div class="check-group" id="s-reasons">${['产品打动','价格合适','同行在用','关系到位','其他'].map(r=>`<div class="check-opt ${s.dealReason.includes(r)?'active':''}" onclick="this.classList.toggle('active')">${r}</div>`).join('')}</div></div>
+<div class="form-group" style="margin-bottom:12px"><label class="form-label">主要异议点（多选）</label><div class="check-group" id="s-objections">${['太贵','不需要','竞品','效果质疑','其他'].map(o=>`<div class="check-opt ${s.objection.includes(o)?'active':''}" onclick="this.classList.toggle('active')">${o}</div>`).join('')}</div></div>
+<div class="form-group" style="margin-bottom:12px"><label class="form-label">一句话总结</label><input id="s-text" class="form-input" value="${s.summaryText||''}" placeholder="如：客户对AI接待功能印象深刻，当场签约"></div>
+<div class="btn-group"><button class="btn btn-primary" onclick="saveSummary(${i})">保存</button></div></div></div>`}
+function saveSummary(i){const s=S.summaries[i];s.dealReason=[...document.querySelectorAll('#s-reasons .check-opt.active')].map(el=>el.textContent);s.objection=[...document.querySelectorAll('#s-objections .check-opt.active')].map(el=>el.textContent);s.summaryText=document.getElementById('s-text').value;document.querySelector('.modal-overlay')?.remove();renderSummary()}
+function genCaseFromSummary(i){switchTab('casegen');const s=S.summaries[i];document.getElementById('c-category').value=s.category;document.getElementById('c-pkg').value=s.pkg;updateCasePreview()}
 
-  let priority = 'medium', priorityLabel = '中（正常跟进）';
-  if (c.intent === 'high') { priority = 'high'; priorityLabel = '高（立即跟进）'; }
-  else if (c.intent === 'low') { priority = 'low'; priorityLabel = '低（先培育）'; }
-
-  const monthlyFee = c.stores <= 9 ? c.stores * 99 : c.stores * 89;
-  const adBase = pkg === 'starter' ? 3000 : pkg === 'growth' ? 5000 : 10000;
-  const sixMonth = monthlyFee * 6;
-  const total = sixMonth + adBase;
-
-  return { pkg, reason, priority, priorityLabel, monthlyFee, sixMonth, adBase, total };
-}
-
-function analyzeClient() {
-  const c = getClient();
-  if (!document.getElementById('f-category').value) { alert('请选择品类'); return; }
-  if (!document.getElementById('f-stores').value) { alert('请输入门店数'); return; }
-  if (!getRadio('f-ads')) { alert('请选择是否有广告'); return; }
-
-  S.client = c;
-  const r = recommendPackage(c);
-
-  document.getElementById('picker-result').innerHTML = `
-    <div class="result-card">
-      <div class="result-header">
-        <span class="result-badge ${PKG_DEF[r.pkg].badge}">${PKG_DEF[r.pkg].name}</span>
-        <span class="priority-tag priority-${r.priority}">${r.priorityLabel}</span>
-      </div>
-      <div style="font-size:14px;color:var(--text-secondary);margin-bottom:8px">
-        ${c.category} · ${c.stores}店 · ${c.city} · ${c.hasAds ? '有广告' : '无广告'} · 意向${c.intent === 'high' ? '高' : c.intent === 'medium' ? '中' : '低'}
-      </div>
-      <div class="result-amount">¥${r.total.toLocaleString()} <span>（6个月预估总价）</span></div>
-      <div style="font-size:13px;color:var(--text-secondary)">
-        智能体月费 ¥${r.monthlyFee} × 6个月 = ¥${r.sixMonth.toLocaleString()} + ${PKG_DEF[r.pkg].name.includes('入门') ? '获客宝' : '效果广告'}首充 ¥${r.adBase.toLocaleString()}
-      </div>
-      <div class="result-reason">
-        <strong>推荐理由：</strong>${r.reason}
-      </div>
-      <div class="btn-group">
-        <button class="btn btn-primary" onclick="useRecommendation('${r.pkg}')">进入产品搭配 →</button>
-        <button class="btn btn-outline btn-sm" onclick="copyRecommendation()">复制推荐摘要</button>
-      </div>
-    </div>
-  `;
-}
-
-function useRecommendation(pkg) {
-  S.pkg = pkg;
-  switchTab('matcher');
-}
-
-function copyRecommendation() {
-  const c = S.client;
-  const r = recommendPackage(c);
-  const text = `【客户分析】${c.category} · ${c.stores}店 · ${c.city}\n推荐：${PKG_DEF[r.pkg].name}（${PKG_DEF[r.pkg].combo}）\n预估6个月总价：¥${r.total.toLocaleString()}\n推荐理由：${r.reason}\n优先级：${r.priorityLabel}`;
-  navigator.clipboard.writeText(text).then(() => alert('已复制到剪贴板'));
-}
-
-// ===== MATCHER LOGIC =====
-function renderMatcher() {
-  const c = S.client;
-  const hasClient = c.category;
-
-  // Client info
-  document.getElementById('matcher-client-info').innerHTML = hasClient
-    ? `<div class="card" style="background:var(--primary-bg);border-color:var(--primary)">
-         <div style="display:flex;align-items:center;gap:12px;font-size:14px">
-           <span style="font-size:20px">🏪</span>
-           <span><strong>${c.category}</strong> · ${c.stores}店 · ${c.city} · ${c.hasAds ? '有广告' : '无广告'} · 意向${c.intent === 'high' ? '高' : c.intent === 'medium' ? '中' : '低'}</span>
-           <button class="btn btn-outline btn-sm" style="margin-left:auto" onclick="switchTab('picker')">修改</button>
-         </div>
-       </div>`
-    : `<div class="card"><div class="empty-state"><div class="icon">📋</div><p>请先在"客户挑选"中填写商户信息</p><div class="btn-group" style="justify-content:center"><button class="btn btn-primary btn-sm" onclick="switchTab('picker')">去填写</button></div></div></div>`;
-
-  // Package cards
-  const recommended = hasClient ? recommendPackage(c).pkg : '';
-  let html = '';
-  for (const [key, pkg] of Object.entries(PKG_DEF)) {
-    const selected = S.pkg === key || (!S.pkg && recommended === key);
-    html += `
-      <div class="pkg-card ${selected ? 'selected' : ''} ${recommended === key ? 'recommended' : ''}"
-           onclick="selectPkg('${key}')">
-        <div class="pkg-name">${pkg.name}</div>
-        <div class="pkg-combo">${pkg.combo}</div>
-        <div style="font-size:12px;color:var(--text-light);margin-bottom:10px">${pkg.forWhom}</div>
-        <div class="pkg-logic">
-          ${pkg.logic.map((l, i) => `${i > 0 ? '<span class="arrow">→</span>' : ''}${l}`).join('')}
-        </div>
-      </div>
-    `;
-  }
-  document.getElementById('pkg-cards-container').innerHTML = html;
-
-  // Auto-select recommended if not yet selected
-  if (!S.pkg && recommended) selectPkg(recommended);
-
-  // Render pricing and logic if package selected
-  if (S.pkg) renderPricing();
-}
-
-function selectPkg(pkg) {
-  S.pkg = pkg;
-  document.querySelectorAll('.pkg-card').forEach(el => {
-    const name = el.querySelector('.pkg-name').textContent;
-    el.classList.toggle('selected', name === PKG_DEF[pkg].name);
-  });
-  renderPricing();
-}
-
-function renderPricing() {
-  const c = S.client;
-  const pkg = S.pkg;
-  if (!c.stores || !pkg) return;
-
-  const monthlyFee = c.stores <= 9 ? c.stores * 99 : c.stores * 89;
-  const months = 6;
-  const agentTotal = monthlyFee * months;
-
-  let adProduct, adOpts, adDefault;
-  if (pkg === 'starter') {
-    adProduct = AD_BUDGETS.hkb; adOpts = adProduct.opts; adDefault = adOpts[0];
-  } else if (pkg === 'growth') {
-    adProduct = AD_BUDGETS.effect; adOpts = adProduct.opts; adDefault = adOpts[0];
-  } else {
-    adProduct = AD_BUDGETS.effect; adOpts = adProduct.opts; adDefault = adOpts[1];
-  }
-
-  S.pricing = { monthlyFee, agentTotal, adProduct: adProduct.name, adDefault, adOpts };
-
-  const adRows = adOpts.map(opt => `
-    <tr onclick="selectAdBudget(${opt})" style="cursor:pointer;${opt === (S.pricing.selectedAd || adDefault) ? 'background:var(--primary-bg)' : ''}">
-      <td>${adProduct.name}</td>
-      <td>¥${opt.toLocaleString()}</td>
-      <td class="amount">¥${(agentTotal + opt).toLocaleString()}</td>
-    </tr>
-  `).join('');
-
-  let brandRow = '';
-  if (pkg === 'flagship') {
-    brandRow = `<tr>
-      <td>品牌广告（顶展/钻展）</td>
-      <td colspan="2" style="color:var(--warning);font-size:13px">5折起，月封顶400W，需单独沟通定价</td>
-    </tr>`;
-  }
-
-  const selectedAd = S.pricing.selectedAd || adDefault;
-  const grandTotal = agentTotal + selectedAd;
-
-  document.getElementById('pricing-card').style.display = '';
-  document.getElementById('pricing-content').innerHTML = `
-    <table class="pricing-table">
-      <thead><tr><th>产品</th><th>费用</th><th>合计</th></tr></thead>
-      <tbody>
-        <tr>
-          <td>品牌智能体</td>
-          <td>¥${monthlyFee}/月（${c.stores}店 × ¥${c.stores <= 9 ? '99' : '89'}）</td>
-          <td class="amount">¥${agentTotal.toLocaleString()}（${months}个月）</td>
-        </tr>
-        ${adRows}
-        ${brandRow}
-      </tbody>
-    </table>
-    <div class="pricing-total">
-      <div class="pricing-total-label">6个月预估总投入</div>
-      <div class="pricing-total-amount">¥${grandTotal.toLocaleString()}</div>
-    </div>
-    <div style="font-size:12px;color:var(--text-light);margin-top:8px">
-      * 点击广告行可切换首充档位 · 连锁折扣按实际签约门店数自动计算 · 日均成本约¥${Math.round(grandTotal / 180)}
-    </div>
-  `;
-
-  // Logic chain
-  document.getElementById('logic-card').style.display = '';
-  const logic = PKG_DEF[pkg].logic;
-  document.getElementById('logic-content').innerHTML = `
-    <div style="display:flex;flex-direction:column;gap:12px">
-      ${logic.map((l, i) => `
-        <div style="display:flex;align-items:flex-start;gap:12px">
-          <div style="width:32px;height:32px;border-radius:50%;background:${i === 0 ? 'var(--primary)' : i === logic.length - 1 ? 'var(--success)' : 'var(--primary-light)'};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0">${i + 1}</div>
-          <div style="padding-top:5px;font-size:14px;line-height:1.6">${l}</div>
-        </div>
-      `).join('')}
-    </div>
-    <div style="margin-top:16px;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm);font-size:13px;color:var(--text-secondary)">
-      <strong>一句话总结：</strong>${logic.join(' → ')}
-    </div>
-  `;
-
-  document.getElementById('matcher-actions').style.display = '';
-}
-
-function selectAdBudget(opt) {
-  S.pricing.selectedAd = opt;
-  renderPricing();
-}
-
-function copyPlanText() {
-  const c = S.client;
-  const pkg = PKG_DEF[S.pkg];
-  const p = S.pricing;
-  const ad = p.selectedAd || p.adDefault;
-  const text = `【售卖方案】${pkg.name}\n产品：${pkg.combo}\n适用：${c.category} · ${c.stores}店 · ${c.city}\n智能体：¥${p.monthlyFee}/月 × 6个月 = ¥${p.agentTotal.toLocaleString()}\n${p.adProduct}：首充¥${ad.toLocaleString()}\n合计：¥${(p.agentTotal + ad).toLocaleString()}\n推荐理由：${pkg.logic.join(' → ')}`;
-  navigator.clipboard.writeText(text).then(() => alert('方案摘要已复制'));
-}
-
-function goToScript() {
-  switchTab('script');
-}
-
-// ===== SCRIPT LOGIC =====
-function renderScript() {
-  const c = S.client;
-  const pkg = S.pkg;
-
-  if (!c.category || !pkg) {
-    document.getElementById('script-info').style.display = 'none';
-    document.getElementById('script-steps').innerHTML = `
-      <div class="empty-state">
-        <div class="icon">📋</div>
-        <p>请先完成客户挑选和产品搭配</p>
-        <div class="btn-group" style="justify-content:center">
-          <button class="btn btn-primary btn-sm" onclick="switchTab('picker')">去开始</button>
-        </div>
-      </div>`;
-    renderObjections();
-    return;
-  }
-
-  const daily = Math.round((S.pricing.agentTotal + (S.pricing.selectedAd || S.pricing.adDefault)) / 180);
-  const hook = CATEGORY_HOOKS[c.category] || CATEGORY_HOOKS['其他'];
-  const sp = SELLING_POINTS[pkg];
-  const pkgName = PKG_DEF[pkg].name;
-  const monthlyFee = S.pricing.monthlyFee;
-  const sixMonth = S.pricing.agentTotal;
-  const adName = S.pricing.adProduct;
-  const adFee = S.pricing.selectedAd || S.pricing.adDefault;
-
-  // Overview
-  document.getElementById('script-info').style.display = '';
-  document.getElementById('script-overview').innerHTML = `
-    <div style="display:flex;gap:16px;flex-wrap:wrap">
-      <div style="flex:1;min-width:120px;padding:12px 16px;background:var(--primary-bg);border-radius:var(--radius-sm)">
-        <div style="font-size:12px;color:var(--text-secondary)">售卖包</div>
-        <div style="font-size:18px;font-weight:700;color:var(--primary)">${pkgName}</div>
-      </div>
-      <div style="flex:1;min-width:120px;padding:12px 16px;background:var(--success-bg);border-radius:var(--radius-sm)">
-        <div style="font-size:12px;color:var(--text-secondary)">日均成本</div>
-        <div style="font-size:18px;font-weight:700;color:var(--success)">¥${daily}</div>
-      </div>
-      <div style="flex:1;min-width:120px;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm)">
-        <div style="font-size:12px;color:var(--text-secondary)">客户</div>
-        <div style="font-size:18px;font-weight:700">${c.category} ${c.stores}店</div>
-      </div>
-    </div>
-  `;
-
-  // Steps
-  const steps = [
-    {
-      name: '开场白',
-      time: '30秒',
-      text: `您好！我是高德地图的[您的名字]，负责咱们${c.city || '本地'}美食商家的线上服务。\n\n今天过来是想跟您聊一个事——${hook}\n\n我们刚上线了一个"品牌智能体"产品，帮您的门店在高德地图上实现AI自动接待，已经有不少${c.category}同行在用了，效果不错，花两分钟跟您说说？`
-    },
-    {
-      name: '挖需求',
-      time: '2分钟',
-      text: `我想先了解一下您目前的情况：\n\n1. 您这边日均大概有多少客人到店？线上搜索来的多不多？\n2. 有没有觉得线上获客比较难？比如顾客搜"${c.category}"但找不到您的店？\n3. 目前有在美团、抖音或者其他平台投广告吗？效果怎么样？\n4. 周边的竞品有没有做什么新的推广动作？\n\n（认真听回答，记录痛点，后续话术根据回答灵活调整）`
-    },
-    {
-      name: '三大卖点',
-      time: '3分钟',
-      text: `基于您的情况，我推荐我们的【${pkgName}】方案，有三个核心价值：\n\n一、${sp.point1}\n\n二、${sp.point2}\n\n三、${sp.point3}\n\n给您举个例子：有家做${c.category}的门店，跟您规模差不多，用了之后曝光量提升了3.6倍，到店转化率提升了31.6%，一年算下来省了大概6万块钱人力成本。`
-    },
-    {
-      name: '前后对比',
-      time: '1分钟',
-      text: `您可以对比一下：\n\n【开通前】\n- 顾客在高德搜"${c.category}"，您的店排在后面，看不到\n- 就算看到了，点进来没有互动，顾客又划走了\n- 全靠自然客流，天气不好就没生意\n\n【开通后】\n- 品牌智能体在搜索结果和门店页优先展示，有专属AI服务员\n- 顾客问什么AI秒回：推荐菜品、引导团购、帮忙预订，40秒内完成\n- ${pkg === 'starter' ? '获客宝持续放大曝光，让更多人看到您' : pkg === 'growth' ? '效果广告精准投放+智能体高效转化，广告费不白花' : '品牌广告打认知+效果广告做获客+智能体做转化，全链路闭环'}`
-    },
-    {
-      name: '报价',
-      time: '1分钟',
-      text: `说到价格，其实很划算：\n\n智能体月费：¥${monthlyFee}（${c.stores}家门店）\n${adName}首充：¥${adFee.toLocaleString()}\n6个月总投入：¥${(sixMonth + adFee).toLocaleString()}\n\n算下来每天成本只要¥${daily}——还不到一杯咖啡的钱。\n\n而且对比效果：年省6万+曝光提升3.6倍+转化提升31.6%，投入产出比非常高。\n\n现在签约还有一个好处：新上线推广期价格有优势，后续调价后您可以继续享受当前价格。`
-    },
-    {
-      name: '异议处理',
-      time: '按需',
-      text: `（如果商户有疑虑，请查看下方"异议速查手册"快速找到对应话术）\n\n常见异议速答：\n- "太贵了" → 每天¥${daily}，比雇兼职便宜10倍\n- "我用美团/抖音" → 高德是到店场景，用户已出门，转化率更高\n- "效果能保证吗" → 同类商户实测曝光+3.6x、转化+31.6%\n- "AI不懂" → 全自动运行，您只管接单做菜`
-    },
-    {
-      name: '促单金句',
-      time: '30秒',
-      text: `最后说三句话：\n\n"现在签约锁定推广期价格，后续只会涨不会降。"\n\n"您的同行已经有不少在用了，${c.city || '本地'}的${c.category}品类竞争越来越激烈，早用早受益。"\n\n"我帮您现场开通，5分钟搞定，今天就能开始接单。来，扫这个码就行。"\n\n（掏出签约二维码，引导扫码）`
-    }
-  ];
-
-  document.getElementById('script-steps').innerHTML = steps.map((s, i) => `
-    <div class="script-step ${i === 0 ? 'open' : ''}" onclick="toggleStep(this)">
-      <div class="script-step-header">
-        <span class="step-num">${i + 1}</span>
-        <span class="step-name">${s.name}</span>
-        <span class="step-time">${s.time}</span>
-        <span class="chevron">▾</span>
-      </div>
-      <div class="script-step-body">
-        <div class="script-text">${formatScript(s.text)}</div>
-        <button class="btn btn-outline btn-sm script-copy" onclick="event.stopPropagation();copyStepText(this, \`${escapeForTemplate(s.text)}\`)">复制本段</button>
-      </div>
-    </div>
-  `).join('');
-
-  // Objections
-  renderObjections();
-}
-
-function formatScript(text) {
-  return text
-    .replace(/\n/g, '<br>')
-    .replace(/【([^】]+)】/g, '<strong>【$1】</strong>')
-    .replace(/（([^）]+)）/g, '<span style="color:var(--text-light);font-size:13px">（$1）</span>')
-    .replace(/"([^"]+)"/g, '<span class="hl">"$1"</span>');
-}
-
-function escapeForTemplate(s) {
-  return s.replace(/`/g, '\\`').replace(/\$/g, '\\$');
-}
-
-function toggleStep(el) {
-  el.classList.toggle('open');
-}
-
-function copyStepText(btn, text) {
-  navigator.clipboard.writeText(text).then(() => {
-    btn.textContent = '已复制 ✓';
-    setTimeout(() => btn.textContent = '复制本段', 2000);
-  });
-}
-
-function renderObjections() {
-  document.getElementById('objection-list').innerHTML = OBJECTIONS.map((o, i) => `
-    <div class="objection-item" data-q="${o.q}" onclick="this.classList.toggle('expanded')">
-      <div class="q">"${o.q}"</div>
-      <div class="a">${o.a}</div>
-    </div>
-  `).join('');
-}
-
-function filterObjections(keyword) {
-  const kw = keyword.toLowerCase();
-  document.querySelectorAll('.objection-item').forEach(el => {
-    const q = el.dataset.q.toLowerCase();
-    const a = el.querySelector('.a').textContent.toLowerCase();
-    el.classList.toggle('hidden', kw && !q.includes(kw) && !a.includes(kw));
-  });
-}
-
-function copyAllScript() {
-  const steps = document.querySelectorAll('.script-step-body .script-text');
-  const titles = ['一、开场白', '二、挖需求', '三、三大卖点', '四、前后对比', '五、报价', '六、异议处理', '七、促单金句'];
-  let text = '【智能体售卖话术】\n\n';
-  steps.forEach((s, i) => {
-    text += titles[i] + '\n' + s.textContent.trim() + '\n\n';
-  });
-  text += '【异议速查】\n';
-  OBJECTIONS.forEach(o => {
-    text += `Q: "${o.q}"\nA: ${o.a}\n\n`;
-  });
-  navigator.clipboard.writeText(text).then(() => alert('全部话术已复制'));
-}
-
-function printScript() {
-  window.print();
-}
+// ===== CASE GENERATOR =====
+function updateCasePreview(){const cat=document.getElementById('c-category').value;const pkg=document.getElementById('c-pkg').value;const m1v=document.getElementById('c-metric1-val').value||'+XX%';const m1d=document.getElementById('c-metric1-desc').value||'核心指标';const m2v=document.getElementById('c-metric2-val').value||'+XX%';const m2d=document.getElementById('c-metric2-desc').value|| '效果指标';const pain=document.getElementById('c-pain').value||'线上曝光不足，自然客流持续下降';const slogan=document.getElementById('c-slogan').value||'让AI替你揽客';const strategy=document.getElementById('c-strategy').value||'做好新品介绍，讲好商户故事';
+const theme=CASE_THEMES[cat]||CASE_THEMES['中餐'];const pkgInfo=PKG_DEF[pkg];
+document.getElementById('case-preview').innerHTML=`<div class="case-card-html" style="background:linear-gradient(180deg,${theme.bg1},#030712)"><div class="case-hero" style="background:linear-gradient(180deg,${theme.bg1},#030712)"><div class="case-category">${theme.label} 某${cat}门店 · ${pkgInfo.name}</div><div class="case-headline" style="color:${theme.accent}">${m1v}</div><div class="case-subline">${m1d}</div></div><div class="case-body"><div class="case-section"><div class="case-section-title" style="color:${theme.accent}">痛点</div><div class="case-pain">${pain}</div></div><div class="case-section"><div class="case-section-title" style="color:${theme.accent}">金句</div><div class="case-sell" style="border-color:${theme.accent}">"${slogan}"</div></div><div class="case-section"><div class="case-section-title" style="color:${theme.accent}">售卖核心</div><div style="font-size:14px;line-height:1.7;opacity:.9">${strategy}</div></div><div class="case-section"><div class="case-section-title" style="color:${theme.accent}">效果</div><div class="case-metric"><div class="case-metric-item"><div class="val" style="color:${theme.accent}">${m1v}</div><div class="desc">${m1d}</div></div><div class="case-metric-item"><div class="val" style="color:${theme.accent}">${m2v}</div><div class="desc">${m2d}</div></div></div></div></div><div class="case-footer">智能体销售赋能工作台 · 案例卡片</div></div>`}
+function getCaseHTML(){return document.querySelector('.case-card-html')?.outerHTML||''}
+function copyCaseHTML(){navigator.clipboard.writeText(getCaseHTML()).then(()=>alert('HTML源码已复制'))}
+function downloadCaseHTML(){const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#111}img{max-width:100%}</style></head><body>${getCaseHTML()}</body></html>`;const blob=new Blob([html],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='案例卡片.html';a.click();URL.revokeObjectURL(a.href)}
 
 // ===== INIT =====
-renderObjections();
+renderObjections();updateCasePreview();
+// Demo data
+addDeal('老王火锅·8店','火锅','growth',2);addDeal('鲜茶道·3店','茶饮','starter',1);addDeal('川味坊·5店','中餐','starter',3);
+S.pipeline[0].followups=[{date:'6月10日',text:'首次拜访，老板对AI接待感兴趣'},{date:'6月11日',text:'发送方案，等待回复'}];
 </script>
 </body>
 </html>
