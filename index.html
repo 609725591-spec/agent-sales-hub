@@ -1,376 +1,459 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>智能体销售赋能工作台</title>
 <style>
-:root {
-  --primary:#2563eb;--primary-light:#3b82f6;--primary-dark:#1d4ed8;--primary-bg:#eff6ff;--primary-50:#dbeafe;
-  --success:#059669;--success-bg:#ecfdf5;--warning:#d97706;--warning-bg:#fffbeb;--danger:#dc2626;--danger-bg:#fef2f2;
-  --bg:#f8fafc;--card:#fff;--border:#e2e8f0;--text:#1e293b;--text-secondary:#64748b;--text-light:#94a3b8;
-  --radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.08);--shadow-md:0 4px 6px rgba(0,0,0,.07);
-  --transition:all .2s ease;
-}
+:root{--primary:#2563eb;--primary-light:#3b82f6;--primary-dark:#1d4ed8;--primary-bg:#eff6ff;--primary-50:#dbeafe;--success:#059669;--success-bg:#ecfdf5;--warning:#d97706;--warning-bg:#fffbeb;--danger:#dc2626;--danger-bg:#fef2f2;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--text:#1e293b;--text-sec:#64748b;--text-light:#94a3b8;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.08);--shadow-md:0 4px 6px rgba(0,0,0,.07);--tr:all .2s ease}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
-.header{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;padding:20px 32px;position:sticky;top:0;z-index:100}
+.header{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;padding:16px 32px;position:sticky;top:0;z-index:100}
 .header-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
-.header h1{font-size:20px;font-weight:700}.header-sub{font-size:13px;opacity:.8;margin-top:2px}
+.header h1{font-size:18px;font-weight:700}.header-sub{font-size:12px;opacity:.8;margin-top:2px}
 .role-switch{display:flex;gap:4px;background:rgba(255,255,255,.15);border-radius:8px;padding:3px}
-.role-btn{padding:6px 16px;border:none;background:0 0;color:rgba(255,255,255,.7);border-radius:6px;cursor:pointer;font-size:13px;transition:var(--transition)}
-.role-btn.active{background:rgba(255,255,255,.25);color:#fff;font-weight:600}.role-btn:hover{color:#fff}
-.tabs{background:var(--card);border-bottom:1px solid var(--border);padding:0 32px;position:sticky;top:68px;z-index:99}
-.tabs-inner{max-width:1280px;margin:0 auto;display:flex;gap:0;overflow-x:auto}
-.tab{padding:14px 20px;border:none;background:0 0;color:var(--text-secondary);cursor:pointer;font-size:14px;font-weight:500;border-bottom:2px solid transparent;transition:var(--transition);white-space:nowrap}
-.tab:hover{color:var(--primary)}.tab.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
-.tab .badge{display:inline-block;background:var(--primary);color:#fff;font-size:11px;padding:1px 7px;border-radius:10px;margin-left:4px;font-weight:600}
-.tab .badge.p0{background:var(--danger)}.tab .badge.p1{background:var(--warning)}
-.main{max-width:1280px;margin:0 auto;padding:24px 32px}
+.role-btn{padding:5px 14px;border:none;background:0 0;color:rgba(255,255,255,.7);border-radius:6px;cursor:pointer;font-size:12px;transition:var(--tr)}.role-btn.active{background:rgba(255,255,255,.25);color:#fff;font-weight:600}.role-btn:hover{color:#fff}
+.tabs{background:var(--card);border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:56px;z-index:99;overflow-x:auto;white-space:nowrap}
+.tabs-inner{max-width:1280px;margin:0 auto;display:flex}
+.tab{padding:10px 14px;border:none;background:0 0;color:var(--text-sec);cursor:pointer;font-size:13px;font-weight:500;border-bottom:2px solid transparent;transition:var(--tr);white-space:nowrap}.tab:hover{color:var(--primary)}.tab.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+.tab .bdg{display:inline-block;font-size:10px;padding:1px 5px;border-radius:8px;margin-left:3px;font-weight:600;color:#fff}.bdg.p0{background:var(--danger)}.bdg.p1{background:var(--warning)}.bdg.p2{background:var(--primary)}
+.tab-sep{border-left:1px solid var(--border);margin:0 4px}
+.main{max-width:1280px;margin:0 auto;padding:20px 24px}
 .panel{display:none;animation:fadeIn .3s ease}.panel.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:24px;margin-bottom:16px;box-shadow:var(--shadow)}
-.card-title{font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.card-title .icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.card-title .icon.blue{background:var(--primary-bg);color:var(--primary)}.card-title .icon.green{background:var(--success-bg);color:var(--success)}.card-title .icon.orange{background:var(--warning-bg);color:var(--warning)}
-.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
-.form-group{display:flex;flex-direction:column;gap:6px}
-.form-label{font-size:13px;font-weight:600;color:var(--text-secondary)}
-.form-input,.form-select{padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;color:var(--text);background:var(--card);transition:var(--transition);outline:none;width:100%}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:20px;margin-bottom:14px;box-shadow:var(--shadow)}
+.card-title{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.card-title .ic{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.ic.blue{background:var(--primary-bg);color:var(--primary)}.ic.green{background:var(--success-bg);color:var(--success)}.ic.orange{background:var(--warning-bg);color:var(--warning)}.ic.purple{background:#f3e8ff;color:#7c3aed}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-label{font-size:12px;font-weight:600;color:var(--text-sec)}
+.form-input,.form-select{padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;outline:none;width:100%;transition:var(--tr)}
 .form-input:focus,.form-select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
-.form-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
-.radio-group{display:flex;gap:8px;flex-wrap:wrap}
-.radio-opt{padding:8px 16px;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:13px;transition:var(--transition);user-select:none}
-.radio-opt:hover{border-color:var(--primary-light)}.radio-opt.active{background:var(--primary-bg);border-color:var(--primary);color:var(--primary);font-weight:600}
-.check-group{display:flex;gap:8px;flex-wrap:wrap}
-.check-opt{padding:8px 16px;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:13px;transition:var(--transition);user-select:none}
-.check-opt:hover{border-color:var(--primary-light)}.check-opt.active{background:var(--primary-bg);border-color:var(--primary);color:var(--primary);font-weight:600}
-.btn{padding:10px 24px;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;transition:var(--transition);display:inline-flex;align-items:center;gap:8px}
-.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark);box-shadow:var(--shadow-md)}
-.btn-secondary{background:var(--primary-bg);color:var(--primary)}.btn-secondary:hover{background:var(--primary-50)}
-.btn-outline{background:0 0;color:var(--text-secondary);border:1px solid var(--border)}.btn-outline:hover{border-color:var(--primary);color:var(--primary)}
-.btn-sm{padding:6px 14px;font-size:13px}.btn-xs{padding:4px 10px;font-size:12px}
-.btn-group{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
-.result-card{border:2px solid var(--primary);border-radius:var(--radius);padding:24px;background:linear-gradient(135deg,var(--primary-bg),#fff);margin-top:20px;animation:slideUp .4s ease}
-@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.result-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.result-badge{padding:4px 14px;border-radius:20px;font-size:13px;font-weight:700}
-.badge-starter{background:#dbeafe;color:#1d4ed8}.badge-growth{background:#d1fae5;color:#065f46}.badge-flagship{background:#fef3c7;color:#92400e}
-.priority-tag{padding:3px 10px;border-radius:4px;font-size:12px;font-weight:600}
-.priority-high{background:var(--danger-bg);color:var(--danger)}.priority-medium{background:var(--warning-bg);color:var(--warning)}.priority-low{background:var(--bg);color:var(--text-secondary)}
-.result-amount{font-size:28px;font-weight:800;color:var(--primary);margin:8px 0}.result-amount span{font-size:14px;font-weight:500;color:var(--text-secondary)}
-.result-reason{font-size:14px;color:var(--text-secondary);padding:12px 16px;background:var(--card);border-radius:var(--radius-sm);border-left:3px solid var(--primary);margin-top:12px;line-height:1.7}
-.pkg-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
-.pkg-card{border:2px solid var(--border);border-radius:var(--radius);padding:20px;cursor:pointer;transition:var(--transition);position:relative;overflow:hidden}
-.pkg-card:hover{border-color:var(--primary-light);box-shadow:var(--shadow-md)}.pkg-card.selected{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
-.pkg-card.recommended::before{content:"推荐";position:absolute;top:12px;right:-24px;background:var(--primary);color:#fff;font-size:11px;font-weight:700;padding:2px 28px;transform:rotate(45deg)}
-.pkg-name{font-size:18px;font-weight:800;margin-bottom:4px}.pkg-combo{font-size:13px;color:var(--text-secondary);margin-bottom:12px}
-.pkg-logic{font-size:13px;color:var(--text);line-height:1.7;padding:10px 12px;background:var(--bg);border-radius:var(--radius-sm)}
-.pkg-logic .arrow{color:var(--primary);font-weight:700;margin:0 4px}
-.pricing-table{width:100%;border-collapse:collapse;margin-top:16px}
-.pricing-table th{background:var(--bg);padding:10px 14px;text-align:left;font-size:13px;font-weight:600;color:var(--text-secondary);border-bottom:2px solid var(--border)}
-.pricing-table td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:14px}
-.pricing-table .amount{font-weight:700;color:var(--primary)}
-.pricing-total{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:var(--primary-bg);border-radius:var(--radius-sm);margin-top:12px}
-.pricing-total-label{font-size:14px;color:var(--text-secondary)}.pricing-total-amount{font-size:24px;font-weight:800;color:var(--primary)}
-.script-steps{display:flex;flex-direction:column;gap:2px}
-.script-step{border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
-.script-step-header{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;background:var(--card);transition:var(--transition)}
-.script-step-header:hover{background:var(--bg)}
-.script-step-header .step-num{width:28px;height:28px;border-radius:50%;background:var(--primary-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
-.script-step-header .step-name{font-weight:600;font-size:14px}
-.script-step-header .step-time{margin-left:auto;font-size:12px;color:var(--text-light);background:var(--bg);padding:2px 8px;border-radius:4px}
-.script-step-header .chevron{transition:transform .2s;color:var(--text-light)}
-.script-step.open .chevron{transform:rotate(180deg)}
-.script-step-body{display:none;padding:16px 18px;background:var(--bg);border-top:1px solid var(--border)}
-.script-step.open .script-step-body{display:block}
-.script-text{font-size:14px;line-height:1.8;white-space:pre-wrap}.script-text .hl{color:var(--primary);font-weight:700}
-.objection-search{margin-top:20px}
-.objection-input{width:100%;padding:12px 16px 12px 40px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;transition:var(--transition);background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E") no-repeat 14px center}
-.objection-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
-.objection-list{margin-top:12px;display:flex;flex-direction:column;gap:8px}
-.objection-item{padding:14px 18px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition)}
-.objection-item:hover{border-color:var(--primary-light)}.objection-item .q{font-weight:700;font-size:14px;color:var(--danger);margin-bottom:4px}.objection-item .a{font-size:13px;color:var(--text-secondary);line-height:1.6}
-.objection-item.hidden{display:none}.objection-item.expanded .a{color:var(--text)}
-.flow-bar{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--primary-bg);border-radius:var(--radius-sm);margin-bottom:20px;font-size:13px;color:var(--primary)}
-.flow-step{display:flex;align-items:center;gap:6px}.flow-step.current{font-weight:700}.flow-step.done{color:var(--success)}.flow-arrow{color:var(--text-light)}
-.empty-state{text-align:center;padding:60px 20px;color:var(--text-light)}.empty-state .icon{font-size:48px;margin-bottom:12px}.empty-state p{font-size:14px}
-
-/* ===== Phase 2: Pipeline ===== */
-.pipeline-board{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;min-height:400px}
-.pipeline-col{background:var(--bg);border-radius:var(--radius);padding:12px;min-height:300px;border:2px dashed transparent;transition:var(--transition)}
-.pipeline-col.drag-over{border-color:var(--primary);background:var(--primary-bg)}
-.pipeline-col-header{text-align:center;padding:8px;margin-bottom:12px;border-radius:var(--radius-sm);font-weight:700;font-size:13px;color:#fff}
-.pipeline-col-header .count{display:inline-block;background:rgba(255,255,255,.3);padding:1px 8px;border-radius:10px;margin-left:6px;font-size:11px}
-.stage-1{background:var(--primary)}.stage-2{background:#7c3aed}.stage-3{background:#0891b2}.stage-4{background:var(--warning)}.stage-5{background:var(--success)}
-.deal-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px;cursor:grab;transition:var(--transition);position:relative}
-.deal-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}.deal-card:active{cursor:grabbing}
-.deal-card.warn{border-color:var(--warning);background:var(--warning-bg)}.deal-card.danger{border-color:var(--danger);background:var(--danger-bg)}
-.deal-card .name{font-weight:700;font-size:14px;margin-bottom:4px}.deal-card .meta{font-size:12px;color:var(--text-secondary)}
-.deal-card .days{position:absolute;top:8px;right:8px;font-size:11px;padding:2px 6px;border-radius:4px;background:var(--bg);color:var(--text-secondary)}
-.deal-card.warn .days{background:var(--warning-bg);color:var(--warning)}.deal-card.danger .days{background:var(--danger-bg);color:var(--danger)}
-.deal-card .pkg-tag{display:inline-block;font-size:11px;padding:1px 8px;border-radius:4px;margin-top:4px}
-.deal-card .next-action{font-size:12px;color:var(--text-light);margin-top:6px;padding-top:6px;border-top:1px solid var(--border)}
-.add-deal-btn{width:100%;padding:8px;border:1px dashed var(--border);border-radius:var(--radius-sm);background:0 0;color:var(--text-light);cursor:pointer;font-size:13px;transition:var(--transition);margin-top:8px}
-.add-deal-btn:hover{border-color:var(--primary);color:var(--primary)}
-.followup-list{margin-top:8px;border-top:1px solid var(--border);padding-top:8px}
-.followup-item{font-size:12px;color:var(--text-secondary);padding:4px 0;border-bottom:1px dotted var(--border)}
-.followup-item:last-child{border-bottom:none}
-
-/* ===== Phase 2: Modal ===== */
-.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:200;display:flex;align-items:center;justify-content:center;animation:fadeIn .2s}
-.modal{background:var(--card);border-radius:var(--radius);padding:28px;width:90%;max-width:500px;box-shadow:var(--shadow-lg);max-height:80vh;overflow-y:auto}
-.modal-title{font-size:18px;font-weight:700;margin-bottom:20px}
-.modal-close{position:absolute;top:16px;right:16px;background:0 0;border:none;font-size:20px;cursor:pointer;color:var(--text-light)}
-
-/* ===== Phase 2: Sale Summary ===== */
-.summary-list{display:flex;flex-direction:column;gap:8px}
-.summary-item{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);transition:var(--transition)}
-.summary-item:hover{border-color:var(--primary-light)}
-.summary-item .tag{font-size:11px;padding:2px 8px;border-radius:4px;font-weight:600}
-.summary-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-.stat-card{padding:16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);text-align:center}
-.stat-card .num{font-size:24px;font-weight:800;color:var(--primary)}.stat-card .label{font-size:12px;color:var(--text-secondary);margin-top:4px}
-
-/* ===== Phase 2: Case Card ===== */
-.case-preview{border-radius:var(--radius);overflow:hidden;max-width:400px;margin:0 auto}
-.case-card-html{border-radius:var(--radius);overflow:hidden;background:#030712;color:#fff;font-family:inherit}
-.case-hero{padding:40px 32px 24px;text-align:center;background:linear-gradient(180deg,#0f172a,#030712)}
-.case-category{font-size:13px;opacity:.6;margin-bottom:8px}.case-headline{font-size:36px;font-weight:900;color:#fbbf24;margin-bottom:4px}
-.case-subline{font-size:14px;opacity:.7}
-.case-body{padding:24px 32px}
-.case-section{margin-bottom:20px}.case-section-title{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:#fbbf24;margin-bottom:8px;opacity:.8}
-.case-pain{padding:12px 16px;background:rgba(220,38,38,.15);border-radius:8px;border-left:3px solid var(--danger);font-size:13px;line-height:1.7}
-.case-sell{padding:12px 16px;background:rgba(251,191,36,.1);border-radius:8px;border-left:3px solid #fbbf24;font-size:13px;line-height:1.7;font-weight:600}
-.case-metric{display:flex;gap:16px;margin-top:12px}.case-metric-item{flex:1;text-align:center}
-.case-metric-item .val{font-size:28px;font-weight:900;color:#fbbf24}.case-metric-item .desc{font-size:11px;opacity:.6}
-.case-footer{padding:16px 32px;background:#0f172a;text-align:center;font-size:12px;opacity:.5}
-
-@media(max-width:768px){
-  .header{padding:16px 20px}.tabs{padding:0 12px}.main{padding:16px 20px}
-  .pkg-cards{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}
-  .pipeline-board{grid-template-columns:1fr;gap:16px}.summary-stats{grid-template-columns:repeat(2,1fr)}
-  .tab{padding:12px 10px;font-size:12px}
-}
+.form-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.rg{display:flex;gap:6px;flex-wrap:wrap}.ro{padding:7px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:12px;transition:var(--tr);user-select:none}.ro:hover{border-color:var(--primary-light)}.ro.on{background:var(--primary-bg);border-color:var(--primary);color:var(--primary);font-weight:600}
+.cg{display:flex;gap:6px;flex-wrap:wrap}.co{padding:7px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:12px;transition:var(--tr);user-select:none}.co:hover{border-color:var(--primary-light)}.co.on{background:var(--primary-bg);border-color:var(--primary);color:var(--primary);font-weight:600}
+.btn{padding:8px 20px;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;transition:var(--tr);display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}.btn-sec{background:var(--primary-bg);color:var(--primary)}.btn-sec:hover{background:var(--primary-50)}.btn-out{background:0 0;color:var(--text-sec);border:1px solid var(--border)}.btn-out:hover{border-color:var(--primary);color:var(--primary)}.btn-sm{padding:5px 12px;font-size:12px}.btn-xs{padding:3px 8px;font-size:11px}
+.btn-group{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
+.result-card{border:2px solid var(--primary);border-radius:var(--radius);padding:20px;background:linear-gradient(135deg,var(--primary-bg),#fff);margin-top:16px;animation:slideUp .3s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.rbadge{padding:3px 12px;border-radius:16px;font-size:12px;font-weight:700}.b-s{background:#dbeafe;color:#1d4ed8}.b-g{background:#d1fae5;color:#065f46}.b-f{background:#fef3c7;color:#92400e}
+.ptag{padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}.p-h{background:var(--danger-bg);color:var(--danger)}.p-m{background:var(--warning-bg);color:var(--warning)}.p-l{background:var(--bg);color:var(--text-sec)}
+.ramt{font-size:26px;font-weight:800;color:var(--primary);margin:6px 0}.ramt span{font-size:13px;font-weight:500;color:var(--text-sec)}
+.rreason{font-size:13px;color:var(--text-sec);padding:10px 14px;background:var(--card);border-radius:var(--radius-sm);border-left:3px solid var(--primary);margin-top:10px;line-height:1.7}
+.pkg-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.pkg-card{border:2px solid var(--border);border-radius:var(--radius);padding:18px;cursor:pointer;transition:var(--tr);position:relative;overflow:hidden}.pkg-card:hover{border-color:var(--primary-light);box-shadow:var(--shadow-md)}.pkg-card.sel{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12)}.pkg-card.rec::before{content:"推荐";position:absolute;top:10px;right:-22px;background:var(--primary);color:#fff;font-size:10px;font-weight:700;padding:2px 24px;transform:rotate(45deg)}
+.pkg-name{font-size:16px;font-weight:800;margin-bottom:4px}.pkg-combo{font-size:12px;color:var(--text-sec);margin-bottom:10px}
+.pkg-logic{font-size:12px;line-height:1.7;padding:8px 10px;background:var(--bg);border-radius:var(--radius-sm)}.pkg-logic .ar{color:var(--primary);font-weight:700;margin:0 3px}
+.ptable{width:100%;border-collapse:collapse;margin-top:14px}.ptable th{background:var(--bg);padding:8px 12px;text-align:left;font-size:12px;font-weight:600;color:var(--text-sec);border-bottom:2px solid var(--border)}.ptable td{padding:8px 12px;border-bottom:1px solid var(--border);font-size:13px}.ptable .amt{font-weight:700;color:var(--primary)}
+.ptotal{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:var(--primary-bg);border-radius:var(--radius-sm);margin-top:10px}.ptotal-l{font-size:13px;color:var(--text-sec)}.ptotal-a{font-size:22px;font-weight:800;color:var(--primary)}
+.ssteps{display:flex;flex-direction:column;gap:2px}
+.sstep{border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
+.sstep-h{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;background:var(--card);transition:var(--tr)}.sstep-h:hover{background:var(--bg)}
+.sstep-h .sn{width:26px;height:26px;border-radius:50%;background:var(--primary-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.sstep-h .sname{font-weight:600;font-size:13px}.sstep-h .stime{margin-left:auto;font-size:11px;color:var(--text-light);background:var(--bg);padding:2px 6px;border-radius:4px}.sstep-h .chev{transition:transform .2s;color:var(--text-light)}
+.sstep.open .chev{transform:rotate(180deg)}.sstep-b{display:none;padding:14px 16px;background:var(--bg);border-top:1px solid var(--border)}.sstep.open .sstep-b{display:block}
+.stxt{font-size:13px;line-height:1.8;white-space:pre-wrap}.stxt .hl{color:var(--primary);font-weight:700}
+.osearch{margin-top:16px}
+.oinput{width:100%;padding:10px 14px 10px 36px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;outline:none;background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E") no-repeat 12px center}
+.oinput:focus{border-color:var(--primary)}
+.olist{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.oitem{padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:var(--tr)}.oitem:hover{border-color:var(--primary-light)}.oitem .q{font-weight:700;font-size:13px;color:var(--danger);margin-bottom:3px}.oitem .a{font-size:12px;color:var(--text-sec);line-height:1.6}.oitem.hid{display:none}.oitem.exp .a{color:var(--text)}
+.fbar{display:flex;align-items:center;gap:6px;padding:10px 16px;background:var(--primary-bg);border-radius:var(--radius-sm);margin-bottom:16px;font-size:12px;color:var(--primary)}
+.fstep{display:flex;align-items:center;gap:4px}.fstep.cur{font-weight:700}.fstep.dn{color:var(--success)}.farr{color:var(--text-light)}
+.empty{text-align:center;padding:50px 20px;color:var(--text-light)}.empty .ei{font-size:40px;margin-bottom:10px}.empty p{font-size:13px}
+.pboard{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;min-height:350px}
+.pcol{background:var(--bg);border-radius:var(--radius);padding:10px;min-height:280px;border:2px dashed transparent;transition:var(--tr)}.pcol.dragover{border-color:var(--primary);background:var(--primary-bg)}
+.pcol-h{text-align:center;padding:6px;margin-bottom:10px;border-radius:6px;font-weight:700;font-size:12px;color:#fff}
+.st1{background:var(--primary)}.st2{background:#7c3aed}.st3{background:#0891b2}.st4{background:var(--warning)}.st5{background:var(--success)}
+.dcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;margin-bottom:6px;cursor:grab;transition:var(--tr);position:relative}.dcard:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}.dcard:active{cursor:grabbing}
+.dcard.wrn{border-color:var(--warning);background:var(--warning-bg)}.dcard.dgr{border-color:var(--danger);background:var(--danger-bg)}
+.dcard .nm{font-weight:700;font-size:13px;margin-bottom:3px}.dcard .mt{font-size:11px;color:var(--text-sec)}
+.dcard .dy{position:absolute;top:6px;right:6px;font-size:10px;padding:1px 5px;border-radius:3px;background:var(--bg);color:var(--text-sec)}.dcard.wrn .dy{background:var(--warning-bg);color:var(--warning)}.dcard.dgr .dy{background:var(--danger-bg);color:var(--danger)}
+.dcard .na{font-size:11px;color:var(--text-light);margin-top:5px;padding-top:5px;border-top:1px solid var(--border)}
+.modal-ov{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:200;display:flex;align-items:center;justify-content:center;animation:fadeIn .2s}
+.modal{background:var(--card);border-radius:var(--radius);padding:24px;width:92%;max-width:480px;box-shadow:0 20px 40px rgba(0,0,0,.15);max-height:85vh;overflow-y:auto;position:relative}
+.modal-t{font-size:16px;font-weight:700;margin-bottom:16px}.modal-x{position:absolute;top:12px;right:12px;background:0 0;border:none;font-size:18px;cursor:pointer;color:var(--text-light)}
+.slist{display:flex;flex-direction:column;gap:6px}
+.sitem{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);transition:var(--tr)}.sitem:hover{border-color:var(--primary-light)}.sitem .tg{font-size:10px;padding:2px 6px;border-radius:3px;font-weight:600}
+.sstats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.stcard{padding:14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);text-align:center}.stcard .sn{font-size:22px;font-weight:800;color:var(--primary)}.stcard .sl{font-size:11px;color:var(--text-sec);margin-top:3px}
+.cprev-wrap{border-radius:var(--radius);overflow:hidden;max-width:380px;margin:0 auto}
+.ccard{border-radius:var(--radius);overflow:hidden;color:#fff;font-family:inherit}
+.chero{padding:36px 28px 20px;text-align:center;background:linear-gradient(180deg,#0f172a,#030712)}
+.ccat{font-size:12px;opacity:.6;margin-bottom:6px}.chead{font-size:32px;font-weight:900;color:#fbbf24;margin-bottom:3px}.csub{font-size:13px;opacity:.7}
+.cbody{padding:20px 28px}
+.csec{margin-bottom:16px}.csec-t{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#fbbf24;margin-bottom:6px;opacity:.8}
+.cpain{padding:10px 14px;background:rgba(220,38,38,.15);border-radius:6px;border-left:3px solid var(--danger);font-size:12px;line-height:1.7}
+.csell{padding:10px 14px;background:rgba(251,191,36,.1);border-radius:6px;border-left:3px solid #fbbf24;font-size:12px;line-height:1.7;font-weight:600}
+.cmetric{display:flex;gap:14px;margin-top:10px}.cmetric-i{flex:1;text-align:center}.cmetric-i .v{font-size:26px;font-weight:900;color:#fbbf24}.cmetric-i .d{font-size:10px;opacity:.6}
+.cfooter{padding:14px 28px;background:#0f172a;text-align:center;font-size:11px;opacity:.5}
+.kc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.kc-cat{margin-bottom:20px}.kc-cat-title{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.kc-cat-title .prog{font-size:11px;color:var(--text-sec);font-weight:400;margin-left:auto}
+.kcard{perspective:800px;height:170px;cursor:pointer}.kc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.kcard.flip .kc-inner{transform:rotateY(180deg)}
+.kc-front,.kc-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;justify-content:center;border:1px solid var(--border)}
+.kc-front{background:var(--card);box-shadow:var(--shadow)}.kc-back{background:var(--primary-bg);border-color:var(--primary);transform:rotateY(180deg);overflow-y:auto}
+.kc-front .kcq{font-size:13px;font-weight:700;line-height:1.5}.kc-front .kchint{font-size:11px;color:var(--text-light);margin-top:auto}
+.kc-back .kca{font-size:12px;line-height:1.6;color:var(--text)}.kc-back .kcacts{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.kc-learned{border-color:var(--success)!important;background:var(--success-bg)!important}
+.exam-progress{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:16px}.exam-dot{width:10px;height:10px;border-radius:50%;background:var(--border)}.exam-dot.cur{background:var(--primary)}.exam-dot.right{background:var(--success)}.exam-dot.wrong{background:var(--danger)}
+.exam-q{font-size:15px;font-weight:600;margin-bottom:16px;line-height:1.6}
+.exam-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.exam-opt{padding:12px 16px;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:13px;transition:var(--tr)}.exam-opt:hover{border-color:var(--primary-light)}.exam-opt.sel{background:var(--primary-bg);border-color:var(--primary);color:var(--primary);font-weight:600}.exam-opt.correct{background:var(--success-bg);border-color:var(--success);color:var(--success)}.exam-opt.wrong{background:var(--danger-bg);border-color:var(--danger);color:var(--danger)}
+.exam-result{text-align:center;padding:40px 20px}.exam-score{font-size:56px;font-weight:900;color:var(--primary)}.exam-badge{display:inline-block;padding:8px 24px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#fff;border-radius:20px;font-weight:700;font-size:14px;margin-top:12px;box-shadow:0 4px 12px rgba(245,158,11,.3)}
+.rp-scene{max-width:600px;margin:0 auto}
+.rp-msg{padding:12px 16px;border-radius:12px;margin-bottom:10px;font-size:13px;line-height:1.7;max-width:85%}
+.rp-merchant{background:var(--bg);border:1px solid var(--border);border-bottom-left-radius:4px;margin-right:auto}
+.rp-sales{background:var(--primary-bg);border:1px solid var(--primary-50);border-bottom-right-radius:4px;margin-left:auto;text-align:right}
+.rp-opts{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.rp-opt{padding:12px 16px;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:13px;text-align:left;transition:var(--tr);background:var(--card)}.rp-opt:hover{border-color:var(--primary-light)}.rp-opt.best{background:var(--success-bg);border-color:var(--success)}.rp-opt.ok{background:var(--warning-bg);border-color:var(--warning)}.rp-opt.bad{background:var(--danger-bg);border-color:var(--danger)}.rp-opt.disabled{pointer-events:none;opacity:.8}
+.rp-feedback{padding:10px 14px;background:var(--bg);border-radius:var(--radius-sm);margin-top:8px;font-size:12px;line-height:1.7;border-left:3px solid var(--primary)}
+.rp-score-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}.rp-score-fill{height:100%;border-radius:3px;transition:width .3s}
+.dash-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
+.ds-card{padding:16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);text-align:center}
+.ds-card .dv{font-size:24px;font-weight:800;color:var(--primary)}.ds-card .dl{font-size:11px;color:var(--text-sec);margin-top:3px}.ds-card .dc{font-size:11px;margin-top:2px}.dc.up{color:var(--success)}.dc.down{color:var(--danger)}
+.rank-table{width:100%;border-collapse:collapse}.rank-table th{background:var(--bg);padding:8px 12px;text-align:left;font-size:12px;font-weight:600;color:var(--text-sec);border-bottom:2px solid var(--border)}.rank-table td{padding:8px 12px;border-bottom:1px solid var(--border);font-size:13px}
+.rank-table .warn-cell{color:var(--danger);font-weight:700}.rank-table .good-cell{color:var(--success);font-weight:700}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.gallery-item{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:var(--tr)}.gallery-item:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.gallery-meta{padding:12px 16px;background:var(--card);display:flex;align-items:center;gap:8px}
+.gallery-tag{font-size:10px;padding:2px 6px;border-radius:3px;font-weight:600}
+.gallery-info{font-size:12px;color:var(--text-sec)}
+.gallery-filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.gf-opt{padding:6px 14px;border:1px solid var(--border);border-radius:16px;cursor:pointer;font-size:12px;transition:var(--tr);background:var(--card)}.gf-opt:hover{border-color:var(--primary-light)}.gf-opt.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+@media(max-width:768px){.header{padding:12px 16px}.tabs{padding:0 8px}.main{padding:14px 16px}.pkg-cards{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.pboard{grid-template-columns:1fr}.sstats,.dash-stats{grid-template-columns:repeat(2,1fr)}.tab{padding:8px 8px;font-size:11px}.gallery-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="header"><div class="header-inner"><div><h1>智能体销售赋能工作台</h1><div class="header-sub">Agent Sales Hub · 学 · 卖 · 盘 · 传</div></div><div class="role-switch"><button class="role-btn active" onclick="switchRole('bd')">服务商BD</button><button class="role-btn" onclick="switchRole('manager')">渠道经理</button></div></div></div>
 <div class="tabs"><div class="tabs-inner">
-  <button class="tab active" data-tab="picker" onclick="switchTab('picker')">① 客户挑选 <span class="badge p0">P0</span></button>
-  <button class="tab" data-tab="matcher" onclick="switchTab('matcher')">② 产品搭配 <span class="badge p0">P0</span></button>
-  <button class="tab" data-tab="script" onclick="switchTab('script')">③ 售卖话术 <span class="badge p0">P0</span></button>
-  <button class="tab" data-tab="pipeline" onclick="switchTab('pipeline')">④ 售卖节奏 <span class="badge p1">P1</span></button>
-  <button class="tab" data-tab="summary" onclick="switchTab('summary')">⑤ 售卖总结 <span class="badge p1">P1</span></button>
-  <button class="tab" data-tab="casegen" onclick="switchTab('casegen')">⑥ 案例生成 <span class="badge p1">P1</span></button>
+<button class="tab" data-tab="learn" onclick="switchTab('learn')">学习中心 <span class="bdg p2">学</span></button>
+<button class="tab" data-tab="exam" onclick="switchTab('exam')">认证考试 <span class="bdg p2">学</span></button>
+<button class="tab" data-tab="practice" onclick="switchTab('practice')">话术对练 <span class="bdg p2">学</span></button>
+<div class="tab-sep"></div>
+<button class="tab active" data-tab="picker" onclick="switchTab('picker')">客户挑选 <span class="bdg p0">P0</span></button>
+<button class="tab" data-tab="matcher" onclick="switchTab('matcher')">产品搭配 <span class="bdg p0">P0</span></button>
+<button class="tab" data-tab="script" onclick="switchTab('script')">售卖话术 <span class="bdg p0">P0</span></button>
+<button class="tab" data-tab="pipeline" onclick="switchTab('pipeline')">售卖节奏 <span class="bdg p1">P1</span></button>
+<button class="tab" data-tab="summary" onclick="switchTab('summary')">售卖总结 <span class="bdg p1">P1</span></button>
+<div class="tab-sep"></div>
+<button class="tab" data-tab="dash" onclick="switchTab('dash')">复盘看板 <span class="bdg p1">盘</span></button>
+<button class="tab" data-tab="gallery" onclick="switchTab('gallery')">案例广场 <span class="bdg p2">传</span></button>
+<button class="tab" data-tab="casegen" onclick="switchTab('casegen')">案例生成 <span class="bdg p1">P1</span></button>
 </div></div>
 <div class="main">
-
-<!-- ===== PANEL 1: 客户挑选 ===== -->
+<div id="panel-learn" class="panel"><h2 style="font-size:17px;font-weight:700;margin-bottom:16px">📚 产品知识卡片</h2><div id="learn-cats"></div></div>
+<div id="panel-exam" class="panel"><h2 style="font-size:17px;font-weight:700;margin-bottom:16px">🎓 产品认证考试</h2><div id="exam-area"></div></div>
+<div id="panel-practice" class="panel"><h2 style="font-size:17px;font-weight:700;margin-bottom:16px">🎭 话术对练</h2><div id="practice-area"></div></div>
 <div id="panel-picker" class="panel active">
-  <div class="flow-bar"><span class="flow-step current">① 客户挑选</span><span class="flow-arrow">→</span><span class="flow-step">② 产品搭配</span><span class="flow-arrow">→</span><span class="flow-step">③ 售卖话术</span></div>
-  <div class="card"><div class="card-title"><span class="icon blue">📋</span>输入商户基本信息</div>
-    <div class="form-grid">
-      <div class="form-group"><label class="form-label">品类</label><select id="f-category" class="form-select"><option value="">请选择品类</option><option>中餐</option><option>火锅</option><option>烧烤</option><option>茶饮</option><option>西餐</option><option>日料</option><option>快餐</option><option>小吃</option><option>其他</option></select></div>
-      <div class="form-group"><label class="form-label">门店数</label><input id="f-stores" class="form-input" type="number" min="1" max="9999" placeholder="如：5"></div>
-      <div class="form-group"><label class="form-label">城市</label><input id="f-city" class="form-input" type="text" placeholder="如：杭州"></div>
-      <div class="form-group"><label class="form-label">当前是否有广告</label><div class="radio-group" id="f-ads"><div class="radio-opt" data-val="no" onclick="setRadio('f-ads',this)">否</div><div class="radio-opt" data-val="yes" onclick="setRadio('f-ads',this)">是</div></div></div>
-      <div class="form-group"><label class="form-label">商户意向度</label><div class="radio-group" id="f-intent"><div class="radio-opt" data-val="high" onclick="setRadio('f-intent',this)">高（主动咨询）</div><div class="radio-opt" data-val="medium" onclick="setRadio('f-intent',this)">中（有过接触）</div><div class="radio-opt" data-val="low" onclick="setRadio('f-intent',this)">低（冷启动）</div></div></div>
-    </div>
-    <div class="btn-group"><button class="btn btn-primary" onclick="analyzeClient()">分析推荐</button><button class="btn btn-outline" onclick="resetPicker()">重置</button></div>
-  </div>
-  <div id="picker-result"></div>
+<div class="fbar"><span class="fstep cur">① 客户挑选</span><span class="farr">→</span><span class="fstep">② 产品搭配</span><span class="farr">→</span><span class="fstep">③ 话术</span></div>
+<div class="card"><div class="card-title"><span class="ic blue">📋</span>输入商户基本信息</div>
+<div class="form-grid">
+<div class="form-group"><label class="form-label">品类</label><select id="f-cat" class="form-select"><option value="">请选择</option><option>中餐</option><option>火锅</option><option>烧烤</option><option>茶饮</option><option>西餐</option><option>日料</option><option>快餐</option><option>小吃</option><option>其他</option></select></div>
+<div class="form-group"><label class="form-label">门店数</label><input id="f-stores" class="form-input" type="number" min="1" placeholder="如：5"></div>
+<div class="form-group"><label class="form-label">城市</label><input id="f-city" class="form-input" placeholder="如：杭州"></div>
+<div class="form-group"><label class="form-label">当前是否有广告</label><div class="rg" id="f-ads"><div class="ro" data-v="no" onclick="setR(this)">否</div><div class="ro" data-v="yes" onclick="setR(this)">是</div></div></div>
+<div class="form-group"><label class="form-label">商户意向度</label><div class="rg" id="f-intent"><div class="ro" data-v="high" onclick="setR(this)">高（主动咨询）</div><div class="ro" data-v="medium" onclick="setR(this)">中（有过接触）</div><div class="ro" data-v="low" onclick="setR(this)">低（冷启动）</div></div></div>
 </div>
-
-<!-- ===== PANEL 2: 产品搭配 ===== -->
+<div class="btn-group"><button class="btn btn-primary" onclick="analyzeClient()">分析推荐</button><button class="btn btn-out" onclick="resetPicker()">重置</button></div>
+</div><div id="picker-result"></div></div>
 <div id="panel-matcher" class="panel">
-  <div class="flow-bar"><span class="flow-step done">① 客户挑选 ✓</span><span class="flow-arrow">→</span><span class="flow-step current">② 产品搭配</span><span class="flow-arrow">→</span><span class="flow-step">③ 售卖话术</span></div>
-  <div id="matcher-client-info"></div>
-  <div class="card"><div class="card-title"><span class="icon green">📦</span>选择售卖包</div><div id="pkg-cards-container" class="pkg-cards"></div></div>
-  <div class="card" id="pricing-card" style="display:none"><div class="card-title"><span class="icon orange">💰</span>定价明细</div><div id="pricing-content"></div></div>
-  <div class="card" id="logic-card" style="display:none"><div class="card-title"><span class="icon blue">🔗</span>推荐理由链</div><div id="logic-content"></div></div>
-  <div class="btn-group" id="matcher-actions" style="display:none"><button class="btn btn-primary" onclick="goToScript()">生成话术 →</button><button class="btn btn-secondary btn-sm" onclick="copyPlanText()">复制方案摘要</button></div>
+<div class="fbar"><span class="fstep dn">① ✓</span><span class="farr">→</span><span class="fstep cur">② 产品搭配</span><span class="farr">→</span><span class="fstep">③ 话术</span></div>
+<div id="match-info"></div>
+<div class="card"><div class="card-title"><span class="ic green">📦</span>选择售卖包</div><div id="pkg-container" class="pkg-cards"></div></div>
+<div class="card" id="price-card" style="display:none"><div class="card-title"><span class="ic orange">💰</span>定价明细</div><div id="price-content"></div></div>
+<div class="card" id="logic-card" style="display:none"><div class="card-title"><span class="ic blue">🔗</span>推荐理由链</div><div id="logic-content"></div></div>
+<div class="btn-group" id="match-actions" style="display:none"><button class="btn btn-primary" onclick="switchTab('script')">生成话术 →</button><button class="btn btn-sec btn-sm" onclick="copyPlan()">复制方案</button></div>
 </div>
-
-<!-- ===== PANEL 3: 售卖话术 ===== -->
 <div id="panel-script" class="panel">
-  <div class="flow-bar"><span class="flow-step done">① ✓</span><span class="flow-arrow">→</span><span class="flow-step done">② ✓</span><span class="flow-arrow">→</span><span class="flow-step current">③ 售卖话术</span></div>
-  <div id="script-info" class="card" style="display:none"><div class="card-title"><span class="icon blue">🎯</span>话术概览</div><div id="script-overview"></div></div>
-  <div class="card"><div class="card-title"><span class="icon green">📝</span>7步售卖话术</div><div id="script-steps" class="script-steps"></div></div>
-  <div class="card"><div class="card-title"><span class="icon orange">🛡️</span>异议速查手册</div><div class="objection-search"><input class="objection-input" type="text" placeholder="搜索异议关键词..." oninput="filterObjections(this.value)"><div id="objection-list" class="objection-list"></div></div></div>
-  <div class="btn-group"><button class="btn btn-primary" onclick="copyAllScript()">复制全部话术</button><button class="btn btn-secondary" onclick="window.print()">打印话术（A4）</button></div>
+<div class="fbar"><span class="fstep dn">① ✓</span><span class="farr">→</span><span class="fstep dn">② ✓</span><span class="farr">→</span><span class="fstep cur">③ 话术</span></div>
+<div id="script-info" class="card" style="display:none"><div class="card-title"><span class="ic blue">🎯</span>话术概览</div><div id="script-ov"></div></div>
+<div class="card"><div class="card-title"><span class="ic green">📝</span>7步售卖话术</div><div id="script-steps" class="ssteps"></div></div>
+<div class="card"><div class="card-title"><span class="ic orange">🛡️</span>异议速查</div><div class="osearch"><input class="oinput" placeholder="搜索异议..." oninput="filterObj(this.value)"><div id="obj-list" class="olist"></div></div></div>
+<div class="btn-group"><button class="btn btn-primary" onclick="copyScript()">复制全部话术</button><button class="btn btn-sec" onclick="window.print()">打印A4</button></div>
 </div>
-
-<!-- ===== PANEL 4: 售卖节奏 Pipeline ===== -->
 <div id="panel-pipeline" class="panel">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-    <h2 style="font-size:18px;font-weight:700">售卖节奏 · Pipeline</h2>
-    <div class="btn-group" style="margin:0"><button class="btn btn-primary btn-sm" onclick="showAddDealModal()">+ 添加客户</button></div>
-  </div>
-  <div id="pipeline-board" class="pipeline-board"></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h2 style="font-size:17px;font-weight:700">📊 售卖节奏</h2><button class="btn btn-primary btn-sm" onclick="showAddDeal()">+ 添加客户</button></div>
+<div id="pboard" class="pboard"></div>
 </div>
-
-<!-- ===== PANEL 5: 售卖总结 ===== -->
 <div id="panel-summary" class="panel">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-    <h2 style="font-size:18px;font-weight:700">售卖总结 · 成交记录</h2>
-  </div>
-  <div id="summary-stats" class="summary-stats"></div>
-  <div class="card"><div class="card-title"><span class="icon green">📊</span>成交记录列表</div><div id="summary-list" class="summary-list"></div></div>
+<h2 style="font-size:17px;font-weight:700;margin-bottom:14px">📋 售卖总结</h2>
+<div id="sum-stats" class="sstats"></div>
+<div class="card"><div class="card-title"><span class="ic green">📊</span>成交记录</div><div id="sum-list" class="slist"></div></div>
 </div>
-
-<!-- ===== PANEL 6: 案例生成 ===== -->
+<div id="panel-dash" class="panel">
+<h2 style="font-size:17px;font-weight:700;margin-bottom:14px">📈 复盘看板</h2>
+<div id="dash-stats" class="dash-stats"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+<div class="card"><div class="card-title"><span class="ic blue">🏆</span>大区排名</div><div id="dash-rank"></div></div>
+<div class="card"><div class="card-title"><span class="ic orange">📊</span>组合购分析</div><div id="dash-combo"></div></div>
+</div>
+<div class="card"><div class="card-title"><span class="ic green">📥</span>数据导入</div><p style="font-size:13px;color:var(--text-sec);margin-bottom:12px">上传xlsx文件导入销售数据。</p><input type="file" id="dash-file" accept=".xlsx,.csv" style="font-size:13px"><div id="dash-status" style="font-size:12px;color:var(--text-light);margin-top:8px"></div></div>
+</div>
+<div id="panel-gallery" class="panel">
+<h2 style="font-size:17px;font-weight:700;margin-bottom:14px">🏛️ 案例广场</h2>
+<div id="gallery-filters" class="gallery-filters"></div>
+<div id="gallery-grid" class="gallery-grid"></div>
+</div>
 <div id="panel-casegen" class="panel">
-  <h2 style="font-size:18px;font-weight:700;margin-bottom:16px">案例生成器</h2>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-    <div>
-      <div class="card"><div class="card-title"><span class="icon blue">✏️</span>填写案例信息</div>
-        <div class="form-grid" style="grid-template-columns:1fr">
-          <div class="form-group"><label class="form-label">品类</label><select id="c-category" class="form-select" onchange="updateCasePreview()"><option value="中餐">中餐</option><option value="火锅">火锅</option><option value="烧烤">烧烤</option><option value="茶饮">茶饮</option><option value="海鲜">海鲜</option><option value="西餐">西餐</option><option value="快餐">快餐</option></select></div>
-          <div class="form-group"><label class="form-label">售卖包类型</label><select id="c-pkg" class="form-select" onchange="updateCasePreview()"><option value="starter">入门包（智能体+获客宝）</option><option value="growth">增长包（智能体+效果广告）</option><option value="flagship">旗舰包（全链路）</option></select></div>
-          <div class="form-group"><label class="form-label">核心数据亮点1（如点击率提升）</label><input id="c-metric1-val" class="form-input" placeholder="如：+133%" oninput="updateCasePreview()"><input id="c-metric1-desc" class="form-input" style="margin-top:4px" placeholder="描述，如：点击率提升" oninput="updateCasePreview()"></div>
-          <div class="form-group"><label class="form-label">核心数据亮点2（如转化率提升）</label><input id="c-metric2-val" class="form-input" placeholder="如：+31.6%" oninput="updateCasePreview()"><input id="c-metric2-desc" class="form-input" style="margin-top:4px" placeholder="描述，如：转化率提升" oninput="updateCasePreview()"></div>
-          <div class="form-group"><label class="form-label">痛点描述</label><textarea id="c-pain" class="form-input" rows="2" placeholder="如：线上曝光不足，自然客流持续下降" oninput="updateCasePreview()"></textarea></div>
-          <div class="form-group"><label class="form-label">卖点金句</label><input id="c-slogan" class="form-input" placeholder="如：让AI替你揽客" oninput="updateCasePreview()"></div>
-          <div class="form-group"><label class="form-label">售卖核心（一句话打法）</label><input id="c-strategy" class="form-input" placeholder="如：做好新品介绍，讲好商户故事" oninput="updateCasePreview()"></div>
-        </div>
-        <div class="btn-group"><button class="btn btn-primary" onclick="downloadCaseHTML()">导出HTML卡片</button><button class="btn btn-secondary" onclick="copyCaseHTML()">复制HTML源码</button></div>
-      </div>
-    </div>
-    <div>
-      <div class="card"><div class="card-title"><span class="icon orange">👁️</span>实时预览</div><div id="case-preview"></div></div>
-    </div>
-  </div>
+<h2 style="font-size:17px;font-weight:700;margin-bottom:14px">🎨 案例生成器</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+<div class="card"><div class="card-title"><span class="ic blue">✏️</span>填写信息</div>
+<div class="form-grid" style="grid-template-columns:1fr">
+<div class="form-group"><label class="form-label">品类</label><select id="c-cat" class="form-select" onchange="updCase()"><option>中餐</option><option>火锅</option><option>烧烤</option><option>茶饮</option><option>海鲜</option><option>西餐</option><option>快餐</option></select></div>
+<div class="form-group"><label class="form-label">售卖包</label><select id="c-pkg" class="form-select" onchange="updCase()"><option value="starter">入门包</option><option value="growth">增长包</option><option value="flagship">旗舰包</option></select></div>
+<div class="form-group"><label class="form-label">数据亮点1</label><input id="c-m1v" class="form-input" placeholder="+133%" oninput="updCase()"><input id="c-m1d" class="form-input" style="margin-top:4px" placeholder="点击率提升" oninput="updCase()"></div>
+<div class="form-group"><label class="form-label">数据亮点2</label><input id="c-m2v" class="form-input" placeholder="+31.6%" oninput="updCase()"><input id="c-m2d" class="form-input" style="margin-top:4px" placeholder="转化率提升" oninput="updCase()"></div>
+<div class="form-group"><label class="form-label">痛点</label><textarea id="c-pain" class="form-input" rows="2" placeholder="线上曝光不足" oninput="updCase()"></textarea></div>
+<div class="form-group"><label class="form-label">金句</label><input id="c-slogan" class="form-input" placeholder="让AI替你揽客" oninput="updCase()"></div>
+<div class="form-group"><label class="form-label">售卖核心</label><input id="c-strat" class="form-input" placeholder="做好新品介绍" oninput="updCase()"></div>
 </div>
-
-</div><!-- end .main -->
-
-<div id="modal-container"></div>
-
-<script>
-// ===== STATE =====
-const S={role:'bd',tab:'picker',client:{},pkg:'',pricing:{},pipeline:[],summaries:[]};
-let dealIdCounter=1;
+<div class="btn-group"><button class="btn btn-primary" onclick="dlCase()">导出HTML</button><button class="btn btn-sec" onclick="cpCase()">复制源码</button></div>
+</div>
+<div class="card"><div class="card-title"><span class="ic orange">👁️</span>实时预览</div><div id="case-prev"></div></div>
+</div>
+</div>
+</div>
+<div id="modal-box"></div>
+<script>// ===== STATE =====
+const S={role:'bd',tab:'picker',client:{},pkg:'',pricing:{},pipeline:[],summaries:[],gallery:[],learned:{},examQs:null,examIdx:0,examCorrect:0,examAnswers:[],examDone:false,rpScene:0,rpRound:0,rpScore:0,rpTotal:0,rpDone:false};
+let didC=1;
 
 // ===== DATA =====
-const PKG_DEF={starter:{name:'入门包',badge:'badge-starter',combo:'品牌智能体 + 获客宝',logic:['智能体让门店24小时有AI服务员接待','获客宝放大曝光让更多人看到你','先花小钱试效果，验证再加码'],forWhom:'首次接触广告的小微商户'},growth:{name:'增长包',badge:'badge-growth',combo:'品牌智能体 + 效果广告',logic:['效果广告买来精准流量','智能体接住每一个咨询并促转化','转化+31.6%让广告费不白花'],forWhom:'有流量基础但转化不理想的商户'},flagship:{name:'旗舰包',badge:'badge-flagship',combo:'品牌智能体 + 效果广告 + 品牌广告',logic:['品广打品牌认知，扩大影响力','效广做精准获客，带来高意向客户','智能体完成转化锁客，全链路闭环'],forWhom:'连锁品牌或高客单品类商户'}};
-const AD_BUDGETS={hkb:{name:'获客宝',opts:[3000,5000,10000]},effect:{name:'效果广告',opts:[5000,10000,20000]}};
-const OBJECTIONS=[{q:'太贵了',a:'用"日均成本"话术化解。对比数据：同类商户使用后年省约6万元人力成本。话术参考："每天不到一杯咖啡的钱，相当于雇了一个24小时不休息的AI服务员，比招个兼职便宜10倍。"'},{q:'我用美团/抖音了',a:'不排斥，讲差异。高德是到店导航场景——用户已经出门了、正在找地方吃饭，转化率远高于刷短视频时的冲动消费。'},{q:'我门店够大了不需要',a:'大店更需要维护口碑。品牌智能体帮您24小时回复顾客咨询，AI组菜、AI预订锁客。'},{q:'效果能保证吗',a:'区间表达+免责："根据同类商户实测数据，预计曝光提升2-4倍，转化率提升约30%。"'},{q:'我考虑考虑',a:'"现在签约可锁定当前价格，后续调价后享受原价。您的同行已经有不少在用了。"'},{q:'AI我不太懂',a:'"您不需要懂AI，开通后系统自动运行，您只管接单做菜就行。"'},{q:'跟门店智能体有什么区别',a:'品牌智能体30+项能力 vs 门店智能体仅8项，22项专属差异能力，含同行分析、AI组菜等。'},{q:'我已经在用其他工具了',a:'"不冲突，智能体是高德独有的到店场景入口，帮您从地图上获客。"'},{q:'签约后能退吗',a:'"支持解约，按实际使用天数折算退款，不满一个月按10天保底计算。"'},{q:'开发中的功能什么时候上',a:'"套餐已包含这些权益，上线后自动开通。现在签约=提前锁价占位。"'}];
-const HOOKS={'中餐':'周边写字楼的白领都在搜"中餐"，您的店排第几？','火锅':'天气一冷火锅搜索量翻倍，您准备好接住这波流量了吗？','烧烤':'夏天烧烤是夜宵搜索第一名，您的门店在地图上够显眼吗？','茶饮':'奶茶店竞争这么激烈，怎么让用户搜"奶茶"第一眼看到您？','西餐':'约会聚餐搜西餐的用户消费力强，您的门店展示够吸引人吗？','日料':'日料客单价高，一个客户价值顶三个快餐客户。','快餐':'快餐讲究快和方便，AI帮您30秒内完成推荐+下单。','小吃':'小吃店靠口碑和曝光，AI帮您把路过的人都变成进店客。','其他':'高德每天有数百万用户在搜美食，您的门店准备好了吗？'};
-const SP={starter:{p1:'流量壁垒：品牌智能体在POI页和泛搜中优先展示，比门店智能体多出22项专属能力',p2:'C端40秒获客：用户从搜索到下单全程不到40秒',p3:'低门槛试错：获客宝首充¥3,000起，总投入可控'},growth:{p1:'转化+31.6%：品牌智能体实测转化率提升31.6%',p2:'年省6万：AI替代人工客服，一个门店年省约6万元人力成本',p3:'流量+转化双引擎：效果广告"拉人"，智能体"留人"，1+1>2'},flagship:{p1:'全链路闭环：品广做认知→效广做获客→智能体做转化',p2:'复购+12.5%：品牌智能体实测复购率提升12.5%',p3:'品牌溢价：品牌定制形象+颜色，形成辨识度壁垒'}};
-const STAGES=[{id:1,name:'初访',color:'var(--primary)',action:'分析商户画像，准备方案',signal:'完成首次拜访/电话'},{id:2,name:'需求确认',color:'#7c3aed',action:'挖需求4问',signal:'商户表达痛点/兴趣'},{id:3,name:'方案呈现',color:'#0891b2',action:'生成方案，现场演示',signal:'商户认可方案方向'},{id:4,name:'报价谈判',color:'var(--warning)',action:'报价+异议处理',signal:'价格共识/进入审批'},{id:5,name:'签约完成',color:'var(--success)',action:'引导扫码签约',signal:'签约成功'}];
-const CASE_THEMES={火锅:{accent:'#ef4444',bg1:'#1a0000',label:'🍲'},中餐:{accent:'#f59e0b',bg1:'#1a1000',label:'🥢'},烧烤:{accent:'#d97706',bg1:'#1a0e00',label:'🔥'},茶饮:{accent:'#10b981',bg1:'#001a0e',label:'🍵'},海鲜:{accent:'#3b82f6',bg1:'#000a1a',label:'🦐'},西餐:{accent:'#8b5cf6',bg1:'#0e001a',label:'🍷'},快餐:{accent:'#f97316',bg1:'#1a0800',label:'🍔'}};
-const NEXT_ACTIONS={1:'准备方案，安排首次拜访',2:'深挖需求，了解痛点',3:'演示方案，获取认可',4:'报价谈判，处理异议',5:'引导签约，完成配置'};
+const PD={starter:{name:'入门包',b:'b-s',combo:'智能体+获客宝',logic:['AI服务员24小时接待','获客宝放大曝光','低门槛试水验证'],for:'首次接触广告的小微商户'},growth:{name:'增长包',b:'b-g',combo:'智能体+效果广告',logic:['效广买精准流量','智能体接住咨询促转化','转化+31.6%让广告费不白花'],for:'有流量但转化不佳的商户'},flagship:{name:'旗舰包',b:'b-f',combo:'智能体+效广+品广',logic:['品广打品牌认知','效广做精准获客','智能体转化锁客全闭环'],for:'连锁品牌或高客单品类'}};
+const AB={hkb:{name:'获客宝',opts:[3000,5000,10000]},eff:{name:'效果广告',opts:[5000,10000,20000]}};
+const OBJ=[{q:'太贵了',a:'日均成本话术：每天不到一杯咖啡，比雇兼职便宜10倍。年省约6万。'},{q:'我用美团/抖音',a:'高德是到店场景，用户已出门，转化率更高。美团种草，高德拔草。'},{q:'门店够大不需要',a:'大店更需维护口碑，24小时AI回复，搜索量越大越需要。'},{q:'效果能保证吗',a:'区间表达：实测曝光提升2-4倍，转化+31.6%，不做绝对承诺。'},{q:'考虑考虑',a:'推广期锁价，后续调价享受原价。同行已在用。'},{q:'AI不懂',a:'全自动运行，您只管接单做菜，跟开了个自动接待员一样。'},{q:'跟门店智能体区别',a:'品牌30+项 vs 门店8项，22项专属：同行分析、AI组菜、AI预订等。'},{q:'已在用其他工具',a:'不冲突，高德独有到店场景入口，是增量不是替代。'},{q:'能退吗',a:'支持解约，按实际天数折算退款，10天保底。'},{q:'开发中功能何时上',a:'套餐已含，上线自动开通。现在签约=提前锁价。'}];
+const HK={'中餐':'周边白领都在搜中餐，您的店排第几？','火锅':'火锅搜索量翻倍，准备好接住流量了吗？','烧烤':'夜宵搜索第一名，门店够显眼吗？','茶饮':'奶茶竞争激烈，怎么让用户第一眼看到您？','西餐':'约会聚餐消费力强，展示够吸引人吗？','日料':'客单价高，一个客户顶三个。','快餐':'讲究快，AI帮您30秒完成推荐+下单。','小吃':'靠口碑和曝光，把路过的人变进店客。','其他':'高德每天数百万用户搜美食，准备好了吗？'};
+const SP={starter:{p1:'流量壁垒：POI页和泛搜优先展示，多22项专属能力',p2:'C端40秒获客：搜索到下单不到40秒',p3:'低门槛：获客宝首充¥3,000起'},growth:{p1:'转化+31.6%：实测转化率提升',p2:'年省6万：AI替代人工客服',p3:'流量+转化双引擎：1+1>2'},flagship:{p1:'全链路闭环：品广→效广→智能体',p2:'复购+12.5%：实测复购率提升',p3:'品牌溢价：定制形象+颜色'}};
+const STG=[{id:1,name:'初访',cls:'st1',na:'准备方案，安排拜访'},{id:2,name:'需求确认',cls:'st2',na:'深挖需求，了解痛点'},{id:3,name:'方案呈现',cls:'st3',na:'演示方案，获取认可'},{id:4,name:'报价谈判',cls:'st4',na:'报价谈判，处理异议'},{id:5,name:'签约完成',cls:'st5',na:'引导签约，完成配置'}];
+const TH={火锅:{ac:'#ef4444',bg:'#1a0000',em:'🍲'},中餐:{ac:'#f59e0b',bg:'#1a1000',em:'🥢'},烧烤:{ac:'#d97706',bg:'#1a0e00',em:'🔥'},茶饮:{ac:'#10b981',bg:'#001a0e',em:'🍵'},海鲜:{ac:'#3b82f6',bg:'#000a1a',em:'🦐'},西餐:{ac:'#8b5cf6',bg:'#0e001a',em:'🍷'},快餐:{ac:'#f97316',bg:'#1a0800',em:'🍔'}};
+
+// Knowledge Cards
+const KC=[
+{cat:'C端权益',em:'🎯',cards:[{q:'品牌智能体在C端有哪些入口？',a:'两大入口：①POI页智能体卡片（门店详情页）；②泛搜咨询入口（搜索列表）。'},{q:'AI组菜功能解决什么问题？',a:'基于用户人数和预算，AI自动推荐菜品组合，支持提前点单。'},{q:'AI预订功能怎么工作？',a:'AI收集需求（人数/时间/偏好），电话联系商家完成预订锁客，40秒内从咨询到下单。'},{q:'语音播报道达率是多少？',a:'每月100条语音播报，用户导航到店过程中插空播报，15字以内效果最佳。'},{q:'品牌形象定制有什么限制？',a:'支持品牌定制颜色和形象，限百店以上可申请，需联系销运对接。'}]},
+{cat:'B端能力',em:'🔧',cards:[{q:'同行分析包含哪些维度？',a:'五大维度：综合竞争力评分、客流趋势、客群画像（年龄/性别/消费力）、职业分布、流量转化对比。每月10日更新。'},{q:'经营洞察帮商家做什么？',a:'提供商圈竞争诊断：分析门店竞争力评分，给出AI综合诊断（亮点/薄弱点/建议），对比优秀同行。'},{q:'品牌版比门店版多哪些核心能力？',a:'22项专属：同行分析、经营洞察、AI组菜、AI预订、品牌色定制、语音播报、批量同步管理等。'},{q:'同行分析的商圈范围怎么选？',a:'支持0.5km/1km/2km等半径，决定"商圈均值"和"优秀同行"的取数口径。'}]},
+{cat:'定价体系',em:'💰',cards:[{q:'品牌智能体的标准定价？',a:'1-9店：¥99/月/店；10-99店：¥89/月/店；1000+店单独报价。最短6个月。'},{q:'连锁折扣怎么算？',a:'按本次新签门店数命中阶梯档位。折扣按门店类目分别配置，同一笔签约不同类目各自匹配。'},{q:'解约退款怎么算？',a:'退款=订阅费×剩余天数÷合约总天数。不足一个完整计费月的零头天数设10天保底。'},{q:'获客宝和效果广告的首充档位？',a:'获客宝：¥3,000/5,000/10,000；效果广告：¥5,000/10,000/20,000。'}]},
+{cat:'权益对比',em:'⚖️',cards:[{q:'品牌智能体有多少项权益？',a:'30+项权益，门店智能体仅8项。品牌版多出22项专属差异能力。'},{q:'品牌智能体三大核心卖点？',a:'①流量壁垒（优先展示+22项专属）②C端40秒获客（AI推荐+下单）③B端AI管店（同行分析+经营洞察）。'},{q:'品牌智能体的实测数据？',a:'曝光+3.6倍、转化率+31.6%、年省6万人力成本、复购率+12.5%。'}]},
+{cat:'签约流程',em:'📝',cards:[{q:'品牌智能体怎么签约？',a:'复用标准年费签约流程。入口：高德轩辕PC→签约中心→签约市场→选客户→选"高德品牌智能体"。'},{q:'签约后商户怎么确认？',a:'提交签约后生成二维码，商户用阿里本地通扫码查看并支付。'},{q:'品牌智能体适用什么行业？',a:'适用行业：美食。角色：新签BD、运营中台、渠道经理、服务商。'},{q:'上线时间是什么时候？',a:'2026年6月1日全量上线。'}]},
+{cat:'商家配置',em:'⚙️',cards:[{q:'商家怎么配置智能体？',a:'阿里本地通PC→选择门店→系统根据权益code展示对应模板。支持基础信息、问答库、语音播报配置。'},{q:'批量同步能同步哪些内容？',a:'三项：基本信息（名称/形象/标语）、问答库、语音播报。仅审核成功的内容可同步。'},{q:'知识库怎么维护？',a:'在配置页面进入"智能体知识库"入口，上传或维护内容。提交后进入审核流。'}]}
+];
+
+// Exam Questions
+const EQ=[
+{q:'品牌智能体相比门店智能体多出多少项专属能力？',opts:['12项','18项','22项','30项'],ans:2},
+{q:'品牌智能体的实测转化率提升是多少？',opts:['+15%','+21%','+31.6%','+50%'],ans:2},
+{q:'1-9店的月费标准是？',opts:['¥79/月/店','¥89/月/店','¥99/月/店','¥109/月/店'],ans:2},
+{q:'品牌智能体最短签约几个月？',opts:['3个月','6个月','12个月','24个月'],ans:1},
+{q:'解约退款中零头天数的保底规则是？',opts:['5天保底','7天保底','10天保底','15天保底'],ans:2},
+{q:'品牌智能体实测曝光提升多少倍？',opts:['+1.5x','+2.5x','+3.6x','+5x'],ans:2},
+{q:'品牌智能体年省多少人力成本？',opts:['3万','4万','6万','8万'],ans:2},
+{q:'品牌智能体复购率提升多少？',opts:['+5%','+8%','+12.5%','+20%'],ans:2},
+{q:'以下哪个不是品牌智能体的C端能力？',opts:['AI组菜','AI预订','同行分析','语音播报'],ans:2},
+{q:'品牌智能体每月包含多少条语音播报？',opts:['50条','100条','200条','不限'],ans:1},
+{q:'品牌形象定制限多少店以上可申请？',opts:['10店','50店','100店','500店'],ans:2},
+{q:'品牌智能体上线时间是？',opts:['2026年5月1日','2026年6月1日','2026年7月1日','2026年8月1日'],ans:1},
+{q:'获客宝的首充档位不包括哪个？',opts:['¥3,000','¥5,000','¥8,000','¥10,000'],ans:2},
+{q:'效果广告的首充档位不包括哪个？',opts:['¥3,000','¥5,000','¥10,000','¥20,000'],ans:0},
+{q:'同行分析功能多久更新一次数据？',opts:['每周','每月10日','每季度','实时'],ans:1},
+{q:'签约入口在哪个系统？',opts:['阿里本地通APP','高德轩辕PC','钉钉','CRM系统'],ans:1},
+{q:'商户用什么APP扫码签约？',opts:['高德地图','阿里本地通','支付宝','微信'],ans:1},
+{q:'批量同步时哪项内容不可同步？',opts:['基本信息','问答库','语音播报','经营数据'],ans:3},
+{q:'品牌智能体适用行业是？',opts:['全行业','美食','零售','餐饮+零售'],ans:1},
+{q:'门店智能体有几项权益？',opts:['5项','8项','12项','15项'],ans:1},
+{q:'品牌智能体的三大卖点不包括？',opts:['流量壁垒','C端40秒获客','低价促销','B端AI管店'],ans:2},
+{q:'10-99店的月费标准是？',opts:['¥79/月/店','¥89/月/店','¥99/月/店','¥109/月/店'],ans:1},
+{q:'组合购的核心价值是？',opts:['降低产品价格','产品能力互补提升转化','减少签约流程','增加门店数量'],ans:1},
+{q:'遇到"太贵了"异议，最佳应对是？',opts:['直接打折','用日均成本话术化解','忽略异议','推荐更便宜的产品'],ans:1},
+{q:'遇到商户说"我用美团/抖音了"，应该？',opts:['贬低竞品','讲高德到店场景的差异化','放弃该客户','降价竞争'],ans:1},
+{q:'品牌智能体的签约二维码发给谁？',opts:['渠道经理','服务商','商户扫码确认','系统自动确认'],ans:2},
+{q:'以下哪种不是标准的售卖包？',opts:['入门包','增长包','旗舰包','免费试用包'],ans:3},
+{q:'组合购渗透率从6/8到6/11的变化趋势是？',opts:['下降','持平','从6.9%升至9.6%','从15%降至10%'],ans:2},
+{q:'渠道组合购渗透率最高的大区是？',opts:['华南','华东','华西','华北'],ans:2},
+{q:'品牌智能体C端40秒获客指的是？',opts:['40秒内完成支付','从搜索到下单全程不到40秒','40秒内回复咨询','40秒内完成配送'],ans:1},
+{q:'增长包的核心逻辑是？',opts:['低门槛试水','效广买流量+智能体促转化','品广打品牌','纯靠自然流量'],ans:1},
+{q:'遇到商户说"AI我不懂"，最佳回应是？',opts:['详细讲解AI技术','告知全自动运行只管接单','建议先学习AI知识','推荐其他产品'],ans:1},
+{q:'入门包（智能体+获客宝）适合什么商户？',opts:['连锁大品牌','首次接触广告的小微商户','已有品广投放的商户','SKA客户'],ans:1},
+{q:'旗舰包包含哪些产品？',opts:['智能体+获客宝','智能体+效果广告','智能体+效广+品广','仅智能体'],ans:2},
+{q:'品牌智能体的核心签约流程是？',opts:['BD建单→商户扫码→支付','商户自建→审核→上线','电话签约→打款','线上自助开通'],ans:0},
+{q:'效果广告搭售占比的趋势是？',opts:['持续下降','从19%升至31%','保持稳定','从50%降至20%'],ans:1},
+{q:'品牌智能体的"开发中"功能怎么跟商户说？',opts:['回避不提','套餐已含上线自动开通=提前锁价','承诺具体日期','建议等上线再签'],ans:1},
+{q:'客户挑选环节建议输入几个字段？',opts:['3个','5个','8个','10个'],ans:1},
+{q:'签约提交后第一步是？',opts:['等审批','生成签约二维码发给商户','配置智能体','打电话确认'],ans:1},
+{q:'品牌智能体的三大卖点不包括哪个？',opts:['流量壁垒','C端40秒获客','低价促销','B端AI管店'],ans:2}
+];
+
+// Roleplay Scenes
+const RP=[
+{name:'异议处理',desc:'商户对价格和效果提出质疑',rounds:[
+{merchant:'你们这个太贵了吧？一个月99块，我美团推广通首充才5000块。',opts:[{text:'给您算笔账：日均不到20元，相当于雇了个24小时AI服务员，比招兼职便宜10倍。',score:10,fb:'正确！日均成本话术是最有效的价格异议应对方式。'},{text:'我们可以给您打个折。',score:3,fb:'打折不是首选，应先传递价值再考虑价格策略。'},{text:'那您觉得多少钱合适？',score:0,fb:'把定价权交给商户非常危险，容易被过度压价。'}]},
+{merchant:'我在美团和抖音都投了广告了，不需要再买你们的。',opts:[{text:'高德是到店导航场景，用户已出门在找餐厅了，转化率比刷短视频高很多。两个渠道互补不冲突。',score:10,fb:'完美！差异化定位是关键，不贬低竞品。'},{text:'我们比美团便宜。',score:3,fb:'价格对比不是核心差异点，场景差异才是。'},{text:'那算了，打扰了。',score:0,fb:'过早放弃会错失大量机会。'}]},
+{merchant:'效果能保证吗？万一没效果呢？',opts:[{text:'根据同类商户实测数据，预计曝光提升2-4倍、转化率提升约31.6%。具体因门店位置有所不同，建议先试6个月。',score:10,fb:'正确！区间表达+实测数据+免责，三合一话术。'},{text:'保证有效！没效果全额退款。',score:0,fb:'绝对承诺有合规风险，不可使用。'},{text:'效果肯定有的，您放心。',score:3,fb:'空泛的承诺缺乏说服力，需要数据支撑。'}]},
+{merchant:'我再考虑考虑吧。',opts:[{text:'理解。不过现在是推广期价格有优势，签约后可锁定当前价格。您的同行已经有不少在用了。',score:10,fb:'完美！紧迫感+锁价+社会认同，三重促单。'},{text:'好的，您考虑好了联系我。',score:3,fb:'被动等待容易流失客户，应主动制造紧迫感。'},{text:'别犹豫了，错过就没了。',score:0,fb:'过于强硬会引起反感。'}]}
+]},
+{name:'需求挖掘',desc:'引导商户表达痛点和需求',rounds:[
+{merchant:'你好，你们是做什么的？',opts:[{text:'我是高德地图的[名字]，负责本地美食商家的线上服务。想跟您聊一下——现在周边搜火锅的用户越来越多，您的店在高德上排第几？',score:10,fb:'完美开场！自我介绍+品类钩子，快速引起兴趣。'},{text:'我们是卖智能体的，一个月99块。',score:3,fb:'直接报价缺乏铺垫，应先建立价值感知。'},{text:'我们帮您做推广，效果很好。',score:0,fb:'空泛的描述缺乏差异化，无法引起兴趣。'}]},
+{merchant:'我们现在客流还行，不太需要推广。',opts:[{text:'那太好了！说明您的店本身有吸引力。不过线上搜索来的客人转化率通常更高。您关注过高德上的搜索数据吗？',score:10,fb:'优秀！先肯定商户，再用数据引发好奇。'},{text:'客流够也建议做推广，多多益善。',score:3,fb:'缺乏数据支撑，说服力不够。'},{text:'那以后有需要再说吧。',score:0,fb:'过早放弃，错失挖掘需求的机会。'}]},
+{merchant:'你们这个AI智能体具体能做什么？',opts:[{text:'简单说就是给您的门店配一个24小时AI服务员——顾客在高德搜到您，AI自动推荐菜品、引导团购、帮忙预订，40秒内完成。',score:10,fb:'精准！用场景化语言解释产品价值。'},{text:'功能很多，有AI组菜、AI预订、同行分析等30多项。',score:5,fb:'信息量太大，商户难以消化。'},{text:'您看看这个产品介绍手册。',score:0,fb:'推手册给商户是最低效的方式。'}]}
+]}
+];
+
+// Dashboard Data
+const DASH=[
+{name:'华西',deals:120,amount:185000,comboRate:45,arpu:1542},
+{name:'华南',deals:135,amount:210000,comboRate:18,arpu:1556},
+{name:'华中',deals:95,amount:140000,comboRate:12,arpu:1474},
+{name:'华东',deals:80,amount:115000,comboRate:5,arpu:1438},
+{name:'华北',deals:93,amount:178600,comboRate:8,arpu:1920}
+];
+
+// Gallery Demo Cases
+const DEMO_CASES=[
+{cat:'海鲜',pkg:'starter',headline:'+133%',sub:'点击率提升',pain:'线上曝光不足，自然客流下降',slogan:'让AI替你揽客',strat:'获客宝放大曝光+智能体转化锁客'},
+{cat:'中餐',pkg:'growth',headline:'+31.6%',sub:'转化率提升',pain:'广告流量有但转化率低下',slogan:'让每一分广告费都不白花',strat:'效广精准投放+智能体高效转化'},
+{cat:'火锅',pkg:'flagship',headline:'3.6x',sub:'曝光倍数提升',pain:'品牌知名度不足，搜索排名靠后',slogan:'全链路闭环，品效合一',strat:'品广打认知+效广做获客+智能体做转化'},
+{cat:'茶饮',pkg:'growth',headline:'+28%',sub:'到店转化提升',pain:'周边茶饮店密集，客流被分散',slogan:'精准投放，锁定目标客群',strat:'效广定向周边3km+智能体推荐引流'},
+{cat:'快餐',pkg:'starter',headline:'+85%',sub:'线上曝光增长',pain:'午高峰竞争激烈，外卖占比过高',slogan:'让堂食重新火起来',strat:'获客宝提升到店+智能体推荐堂食优惠'}
+];
 
 // ===== NAV =====
 function switchRole(r){S.role=r;document.querySelectorAll('.role-btn').forEach(b=>b.classList.toggle('active',b.textContent.includes(r==='bd'?'BD':'经理')))}
-function switchTab(t){S.tab=t;document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===t));document.querySelectorAll('.panel').forEach(el=>el.classList.toggle('active',el.id==='panel-'+t));if(t==='matcher')renderMatcher();if(t==='script')renderScript();if(t==='pipeline')renderPipeline();if(t==='summary')renderSummary();if(t==='casegen')updateCasePreview();}
+function switchTab(t){S.tab=t;document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===t));document.querySelectorAll('.panel').forEach(el=>el.classList.toggle('active',el.id==='panel-'+t));if(t==='matcher')renderMatcher();if(t==='script')renderScript();if(t==='pipeline')renderPipeline();if(t==='summary')renderSummary();if(t==='casegen')updCase();if(t==='learn')renderLearn();if(t==='exam')renderExam();if(t==='practice')renderPractice();if(t==='dash')renderDash();if(t==='gallery')renderGallery();}
 
-// ===== FORM HELPERS =====
-function setRadio(g,el){document.querySelectorAll('#'+g+' .radio-opt').forEach(o=>o.classList.remove('active'));el.classList.add('active')}
-function getRadio(g){const a=document.querySelector('#'+g+' .radio-opt.active');return a?a.dataset.val:''}
+// ===== FORM =====
+function setR(el){el.parentElement.querySelectorAll('.ro').forEach(o=>o.classList.remove('on'));el.classList.add('on')}
+function getR(g){const a=document.querySelector('#'+g+' .ro.on');return a?a.dataset.v:''}
 
 // ===== PICKER =====
-function getClient(){return{category:document.getElementById('f-category').value||'其他',stores:parseInt(document.getElementById('f-stores').value)||1,city:document.getElementById('f-city').value||'未知',hasAds:getRadio('f-ads')==='yes',intent:getRadio('f-intent')||'medium'}}
-function recommendPackage(c){let pkg,reason;if(c.stores>=100){pkg='flagship';reason='百店以上大品牌，建议定制旗舰方案。'}else if(c.stores>=10&&c.hasAds){pkg='flagship';reason='连锁品牌且已有广告，成熟度高，适合全链路旗舰方案。'}else if(c.stores>=10){pkg='growth';reason='连锁品牌有预算基础，智能体+效果广告组合投放效果更佳。'}else if(c.hasAds){pkg='growth';reason='已有广告基础，搭配智能体可提升转化率+31.6%。'}else{pkg='starter';reason='首次接触广告，先用AI接住自然流量+获客宝放大曝光。'}
+function analyzeClient(){const c={cat:document.getElementById('f-cat').value,stores:parseInt(document.getElementById('f-stores').value)||1,city:document.getElementById('f-city').value||'未知',hasAds:getR('f-ads')==='yes',intent:getR('f-intent')||'medium'};
+if(!c.cat){alert('请选择品类');return}if(!document.getElementById('f-stores').value){alert('请输入门店数');return}if(!getR('f-ads')){alert('请选择是否有广告');return}
+S.client=c;let pkg,reason;if(c.stores>=100){pkg='flagship';reason='百店以上大品牌，建议定制旗舰方案。'}else if(c.stores>=10&&c.hasAds){pkg='flagship';reason='连锁品牌且已有广告，适合全链路旗舰方案。'}else if(c.stores>=10){pkg='growth';reason='连锁品牌有预算基础，智能体+效果广告组合更优。'}else if(c.hasAds){pkg='growth';reason='已有广告基础，搭配智能体可提升转化率+31.6%。'}else{pkg='starter';reason='首次接触广告，先用AI接住自然流量+获客宝放大曝光。'}
 let pri='medium',priL='中（正常跟进）';if(c.intent==='high'){pri='high';priL='高（立即跟进）'}else if(c.intent==='low'){pri='low';priL='低（先培育）'}
-const mf=c.stores<=9?c.stores*99:c.stores*89;const ab=pkg==='starter'?3000:pkg==='growth'?5000:10000;const t=mf*6+ab;return{pkg,reason,priority:pri,priorityLabel:priL,monthlyFee:mf,sixMonth:mf*6,adBase:ab,total:t}}
-function analyzeClient(){const c=getClient();if(!document.getElementById('f-category').value){alert('请选择品类');return}if(!document.getElementById('f-stores').value){alert('请输入门店数');return}if(!getRadio('f-ads')){alert('请选择是否有广告');return}
-S.client=c;const r=recommendPackage(c);
-document.getElementById('picker-result').innerHTML=`<div class="result-card"><div class="result-header"><span class="result-badge ${PKG_DEF[r.pkg].badge}">${PKG_DEF[r.pkg].name}</span><span class="priority-tag priority-${r.priority}">${r.priorityLabel}</span></div><div style="font-size:14px;color:var(--text-secondary);margin-bottom:8px">${c.category} · ${c.stores}店 · ${c.city} · ${c.hasAds?'有广告':'无广告'} · 意向${c.intent==='high'?'高':c.intent==='medium'?'中':'低'}</div><div class="result-amount">¥${r.total.toLocaleString()} <span>（6个月预估总价）</span></div><div style="font-size:13px;color:var(--text-secondary)">智能体月费¥${r.monthlyFee} × 6月 = ¥${r.sixMonth.toLocaleString()} + ${PKG_DEF[r.pkg].name.includes('入门')?'获客宝':'效果广告'}首充¥${r.adBase.toLocaleString()}</div><div class="result-reason"><strong>推荐理由：</strong>${r.reason}</div><div class="btn-group"><button class="btn btn-primary" onclick="useRecommendation('${r.pkg}')">进入产品搭配 →</button><button class="btn btn-outline btn-sm" onclick="addDealFromPicker()">加入Pipeline</button></div></div>`}
-function useRecommendation(p){S.pkg=p;switchTab('matcher')}
-function addDealFromPicker(){const c=S.client;const r=recommendPackage(c);addDeal(c.category+c.stores+'店',c.category,r.pkg,1);switchTab('pipeline')}
-function resetPicker(){document.getElementById('f-category').value='';document.getElementById('f-stores').value='';document.getElementById('f-city').value='';document.querySelectorAll('#f-ads .radio-opt,#f-intent .radio-opt').forEach(o=>o.classList.remove('active'));document.getElementById('picker-result').innerHTML='';S.client={}}
+const mf=c.stores<=9?c.stores*99:c.stores*89;const ab=pkg==='starter'?3000:pkg==='growth'?5000:10000;const t=mf*6+ab;
+S.client={...c,pkg,pri};
+document.getElementById('picker-result').innerHTML=`<div class="result-card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><span class="rbadge ${PD[pkg].b}">${PD[pkg].name}</span><span class="ptag p-${pri[0]}">${priL}</span></div><div style="font-size:13px;color:var(--text-sec);margin-bottom:6px">${c.cat} · ${c.stores}店 · ${c.city} · ${c.hasAds?'有广告':'无广告'} · 意向${c.intent==='high'?'高':c.intent==='medium'?'中':'低'}</div><div class="ramt">¥${t.toLocaleString()} <span>（6个月预估总价）</span></div><div style="font-size:12px;color:var(--text-sec)">智能体月费¥${mf} × 6月 = ¥${(mf*6).toLocaleString()} + ${pkg==='starter'?'获客宝':'效果广告'}首充¥${ab.toLocaleString()}</div><div class="rreason"><strong>推荐理由：</strong>${reason}</div><div class="btn-group"><button class="btn btn-primary" onclick="S.pkg='${pkg}';switchTab('matcher')">进入产品搭配 →</button><button class="btn btn-out btn-sm" onclick="addDealFromPicker('${pkg}')">加入Pipeline</button></div></div>`}
+function addDealFromPicker(p){const c=S.client;addDeal(c.cat+c.stores+'店',c.cat,p,1);switchTab('pipeline')}
+function resetPicker(){document.getElementById('f-cat').value='';document.getElementById('f-stores').value='';document.getElementById('f-city').value='';document.querySelectorAll('#f-ads .ro,#f-intent .ro').forEach(o=>o.classList.remove('on'));document.getElementById('picker-result').innerHTML='';S.client={}}
 
 // ===== MATCHER =====
-function renderMatcher(){const c=S.client;const has=!!c.category;
-document.getElementById('matcher-client-info').innerHTML=has?`<div class="card" style="background:var(--primary-bg);border-color:var(--primary)"><div style="display:flex;align-items:center;gap:12px;font-size:14px"><span style="font-size:20px">🏪</span><span><strong>${c.category}</strong> · ${c.stores}店 · ${c.city} · ${c.hasAds?'有广告':'无广告'}</span><button class="btn btn-outline btn-sm" style="margin-left:auto" onclick="switchTab('picker')">修改</button></div></div>`:`<div class="card"><div class="empty-state"><div class="icon">📋</div><p>请先在"客户挑选"中填写商户信息</p><div class="btn-group" style="justify-content:center"><button class="btn btn-primary btn-sm" onclick="switchTab('picker')">去填写</button></div></div></div>`;
-const rec=has?recommendPackage(c).pkg:'';let h='';for(const[k,p]of Object.entries(PKG_DEF)){const sel=S.pkg===k||(!S.pkg&&rec===k);h+=`<div class="pkg-card ${sel?'selected':''} ${rec===k?'recommended':''}" onclick="selectPkg('${k}')"><div class="pkg-name">${p.name}</div><div class="pkg-combo">${p.combo}</div><div style="font-size:12px;color:var(--text-light);margin-bottom:10px">${p.forWhom}</div><div class="pkg-logic">${p.logic.map((l,i)=>`${i>0?'<span class="arrow">→</span>':''}${l}`).join('')}</div></div>`}
-document.getElementById('pkg-cards-container').innerHTML=h;if(!S.pkg&&rec)selectPkg(rec);if(S.pkg)renderPricing()}
-function selectPkg(p){S.pkg=p;document.querySelectorAll('.pkg-card').forEach(el=>{el.classList.toggle('selected',el.querySelector('.pkg-name').textContent===PKG_DEF[p].name)});renderPricing()}
-function renderPricing(){const c=S.client,p=S.pkg;if(!c.stores||!p)return;const mf=c.stores<=9?c.stores*99:c.stores*89;const at=mf*6;
-let ap,ao,ad;if(p==='starter'){ap=AD_BUDGETS.hkb;ao=ap.opts;ad=ao[0]}else if(p==='growth'){ap=AD_BUDGETS.effect;ao=ap.opts;ad=ao[0]}else{ap=AD_BUDGETS.effect;ao=ap.opts;ad=ao[1]}
-S.pricing={monthlyFee:mf,agentTotal:at,adProduct:ap.name,adDefault:ad,adOpts:ao};
-const sa=S.pricing.selectedAd||ad;const gt=at+sa;
-const rows=ao.map(o=>`<tr onclick="selectAdBudget(${o})" style="cursor:pointer;${o===sa?'background:var(--primary-bg)':''}"><td>${ap.name}</td><td>¥${o.toLocaleString()}</td><td class="amount">¥${(at+o).toLocaleString()}</td></tr>`).join('');
-let br='';if(p==='flagship')br=`<tr><td>品牌广告（顶展/钻展）</td><td colspan="2" style="color:var(--warning);font-size:13px">5折起，月封顶400W，需单独沟通</td></tr>`;
-document.getElementById('pricing-card').style.display='';
-document.getElementById('pricing-content').innerHTML=`<table class="pricing-table"><thead><tr><th>产品</th><th>费用</th><th>合计</th></tr></thead><tbody><tr><td>品牌智能体</td><td>¥${mf}/月（${c.stores}店×¥${c.stores<=9?'99':'89'}）</td><td class="amount">¥${at.toLocaleString()}（6个月）</td></tr>${rows}${br}</tbody></table><div class="pricing-total"><div class="pricing-total-label">6个月预估总投入</div><div class="pricing-total-amount">¥${gt.toLocaleString()}</div></div><div style="font-size:12px;color:var(--text-light);margin-top:8px">* 点击广告行可切换首充档位 · 日均成本约¥${Math.round(gt/180)}</div>`;
-document.getElementById('logic-card').style.display='';const lg=PKG_DEF[p].logic;
-document.getElementById('logic-content').innerHTML=`<div style="display:flex;flex-direction:column;gap:12px">${lg.map((l,i)=>`<div style="display:flex;align-items:flex-start;gap:12px"><div style="width:32px;height:32px;border-radius:50%;background:${i===0?'var(--primary)':i===lg.length-1?'var(--success)':'var(--primary-light)'};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0">${i+1}</div><div style="padding-top:5px;font-size:14px">${l}</div></div>`).join('')}</div><div style="margin-top:16px;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm);font-size:13px;color:var(--text-secondary)"><strong>一句话：</strong>${lg.join(' → ')}</div>`;
-document.getElementById('matcher-actions').style.display=''}
-function selectAdBudget(o){S.pricing.selectedAd=o;renderPricing()}
-function copyPlanText(){const c=S.client,p=PKG_DEF[S.pkg],pr=S.pricing,ad=pr.selectedAd||pr.adDefault;const t=`【售卖方案】${p.name}\n产品：${p.combo}\n适用：${c.category} · ${c.stores}店 · ${c.city}\n智能体：¥${pr.monthlyFee}/月 × 6月 = ¥${pr.agentTotal.toLocaleString()}\n${pr.adProduct}：首充¥${ad.toLocaleString()}\n合计：¥${(pr.agentTotal+ad).toLocaleString()}\n理由：${p.logic.join(' → ')}`;navigator.clipboard.writeText(t).then(()=>alert('已复制'))}
-function goToScript(){switchTab('script')}
+function renderMatcher(){const c=S.client;const has=!!c.cat;
+document.getElementById('match-info').innerHTML=has?`<div class="card" style="background:var(--primary-bg);border-color:var(--primary)"><div style="display:flex;align-items:center;gap:10px;font-size:13px"><span style="font-size:18px">🏪</span><span><strong>${c.cat}</strong> · ${c.stores}店 · ${c.city}</span><button class="btn btn-out btn-sm" style="margin-left:auto" onclick="switchTab('picker')">修改</button></div></div>`:`<div class="card"><div class="empty"><div class="ei">📋</div><p>请先在"客户挑选"中填写信息</p><div class="btn-group" style="justify-content:center"><button class="btn btn-primary btn-sm" onclick="switchTab('picker')">去填写</button></div></div></div>`;
+const rec=has?recommendPkg(c):'';let h='';for(const[k,p]of Object.entries(PD)){const sel=S.pkg===k||(!S.pkg&&rec===k);h+=`<div class="pkg-card ${sel?'sel':''} ${rec===k?'rec':''}" onclick="selPkg('${k}')"><div class="pkg-name">${p.name}</div><div class="pkg-combo">${p.combo}</div><div style="font-size:11px;color:var(--text-light);margin-bottom:8px">${p.for}</div><div class="pkg-logic">${p.logic.map((l,i)=>`${i>0?'<span class="ar">→</span>':''}${l}`).join('')}</div></div>`}
+document.getElementById('pkg-container').innerHTML=h;if(!S.pkg&&rec)selPkg(rec);if(S.pkg)renderPrice()}
+function recommendPkg(c){if(c.stores>=100)return'flagship';if(c.stores>=10&&c.hasAds)return'flagship';if(c.stores>=10)return'growth';if(c.hasAds)return'growth';return'starter'}
+function selPkg(p){S.pkg=p;document.querySelectorAll('.pkg-card').forEach(el=>{el.classList.toggle('sel',el.querySelector('.pkg-name').textContent===PD[p].name)});renderPrice()}
+function renderPrice(){const c=S.client,p=S.pkg;if(!c.stores||!p)return;const mf=c.stores<=9?c.stores*99:c.stores*89;const at=mf*6;
+let ap,ao,ad;if(p==='starter'){ap=AB.hkb;ao=ap.opts;ad=ao[0]}else if(p==='growth'){ap=AB.eff;ao=ap.opts;ad=ao[0]}else{ap=AB.eff;ao=ap.opts;ad=ao[1]}
+S.pricing={mf,at,ap:ap.name,ad,ao};const sa=S.pricing.sa||ad;const gt=at+sa;
+const rows=ao.map(o=>`<tr onclick="selAd(${o})" style="cursor:pointer;${o===sa?'background:var(--primary-bg)':''}"><td>${ap.name}</td><td>¥${o.toLocaleString()}</td><td class="amt">¥${(at+o).toLocaleString()}</td></tr>`).join('');
+let br='';if(p==='flagship')br=`<tr><td>品牌广告（顶展/钻展）</td><td colspan="2" style="color:var(--warning);font-size:12px">5折起，月封顶400W，需单独沟通</td></tr>`;
+document.getElementById('price-card').style.display='';
+document.getElementById('price-content').innerHTML=`<table class="ptable"><thead><tr><th>产品</th><th>费用</th><th>合计</th></tr></thead><tbody><tr><td>品牌智能体</td><td>¥${mf}/月（${c.stores}店×¥${c.stores<=9?'99':'89'}）</td><td class="amt">¥${at.toLocaleString()}（6月）</td></tr>${rows}${br}</tbody></table><div class="ptotal"><div class="ptotal-l">6个月预估总投入</div><div class="ptotal-a">¥${gt.toLocaleString()}</div></div><div style="font-size:11px;color:var(--text-light);margin-top:6px">* 点击广告行切换首充档位 · 日均约¥${Math.round(gt/180)}</div>`;
+document.getElementById('logic-card').style.display='';const lg=PD[p].logic;
+document.getElementById('logic-content').innerHTML=`<div style="display:flex;flex-direction:column;gap:10px">${lg.map((l,i)=>`<div style="display:flex;align-items:flex-start;gap:10px"><div style="width:30px;height:30px;border-radius:50%;background:${i===0?'var(--primary)':i===lg.length-1?'var(--success)':'var(--primary-light)'};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0">${i+1}</div><div style="padding-top:4px;font-size:13px">${l}</div></div>`).join('')}</div><div style="margin-top:14px;padding:10px 14px;background:var(--bg);border-radius:var(--radius-sm);font-size:12px;color:var(--text-sec)"><strong>一句话：</strong>${lg.join(' → ')}</div>`;
+document.getElementById('match-actions').style.display=''}
+function selAd(o){S.pricing.sa=o;renderPrice()}
+function copyPlan(){const c=S.client,p=PD[S.pkg],pr=S.pricing,ad=pr.sa||pr.ad;const t=`【售卖方案】${p.name}\n产品：${p.combo}\n适用：${c.cat} · ${c.stores}店 · ${c.city}\n智能体：¥${pr.mf}/月 × 6月 = ¥${pr.at.toLocaleString()}\n${pr.ap}：首充¥${ad.toLocaleString()}\n合计：¥${(pr.at+ad).toLocaleString()}`;navigator.clipboard.writeText(t).then(()=>alert('已复制'))}
 
 // ===== SCRIPT =====
-function renderScript(){const c=S.client,p=S.pkg;if(!c.category||!p){document.getElementById('script-info').style.display='none';document.getElementById('script-steps').innerHTML='<div class="empty-state"><div class="icon">📋</div><p>请先完成客户挑选和产品搭配</p></div>';renderObjections();return}
-const daily=Math.round((S.pricing.agentTotal+(S.pricing.selectedAd||S.pricing.adDefault))/180);const hook=HOOKS[c.category]||HOOKS['其他'];const sp=SP[p];const mn=PKG_DEF[p].name;
+function renderScript(){const c=S.client,p=S.pkg;if(!c.cat||!p){document.getElementById('script-info').style.display='none';document.getElementById('script-steps').innerHTML='<div class="empty"><div class="ei">📋</div><p>请先完成客户挑选和产品搭配</p></div>';renderObj();return}
+const daily=Math.round((S.pricing.at+(S.pricing.sa||S.pricing.ad))/180);const hook=HK[c.cat]||HK['其他'];const sp=SP[p];const mn=PD[p].name;
 document.getElementById('script-info').style.display='';
-document.getElementById('script-overview').innerHTML=`<div style="display:flex;gap:16px;flex-wrap:wrap"><div style="flex:1;min-width:120px;padding:12px 16px;background:var(--primary-bg);border-radius:var(--radius-sm)"><div style="font-size:12px;color:var(--text-secondary)">售卖包</div><div style="font-size:18px;font-weight:700;color:var(--primary)">${mn}</div></div><div style="flex:1;min-width:120px;padding:12px 16px;background:var(--success-bg);border-radius:var(--radius-sm)"><div style="font-size:12px;color:var(--text-secondary)">日均成本</div><div style="font-size:18px;font-weight:700;color:var(--success)">¥${daily}</div></div><div style="flex:1;min-width:120px;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm)"><div style="font-size:12px;color:var(--text-secondary)">客户</div><div style="font-size:18px;font-weight:700">${c.category} ${c.stores}店</div></div></div>`;
-const mf=S.pricing.monthlyFee,st=S.pricing.agentTotal,an=S.pricing.adProduct,af=S.pricing.selectedAd||S.pricing.adDefault;
-const steps=[{name:'开场白',time:'30秒',text:`您好！我是高德地图的[您的名字]，负责咱们${c.city||'本地'}美食商家的线上服务。\n\n今天过来是想跟您聊一个事——${hook}\n\n我们刚上线了"品牌智能体"，帮您的门店在高德上实现AI自动接待，已有不少${c.category}同行在用了。`},{name:'挖需求',time:'2分钟',text:`我想先了解一下：\n\n1. 您这边日均大概多少客人到店？线上搜索来的多不多？\n2. 有没有觉得线上获客比较难？\n3. 目前有在美团、抖音投广告吗？效果怎么样？\n4. 周边竞品有什么新的推广动作？\n\n（认真听回答，记录痛点）`},{name:'三大卖点',time:'3分钟',text:`推荐我们的【${mn}】方案，三个核心价值：\n\n一、${sp.p1}\n\n二、${sp.p2}\n\n三、${sp.p3}\n\n有家做${c.category}的门店，规模差不多，用了之后曝光提升3.6倍，转化提升31.6%，年省约6万。`},{name:'前后对比',time:'1分钟',text:`【开通前】\n- 顾客搜"${c.category}"，您的店排在后面\n- 点进来没有互动，顾客又划走了\n- 全靠自然客流\n\n【开通后】\n- 品牌智能体优先展示，有专属AI服务员\n- 顾客问什么AI秒回：推荐菜品、引导团购、帮忙预订\n- ${p==='starter'?'获客宝持续放大曝光':p==='growth'?'效果广告精准投放+智能体高效转化':'全链路闭环：品广+效广+智能体'}`},{name:'报价',time:'1分钟',text:`价格很划算：\n\n智能体月费：¥${mf}（${c.stores}家门店）\n${an}首充：¥${af.toLocaleString()}\n6个月总投入：¥${(st+af).toLocaleString()}\n\n每天只要¥${daily}——不到一杯咖啡的钱。\n年省6万+曝光3.6倍+转化31.6%，投入产出比非常高。\n现在签约可锁定推广期价格。`},{name:'异议处理',time:'按需',text:`常见异议速答：\n- "太贵了" → 每天¥${daily}，比雇兼职便宜10倍\n- "我用美团/抖音" → 高德到店场景，转化率更高\n- "效果能保证吗" → 实测曝光+3.6x、转化+31.6%\n- "AI不懂" → 全自动运行，您只管接单\n\n（更多异议请查看下方速查手册）`},{name:'促单金句',time:'30秒',text:`"现在签约锁定推广期价格，后续只会涨不会降。"\n\n"您的同行已经有不少在用了，早用早受益。"\n\n"我帮您现场开通，5分钟搞定。来，扫这个码就行。"\n\n（掏出签约二维码）`}];
-document.getElementById('script-steps').innerHTML=steps.map((s,i)=>`<div class="script-step ${i===0?'open':''}" onclick="toggleStep(this)"><div class="script-step-header"><span class="step-num">${i+1}</span><span class="step-name">${s.name}</span><span class="step-time">${s.time}</span><span class="chevron">▾</span></div><div class="script-step-body"><div class="script-text">${fmtScript(s.text)}</div><button class="btn btn-outline btn-sm" style="margin-top:10px" onclick="event.stopPropagation();navigator.clipboard.writeText(\`${escTpl(s.text)}\`).then(()=>{this.textContent='已复制 ✓';setTimeout(()=>this.textContent='复制本段',2e3)})">复制本段</button></div></div>`).join('');
-renderObjections()}
-function fmtScript(t){return t.replace(/\n/g,'<br>').replace(/【([^】]+)】/g,'<strong>【$1】</strong>').replace(/（([^）]+)）/g,'<span style="color:var(--text-light);font-size:13px">（$1）</span>').replace(/"([^"]+)"/g,'<span class="hl">"$1"</span>')}
-function escTpl(s){return s.replace(/`/g,'\\`').replace(/\$/g,'\\$')}
-function toggleStep(el){el.classList.toggle('open')}
-function renderObjections(){document.getElementById('objection-list').innerHTML=OBJECTIONS.map(o=>`<div class="objection-item" data-q="${o.q}" onclick="this.classList.toggle('expanded')"><div class="q">"${o.q}"</div><div class="a">${o.a}</div></div>`).join('')}
-function filterObjections(kw){const k=kw.toLowerCase();document.querySelectorAll('.objection-item').forEach(el=>{const q=el.dataset.q.toLowerCase(),a=el.querySelector('.a').textContent.toLowerCase();el.classList.toggle('hidden',k&&!q.includes(k)&&!a.includes(k))})}
-function copyAllScript(){const steps=document.querySelectorAll('.script-step-body .script-text');const titles=['一、开场白','二、挖需求','三、三大卖点','四、前后对比','五、报价','六、异议处理','七、促单金句'];let t='【智能体售卖话术】\n\n';steps.forEach((s,i)=>{t+=titles[i]+'\n'+s.textContent.trim()+'\n\n'});t+='【异议速查】\n';OBJECTIONS.forEach(o=>{t+=`Q: "${o.q}"\nA: ${o.a}\n\n`});navigator.clipboard.writeText(t).then(()=>alert('已复制全部话术'))}
+document.getElementById('script-ov').innerHTML=`<div style="display:flex;gap:14px;flex-wrap:wrap"><div style="flex:1;min-width:100px;padding:10px 14px;background:var(--primary-bg);border-radius:var(--radius-sm)"><div style="font-size:11px;color:var(--text-sec)">售卖包</div><div style="font-size:16px;font-weight:700;color:var(--primary)">${mn}</div></div><div style="flex:1;min-width:100px;padding:10px 14px;background:var(--success-bg);border-radius:var(--radius-sm)"><div style="font-size:11px;color:var(--text-sec)">日均成本</div><div style="font-size:16px;font-weight:700;color:var(--success)">¥${daily}</div></div><div style="flex:1;min-width:100px;padding:10px 14px;background:var(--bg);border-radius:var(--radius-sm)"><div style="font-size:11px;color:var(--text-sec)">客户</div><div style="font-size:16px;font-weight:700">${c.cat} ${c.stores}店</div></div></div>`;
+const mf=S.pricing.mf,st=S.pricing.at,an=S.pricing.ap,af=S.pricing.sa||S.pricing.ad;
+const steps=[{name:'开场白',time:'30秒',text:`您好！我是高德地图的[名字]，负责${c.city||'本地'}美食商家的线上服务。\n\n想跟您聊一个事——${hook}\n\n我们刚上线了"品牌智能体"，帮门店在高德上实现AI自动接待，已有不少${c.cat}同行在用了。`},{name:'挖需求',time:'2分钟',text:`我想先了解一下：\n\n1. 您这边日均大概多少客人到店？线上搜索来的多不多？\n2. 有没有觉得线上获客比较难？\n3. 目前有在美团、抖音投广告吗？效果怎么样？\n4. 周边竞品有什么新的推广动作？`},{name:'三大卖点',time:'3分钟',text:`推荐我们的【${mn}】方案，三个核心价值：\n\n一、${sp.p1}\n\n二、${sp.p2}\n\n三、${sp.p3}\n\n有家做${c.cat}的门店，规模差不多，用了之后曝光提升3.6倍，转化提升31.6%，年省约6万。`},{name:'前后对比',time:'1分钟',text:`【开通前】\n- 顾客搜"${c.cat}"，您的店排在后面\n- 点进来没有互动，顾客又划走了\n- 全靠自然客流\n\n【开通后】\n- 品牌智能体优先展示，有专属AI服务员\n- AI秒回：推荐菜品、引导团购、帮忙预订\n- ${p==='starter'?'获客宝持续放大曝光':p==='growth'?'效果广告精准投放+智能体高效转化':'全链路闭环：品广+效广+智能体'}`},{name:'报价',time:'1分钟',text:`价格很划算：\n\n智能体月费：¥${mf}（${c.stores}家门店）\n${an}首充：¥${af.toLocaleString()}\n6个月总投入：¥${(st+af).toLocaleString()}\n\n每天只要¥${daily}——不到一杯咖啡的钱。\n年省6万+曝光3.6倍+转化31.6%，ROI非常高。`},{name:'异议处理',time:'按需',text:`常见异议速答：\n- "太贵了" → 每天¥${daily}，比雇兼职便宜10倍\n- "我用美团/抖音" → 高德到店场景，转化率更高\n- "效果能保证吗" → 实测曝光+3.6x、转化+31.6%\n- "AI不懂" → 全自动运行，您只管接单`},{name:'促单金句',time:'30秒',text:`"现在签约锁定推广期价格，后续只会涨不会降。"\n\n"您的同行已经有不少在用了，早用早受益。"\n\n"我帮您现场开通，5分钟搞定。来，扫这个码就行。"`}];
+document.getElementById('script-steps').innerHTML=steps.map((s,i)=>`<div class="sstep ${i===0?'open':''}" onclick="togStep(this)"><div class="sstep-h"><span class="sn">${i+1}</span><span class="sname">${s.name}</span><span class="stime">${s.time}</span><span class="chev">▾</span></div><div class="sstep-b"><div class="stxt">${fmtS(s.text)}</div><button class="btn btn-out btn-sm" style="margin-top:8px" onclick="event.stopPropagation();navigator.clipboard.writeText(\`${escT(s.text)}\`).then(()=>{this.textContent='已复制 ✓';setTimeout(()=>this.textContent='复制本段',2e3)})">复制本段</button></div></div>`).join('');
+renderObj()}
+function fmtS(t){return t.replace(/\n/g,'<br>').replace(/【([^】]+)】/g,'<strong>【$1】</strong>').replace(/（([^）]+)）/g,'<span style="color:var(--text-light);font-size:12px">（$1）</span>').replace(/"([^"]+)"/g,'<span class="hl">"$1"</span>')}
+function escT(s){return s.replace(/`/g,'\\`').replace(/\$/g,'\\$')}
+function togStep(el){el.classList.toggle('open')}
+function renderObj(){document.getElementById('obj-list').innerHTML=OBJ.map(o=>`<div class="oitem" data-q="${o.q}" onclick="this.classList.toggle('exp')"><div class="q">"${o.q}"</div><div class="a">${o.a}</div></div>`).join('')}
+function filterObj(kw){const k=kw.toLowerCase();document.querySelectorAll('.oitem').forEach(el=>{const q=el.dataset.q.toLowerCase(),a=el.querySelector('.a').textContent.toLowerCase();el.classList.toggle('hid',k&&!q.includes(k)&&!a.includes(k))})}
+function copyScript(){const steps=document.querySelectorAll('.sstep-b .stxt');const titles=['一、开场白','二、挖需求','三、三大卖点','四、前后对比','五、报价','六、异议处理','七、促单金句'];let t='【智能体售卖话术】\n\n';steps.forEach((s,i)=>{t+=titles[i]+'\n'+s.textContent.trim()+'\n\n'});t+='【异议速查】\n';OBJ.forEach(o=>{t+=`Q: "${o.q}"\nA: ${o.a}\n\n`});navigator.clipboard.writeText(t).then(()=>alert('已复制全部话术'))}
 
 // ===== PIPELINE =====
-function addDeal(name,cat,pkg,stage){S.pipeline.push({id:dealIdCounter++,name,category:cat,pkg,stage,createdAt:Date.now(),followups:[]})}
-function getDealDays(deal){return Math.max(1,Math.ceil((Date.now()-deal.createdAt)/864e5))}
-function getDealClass(deal){const d=getDealDays(deal);return d>=7?'danger':d>=3?'warn':''}
-function renderPipeline(){const board=document.getElementById('pipeline-board');
-board.innerHTML=STAGES.map(st=>{const deals=S.pipeline.filter(d=>d.stage===st.id);return`<div class="pipeline-col" data-stage="${st.id}" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="dropDeal(event,${st.id});this.classList.remove('drag-over')"><div class="pipeline-col-header stage-${st.id}">${st.name} <span class="count">${deals.length}</span></div>${deals.map(d=>{const days=getDealDays(d);const cls=getDealClass(d);const p=PKG_DEF[d.pkg];return`<div class="deal-card ${cls}" draggable="true" ondragstart="event.dataTransfer.setData('text','${d.id}')" onclick="showDealDetail(${d.id})"><div class="name">${d.name}</div><div class="meta">${d.category} · ${p?p.name:''}</div><div class="days">${days}天</div>${d.followups.length?`<div class="followup-list">${d.followups.slice(-2).map(f=>`<div class="followup-item">${f.date}: ${f.text}</div>`).join('')}</div>`:''}<div class="next-action">→ ${NEXT_ACTIONS[st.id]}</div></div>`}).join('')}</div>`}).join('')}
-function dropDeal(e,stage){e.preventDefault();const id=parseInt(e.dataTransfer.getData('text'));const deal=S.pipeline.find(d=>d.id===id);if(deal){deal.stage=stage;renderPipeline()}}
-function showDealDetail(id){const d=S.pipeline.find(x=>x.id===id);if(!d)return;const st=STAGES.find(s=>s.id===d.stage);
-const mc=document.getElementById('modal-container');
-mc.innerHTML=`<div class="modal-overlay" onclick="if(event.target===this)this.remove()"><div class="modal" style="position:relative"><button class="modal-close" onclick="this.closest('.modal-overlay').remove()">×</button><div class="modal-title">${d.name}</div><div style="font-size:14px;color:var(--text-secondary);margin-bottom:16px">${d.category} · ${PKG_DEF[d.pkg]?.name||''} · 第${d.stage}阶段（${st.name}）· ${getDealDays(d)}天</div>
-<div class="form-group" style="margin-bottom:16px"><label class="form-label">添加跟进记录</label><div style="display:flex;gap:8px"><input id="followup-input" class="form-input" placeholder="如：商户表示感兴趣，下周再聊"><button class="btn btn-primary btn-sm" onclick="addFollowup(${d.id})">添加</button></div></div>
-${d.followups.length?`<div style="margin-bottom:16px"><label class="form-label" style="margin-bottom:8px;display:block">跟进记录</label>${d.followups.map(f=>`<div style="padding:8px 12px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:4px;font-size:13px"><span style="color:var(--text-light)">${f.date}</span> ${f.text}</div>`).join('')}</div>`:''}
-<div class="btn-group"><button class="btn btn-secondary btn-sm" onclick="moveDealToSummary(${d.id})">标记签约 → 售卖总结</button>${d.stage<5?`<button class="btn btn-outline btn-sm" onclick="advanceDeal(${d.id})">推进到下一阶段</button>`:''}</div></div></div>`}
-function addFollowup(id){const inp=document.getElementById('followup-input');if(!inp.value.trim())return;const d=S.pipeline.find(x=>x.id===id);d.followups.push({date:new Date().toLocaleDateString('zh-CN',{month:'short',day:'numeric'}),text:inp.value.trim()});showDealDetail(id);renderPipeline()}
-function advanceDeal(id){const d=S.pipeline.find(x=>x.id===id);if(d&&d.stage<5){d.stage++;renderPipeline();document.querySelector('.modal-overlay')?.remove()}}
-function moveDealToSummary(id){const d=S.pipeline.find(x=>x.id===id);if(!d)return;
-S.summaries.push({...d,signedAt:Date.now(),dealReason:[],objection:[],summaryText:''});
-S.pipeline=S.pipeline.filter(x=>x.id!==id);
-document.querySelector('.modal-overlay')?.remove();renderPipeline();switchTab('summary')}
-function showAddDealModal(){const mc=document.getElementById('modal-container');
-mc.innerHTML=`<div class="modal-overlay" onclick="if(event.target===this)this.remove()"><div class="modal" style="position:relative"><button class="modal-close" onclick="this.closest('.modal-overlay').remove()">×</button><div class="modal-title">添加客户到Pipeline</div>
-<div class="form-grid" style="grid-template-columns:1fr;margin-bottom:16px"><div class="form-group"><label class="form-label">商户名称</label><input id="ad-name" class="form-input" placeholder="如：老王火锅5店"></div><div class="form-group"><label class="form-label">品类</label><select id="ad-cat" class="form-select"><option>中餐</option><option>火锅</option><option>烧烤</option><option>茶饮</option><option>西餐</option><option>快餐</option><option>小吃</option><option>其他</option></select></div><div class="form-group"><label class="form-label">推荐售卖包</label><select id="ad-pkg" class="form-select"><option value="starter">入门包</option><option value="growth">增长包</option><option value="flagship">旗舰包</option></select></div></div>
-<div class="btn-group"><button class="btn btn-primary" onclick="confirmAddDeal()">添加</button></div></div></div>`}
-function confirmAddDeal(){const n=document.getElementById('ad-name').value;if(!n){alert('请输入商户名称');return}addDeal(n,document.getElementById('ad-cat').value,document.getElementById('ad-pkg').value,1);document.querySelector('.modal-overlay')?.remove();renderPipeline()}
+function addDeal(nm,cat,pkg,stage){S.pipeline.push({id:didC++,name:nm,category:cat,pkg,stage,createdAt:Date.now(),followups:[]})}
+function dealDays(d){return Math.max(1,Math.ceil((Date.now()-d.createdAt)/864e5))}
+function dealCls(d){const dy=dealDays(d);return dy>=7?'dgr':dy>=3?'wrn':''}
+function renderPipeline(){document.getElementById('pboard').innerHTML=STG.map(st=>{const deals=S.pipeline.filter(d=>d.stage===st.id);return`<div class="pcol" data-stage="${st.id}" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="dropDeal(event,${st.id});this.classList.remove('dragover')"><div class="pcol-h ${st.cls}">${st.name} <span style="background:rgba(255,255,255,.3);padding:1px 6px;border-radius:8px;margin-left:4px;font-size:10px">${deals.length}</span></div>${deals.map(d=>{const dy=dealDays(d);return`<div class="dcard ${dealCls(d)}" draggable="true" ondragstart="event.dataTransfer.setData('text','${d.id}')" onclick="showDeal(${d.id})"><div class="nm">${d.name}</div><div class="mt">${d.category} · ${PD[d.pkg]?.name||''}</div><div class="dy">${dy}天</div>${d.followups.length?`<div class="fulist">${d.followups.slice(-2).map(f=>`<div class="fuitem">${f.date}: ${f.text}</div>`).join('')}</div>`:''}<div class="na">→ ${st.na}</div></div>`}).join('')}</div>`}).join('')}
+function dropDeal(e,st){e.preventDefault();const id=parseInt(e.dataTransfer.getData('text'));const d=S.pipeline.find(x=>x.id===id);if(d){d.stage=st;renderPipeline()}}
+function showDeal(id){const d=S.pipeline.find(x=>x.id===id);if(!d)return;const st=STG.find(s=>s.id===d.stage);const mc=document.getElementById('modal-box');
+mc.innerHTML=`<div class="modal-ov" onclick="if(event.target===this)this.remove()"><div class="modal"><button class="modal-x" onclick="this.closest('.modal-ov').remove()">×</button><div class="modal-t">${d.name}</div><div style="font-size:13px;color:var(--text-sec);margin-bottom:14px">${d.category} · ${PD[d.pkg]?.name||''} · ${st.name} · ${dealDays(d)}天</div><div class="form-group" style="margin-bottom:14px"><label class="form-label">添加跟进记录</label><div style="display:flex;gap:6px"><input id="fu-in" class="form-input" placeholder="如：商户表示感兴趣"><button class="btn btn-primary btn-sm" onclick="addFU(${d.id})">添加</button></div></div>${d.followups.length?`<div style="margin-bottom:14px"><label class="form-label" style="margin-bottom:6px;display:block">跟进记录</label>${d.followups.map(f=>`<div style="padding:6px 10px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:3px;font-size:12px"><span style="color:var(--text-light)">${f.date}</span> ${f.text}</div>`).join('')}</div>`:''}<div class="btn-group"><button class="btn btn-sec btn-sm" onclick="dealToSum(${d.id})">标记签约 → 售卖总结</button>${d.stage<5?`<button class="btn btn-out btn-sm" onclick="advDeal(${d.id})">推进到下一阶段</button>`:''}</div></div></div>`}
+function addFU(id){const inp=document.getElementById('fu-in');if(!inp.value.trim())return;const d=S.pipeline.find(x=>x.id===id);d.followups.push({date:new Date().toLocaleDateString('zh-CN',{month:'short',day:'numeric'}),text:inp.value.trim()});showDeal(id);renderPipeline()}
+function advDeal(id){const d=S.pipeline.find(x=>x.id===id);if(d&&d.stage<5){d.stage++;renderPipeline();document.querySelector('.modal-ov')?.remove()}}
+function dealToSum(id){const d=S.pipeline.find(x=>x.id===id);if(!d)return;S.summaries.push({...d,signedAt:Date.now(),dealReason:[],objection:[],summaryText:''});S.pipeline=S.pipeline.filter(x=>x.id!==id);document.querySelector('.modal-ov')?.remove();renderPipeline();switchTab('summary')}
+function showAddDeal(){const mc=document.getElementById('modal-box');mc.innerHTML=`<div class="modal-ov" onclick="if(event.target===this)this.remove()"><div class="modal"><button class="modal-x" onclick="this.closest('.modal-ov').remove()">×</button><div class="modal-t">添加客户</div><div class="form-grid" style="grid-template-columns:1fr;margin-bottom:14px"><div class="form-group"><label class="form-label">商户名称</label><input id="ad-nm" class="form-input" placeholder="如：老王火锅5店"></div><div class="form-group"><label class="form-label">品类</label><select id="ad-cat" class="form-select"><option>中餐</option><option>火锅</option><option>烧烤</option><option>茶饮</option><option>西餐</option><option>快餐</option><option>小吃</option><option>其他</option></select></div><div class="form-group"><label class="form-label">推荐售卖包</label><select id="ad-pkg" class="form-select"><option value="starter">入门包</option><option value="growth">增长包</option><option value="flagship">旗舰包</option></select></div></div><div class="btn-group"><button class="btn btn-primary" onclick="confirmAdd()">添加</button></div></div></div>`}
+function confirmAdd(){const n=document.getElementById('ad-nm').value;if(!n){alert('请输入商户名称');return}addDeal(n,document.getElementById('ad-cat').value,document.getElementById('ad-pkg').value,1);document.querySelector('.modal-ov')?.remove();renderPipeline()}
 
 // ===== SUMMARY =====
-function renderSummary(){const sums=S.summaries;
-const stats=document.getElementById('summary-stats');
-const totalDeals=sums.length;const reasons={};const objections={};
-sums.forEach(s=>{s.dealReason.forEach(r=>{reasons[r]=(reasons[r]||0)+1});s.objection.forEach(o=>{objections[o]=(objections[o]||0)+1})});
-stats.innerHTML=`<div class="stat-card"><div class="num">${totalDeals}</div><div class="label">成交总数</div></div><div class="stat-card"><div class="num">${Object.keys(reasons).length?Object.entries(reasons).sort((a,b)=>b[1]-a[1])[0][0]:'-'}</div><div class="label">最常成交原因</div></div><div class="stat-card"><div class="num">${sums.filter(s=>s.pkg==='starter').length}/${sums.filter(s=>s.pkg==='growth').length}/${sums.filter(s=>s.pkg==='flagship').length}</div><div class="label">入门/增长/旗舰</div></div><div class="stat-card"><div class="num">${totalDeals?Math.round(sums.reduce((a,s)=>a+getDealDays(s),0)/totalDeals):'-'}天</div><div class="label">平均跟进天数</div></div>`;
-document.getElementById('summary-list').innerHTML=sums.length?sums.map((s,i)=>`<div class="summary-item"><span class="tag ${PKG_DEF[s.pkg]?.badge||''}">${PKG_DEF[s.pkg]?.name||s.pkg}</span><div style="flex:1"><div style="font-weight:700;font-size:14px">${s.name}</div><div style="font-size:12px;color:var(--text-secondary)">${s.category} · ${getDealDays(s)}天跟进 · ${s.dealReason.length?s.dealReason.join('/'):'未填写原因'} ${s.summaryText?'· '+s.summaryText:''}</div></div><div class="btn-group" style="margin:0"><button class="btn btn-outline btn-xs" onclick="editSummary(${i})">编辑</button><button class="btn btn-outline btn-xs" onclick="genCaseFromSummary(${i})">生成案例</button></div></div>`).join(''):'<div class="empty-state"><div class="icon">📊</div><p>暂无成交记录。在Pipeline中推进客户至"签约完成"后自动归档。</p></div>'}
-function editSummary(i){const s=S.summaries[i];const mc=document.getElementById('modal-container');
-mc.innerHTML=`<div class="modal-overlay" onclick="if(event.target===this)this.remove()"><div class="modal" style="position:relative"><button class="modal-close" onclick="this.closest('.modal-overlay').remove()">×</button><div class="modal-title">编辑售卖总结 · ${s.name}</div>
-<div class="form-group" style="margin-bottom:12px"><label class="form-label">成交原因（多选）</label><div class="check-group" id="s-reasons">${['产品打动','价格合适','同行在用','关系到位','其他'].map(r=>`<div class="check-opt ${s.dealReason.includes(r)?'active':''}" onclick="this.classList.toggle('active')">${r}</div>`).join('')}</div></div>
-<div class="form-group" style="margin-bottom:12px"><label class="form-label">主要异议点（多选）</label><div class="check-group" id="s-objections">${['太贵','不需要','竞品','效果质疑','其他'].map(o=>`<div class="check-opt ${s.objection.includes(o)?'active':''}" onclick="this.classList.toggle('active')">${o}</div>`).join('')}</div></div>
-<div class="form-group" style="margin-bottom:12px"><label class="form-label">一句话总结</label><input id="s-text" class="form-input" value="${s.summaryText||''}" placeholder="如：客户对AI接待功能印象深刻，当场签约"></div>
-<div class="btn-group"><button class="btn btn-primary" onclick="saveSummary(${i})">保存</button></div></div></div>`}
-function saveSummary(i){const s=S.summaries[i];s.dealReason=[...document.querySelectorAll('#s-reasons .check-opt.active')].map(el=>el.textContent);s.objection=[...document.querySelectorAll('#s-objections .check-opt.active')].map(el=>el.textContent);s.summaryText=document.getElementById('s-text').value;document.querySelector('.modal-overlay')?.remove();renderSummary()}
-function genCaseFromSummary(i){switchTab('casegen');const s=S.summaries[i];document.getElementById('c-category').value=s.category;document.getElementById('c-pkg').value=s.pkg;updateCasePreview()}
+function renderSummary(){const sums=S.summaries;const total=sums.length;const reasons={};sums.forEach(s=>s.dealReason.forEach(r=>reasons[r]=(reasons[r]||0)+1));const topR=Object.keys(reasons).length?Object.entries(reasons).sort((a,b)=>b[1]-a[1])[0][0]:'-';
+document.getElementById('sum-stats').innerHTML=`<div class="stcard"><div class="sn">${total}</div><div class="sl">成交总数</div></div><div class="stcard"><div class="sn">${topR}</div><div class="sl">最常成交原因</div></div><div class="stcard"><div class="sn">${sums.filter(s=>s.pkg==='starter').length}/${sums.filter(s=>s.pkg==='growth').length}/${sums.filter(s=>s.pkg==='flagship').length}</div><div class="sl">入门/增长/旗舰</div></div><div class="stcard"><div class="sn">${total?Math.round(sums.reduce((a,s)=>a+dealDays(s),0)/total):'-'}天</div><div class="sl">平均跟进天数</div></div>`;
+document.getElementById('sum-list').innerHTML=total?sums.map((s,i)=>`<div class="sitem"><span class="tg ${PD[s.pkg]?.b||''}">${PD[s.pkg]?.name||s.pkg}</span><div style="flex:1"><div style="font-weight:700;font-size:13px">${s.name}</div><div style="font-size:11px;color:var(--text-sec)">${s.category} · ${dealDays(s)}天 · ${s.dealReason.length?s.dealReason.join('/'):'未填原因'}</div></div><div class="btn-group" style="margin:0"><button class="btn btn-out btn-xs" onclick="editSum(${i})">编辑</button><button class="btn btn-out btn-xs" onclick="sumToCase(${i})">生成案例</button></div></div>`).join(''):'<div class="empty"><div class="ei">📊</div><p>暂无成交记录。Pipeline中推进至签约后自动归档。</p></div>'}
+function editSum(i){const s=S.summaries[i];const mc=document.getElementById('modal-box');mc.innerHTML=`<div class="modal-ov" onclick="if(event.target===this)this.remove()"><div class="modal"><button class="modal-x" onclick="this.closest('.modal-ov').remove()">×</button><div class="modal-t">编辑售卖总结 · ${s.name}</div><div class="form-group" style="margin-bottom:10px"><label class="form-label">成交原因（多选）</label><div class="cg" id="s-rsn">${['产品打动','价格合适','同行在用','关系到位','其他'].map(r=>`<div class="co ${s.dealReason.includes(r)?'on':''}" onclick="this.classList.toggle('on')">${r}</div>`).join('')}</div></div><div class="form-group" style="margin-bottom:10px"><label class="form-label">主要异议点（多选）</label><div class="cg" id="s-obj">${['太贵','不需要','竞品','效果质疑','其他'].map(o=>`<div class="co ${s.objection.includes(o)?'on':''}" onclick="this.classList.toggle('on')">${o}</div>`).join('')}</div></div><div class="form-group" style="margin-bottom:10px"><label class="form-label">一句话总结</label><input id="s-txt" class="form-input" value="${s.summaryText||''}" placeholder="如：客户对AI接待印象深刻"></div><div class="btn-group"><button class="btn btn-primary" onclick="saveSum(${i})">保存</button></div></div></div>`}
+function saveSum(i){const s=S.summaries[i];s.dealReason=[...document.querySelectorAll('#s-rsn .co.on')].map(el=>el.textContent);s.objection=[...document.querySelectorAll('#s-obj .co.on')].map(el=>el.textContent);s.summaryText=document.getElementById('s-txt').value;document.querySelector('.modal-ov')?.remove();renderSummary()}
+function sumToCase(i){switchTab('casegen');const s=S.summaries[i];document.getElementById('c-cat').value=s.category;document.getElementById('c-pkg').value=s.pkg;updCase()}
 
 // ===== CASE GENERATOR =====
-function updateCasePreview(){const cat=document.getElementById('c-category').value;const pkg=document.getElementById('c-pkg').value;const m1v=document.getElementById('c-metric1-val').value||'+XX%';const m1d=document.getElementById('c-metric1-desc').value||'核心指标';const m2v=document.getElementById('c-metric2-val').value||'+XX%';const m2d=document.getElementById('c-metric2-desc').value|| '效果指标';const pain=document.getElementById('c-pain').value||'线上曝光不足，自然客流持续下降';const slogan=document.getElementById('c-slogan').value||'让AI替你揽客';const strategy=document.getElementById('c-strategy').value||'做好新品介绍，讲好商户故事';
-const theme=CASE_THEMES[cat]||CASE_THEMES['中餐'];const pkgInfo=PKG_DEF[pkg];
-document.getElementById('case-preview').innerHTML=`<div class="case-card-html" style="background:linear-gradient(180deg,${theme.bg1},#030712)"><div class="case-hero" style="background:linear-gradient(180deg,${theme.bg1},#030712)"><div class="case-category">${theme.label} 某${cat}门店 · ${pkgInfo.name}</div><div class="case-headline" style="color:${theme.accent}">${m1v}</div><div class="case-subline">${m1d}</div></div><div class="case-body"><div class="case-section"><div class="case-section-title" style="color:${theme.accent}">痛点</div><div class="case-pain">${pain}</div></div><div class="case-section"><div class="case-section-title" style="color:${theme.accent}">金句</div><div class="case-sell" style="border-color:${theme.accent}">"${slogan}"</div></div><div class="case-section"><div class="case-section-title" style="color:${theme.accent}">售卖核心</div><div style="font-size:14px;line-height:1.7;opacity:.9">${strategy}</div></div><div class="case-section"><div class="case-section-title" style="color:${theme.accent}">效果</div><div class="case-metric"><div class="case-metric-item"><div class="val" style="color:${theme.accent}">${m1v}</div><div class="desc">${m1d}</div></div><div class="case-metric-item"><div class="val" style="color:${theme.accent}">${m2v}</div><div class="desc">${m2d}</div></div></div></div></div><div class="case-footer">智能体销售赋能工作台 · 案例卡片</div></div>`}
-function getCaseHTML(){return document.querySelector('.case-card-html')?.outerHTML||''}
-function copyCaseHTML(){navigator.clipboard.writeText(getCaseHTML()).then(()=>alert('HTML源码已复制'))}
-function downloadCaseHTML(){const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#111}img{max-width:100%}</style></head><body>${getCaseHTML()}</body></html>`;const blob=new Blob([html],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='案例卡片.html';a.click();URL.revokeObjectURL(a.href)}
+function updCase(){const cat=document.getElementById('c-cat').value,pkg=document.getElementById('c-pkg').value,m1v=document.getElementById('c-m1v').value||'+XX%',m1d=document.getElementById('c-m1d').value||'核心指标',m2v=document.getElementById('c-m2v').value||'+XX%',m2d=document.getElementById('c-m2d').value||'效果指标',pain=document.getElementById('c-pain').value||'线上曝光不足',slogan=document.getElementById('c-slogan').value||'让AI替你揽客',strat=document.getElementById('c-strat').value||'做好新品介绍';
+const theme=TH[cat]||TH['中餐'],pi=PD[pkg];
+document.getElementById('case-prev').innerHTML=`<div class="cprev-wrap"><div class="ccard" style="background:linear-gradient(180deg,${theme.bg},#030712)"><div class="chero" style="background:linear-gradient(180deg,${theme.bg},#030712)"><div class="ccat">${theme.em} 某${cat}门店 · ${pi.name}</div><div class="chead" style="color:${theme.ac}">${m1v}</div><div class="csub">${m1d}</div></div><div class="cbody"><div class="csec"><div class="csec-t" style="color:${theme.ac}">痛点</div><div class="cpain">${pain}</div></div><div class="csec"><div class="csec-t" style="color:${theme.ac}">金句</div><div class="csell" style="border-color:${theme.ac}">"${slogan}"</div></div><div class="csec"><div class="csec-t" style="color:${theme.ac}">售卖核心</div><div style="font-size:13px;line-height:1.7;opacity:.9">${strat}</div></div><div class="csec"><div class="csec-t" style="color:${theme.ac}">效果</div><div class="cmetric"><div class="cmetric-i"><div class="v" style="color:${theme.ac}">${m1v}</div><div class="d">${m1d}</div></div><div class="cmetric-i"><div class="v" style="color:${theme.ac}">${m2v}</div><div class="d">${m2d}</div></div></div></div></div><div class="cfooter">智能体销售赋能工作台 · 案例卡片</div></div></div>`}
+function cpCase(){navigator.clipboard.writeText(document.querySelector('.ccard')?.outerHTML||'').then(()=>alert('HTML源码已复制'))}
+function dlCase(){const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#111}</style></head><body>${document.querySelector('.ccard')?.outerHTML||''}</body></html>`;const b=new Blob([html],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='案例卡片.html';a.click()}
+
+// ===== LEARN =====
+function renderLearn(){const el=document.getElementById('learn-cats');
+el.innerHTML=KC.map(cat=>{const learned=cat.cards.filter((_,i)=>S.learned[cat.cat+'_'+i]).length;return`<div class="kc-cat"><div class="kc-cat-title">${cat.em} ${cat.cat} <span class="prog">${learned}/${cat.cards.length} 已学习</span></div><div class="kc-grid">${cat.cards.map((c,i)=>{const isL=S.learned[cat.cat+'_'+i];return`<div class="kcard ${isL?'kc-learned':''}" onclick="this.classList.toggle('flip')"><div class="kc-inner"><div class="kc-front"><div class="kcq">${c.q}</div><div class="kchint">点击翻转查看答案</div></div><div class="kc-back"><div class="kca">${c.a}</div><div class="kcacts"><button class="btn ${isL?'btn-out':'btn-primary'} btn-sm" onclick="event.stopPropagation();markLearned('${cat.cat}',${i})">${isL?'取消学习':'标记已学'}</button></div></div></div></div>`}).join('')}</div></div>`}).join('')}
+function markLearned(cat,idx){S.learned[cat+'_'+idx]=!S.learned[cat+'_'+idx];renderLearn()}
+
+// ===== EXAM =====
+function renderExam(){const el=document.getElementById('exam-area');
+if(!S.examQs&&!S.examDone){el.innerHTML=`<div style="text-align:center;padding:40px"><div style="font-size:48px;margin-bottom:16px">🎓</div><h3 style="margin-bottom:8px">品牌智能体产品认证考试</h3><p style="color:var(--text-sec);font-size:13px;margin-bottom:8px">共20题，每题5分，80分及格</p><p style="color:var(--text-sec);font-size:12px;margin-bottom:20px">题型：单选题 · 限时：无 · 交卷后即时出分</p>${S.examPassed?'<div class="exam-badge" style="margin-bottom:16px">已通过认证 🎉</div>':''}<button class="btn btn-primary" onclick="startExam()">开始考试</button></div>`;return}
+if(S.examDone){showExamResult();return}
+renderExamQ()}
+function startExam(){const shuffled=[...EQ].sort(()=>Math.random()-.5);S.examQs=shuffled.slice(0,20);S.examIdx=0;S.examCorrect=0;S.examAnswers=[];S.examDone=false;renderExamQ()}
+function renderExamQ(){const q=S.examQs[S.examIdx];const el=document.getElementById('exam-area');
+const dots=S.examQs.map((_,i)=>{let cls='exam-dot';if(i===S.examIdx)cls+=' cur';else if(S.examAnswers[i]!==undefined)cls+=S.examAnswers[i]?' right':' wrong';return`<div class="${cls}"></div>`}).join('');
+el.innerHTML=`<div class="exam-progress">${dots}</div><div style="font-size:12px;color:var(--text-sec);margin-bottom:12px">第${S.examIdx+1}/20题</div><div class="exam-q">${q.q}</div><div class="exam-opts" id="exam-opts">${q.opts.map((o,i)=>`<div class="exam-opt" data-i="${i}" onclick="selExamOpt(this)">${String.fromCharCode(65+i)}. ${o}</div>`).join('')}</div><div class="btn-group"><button class="btn btn-primary" id="exam-next" onclick="nextExamQ()" disabled>下一题</button></div>`}
+function selExamOpt(el){document.querySelectorAll('.exam-opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');document.getElementById('exam-next').disabled=false}
+function nextExamQ(){const sel=document.querySelector('.exam-opt.sel');if(!sel)return;const idx=parseInt(sel.dataset.i);const correct=idx===S.examQs[S.examIdx].ans;S.examAnswers[S.examIdx]=correct;if(correct)S.examCorrect++;
+// Show feedback
+document.querySelectorAll('.exam-opt').forEach(o=>{const i=parseInt(o.dataset.i);if(i===S.examQs[S.examIdx].ans)o.classList.add('correct');else if(i===idx&&!correct)o.classList.add('wrong');o.classList.add('disabled')});
+const btn=document.getElementById('exam-next');
+if(S.examIdx>=19){btn.textContent='查看成绩';btn.onclick=()=>{S.examDone=true;showExamResult()}}else{setTimeout(()=>{S.examIdx++;renderExamQ()},800)}}
+function showExamResult(){const score=S.examCorrect*5;const pass=score>=80;if(pass)S.examPassed=true;
+document.getElementById('exam-area').innerHTML=`<div class="exam-result"><div style="font-size:48px;margin-bottom:16px">${pass?'🎉':'😢'}</div><div class="exam-score">${score}</div><div style="font-size:14px;color:var(--text-sec);margin-top:8px">${S.examCorrect}/20 正确 · ${pass?'恭喜通过！':'未达80分及格线'}</div>${pass?'<div class="exam-badge">产品认证通过 🏅</div>':''}<div class="btn-group" style="justify-content:center;margin-top:20px"><button class="btn btn-primary" onclick="S.examQs=null;S.examDone=false;renderExam()">重新考试</button></div></div>`}
+
+// ===== PRACTICE =====
+function renderPractice(){const el=document.getElementById('practice-area');
+if(S.rpDone){const pct=Math.round(S.rpScore/S.rpTotal*100);el.innerHTML=`<div class="exam-result"><div style="font-size:48px;margin-bottom:16px">${pct>=80?'🌟':pct>=60?'👍':'💪'}</div><div class="exam-score">${pct}分</div><div style="font-size:14px;color:var(--text-sec);margin-top:8px">${RP[S.rpScene].name} · 得分${S.rpScore}/${S.rpTotal}</div><div style="margin-top:12px"><div class="rp-score-bar" style="max-width:300px;margin:0 auto"><div class="rp-score-fill" style="width:${pct}%;background:${pct>=80?'var(--success)':pct>=60?'var(--warning)':'var(--danger)'}"></div></div></div><div class="btn-group" style="justify-content:center;margin-top:20px"><button class="btn btn-primary" onclick="S.rpDone=false;S.rpScene=0;renderPractice()">换一个场景</button><button class="btn btn-sec" onclick="S.rpDone=false;S.rpScene=(S.rpScene+1)%${RP.length};renderPractice()">下一个场景</button></div></div>`;return}
+if(!S.rpRound&&S.rpRound!==0){el.innerHTML=`<div style="text-align:center;padding:40px"><div style="font-size:48px;margin-bottom:16px">🎭</div><h3 style="margin-bottom:16px">选择一个对练场景</h3><div style="display:flex;flex-direction:column;gap:10px;max-width:400px;margin:0 auto">${RP.map((s,i)=>`<button class="btn btn-out" style="justify-content:flex-start;padding:14px 20px" onclick="startRP(${i})"><span style="font-size:20px;margin-right:8px">🎬</span><div style="text-align:left"><div style="font-weight:700">${s.name}</div><div style="font-size:11px;color:var(--text-sec)">${s.desc}</div></div></button>`).join('')}</div></div>`;return}
+renderRPRound()}
+function startRP(i){S.rpScene=i;S.rpRound=0;S.rpScore=0;S.rpTotal=0;S.rpDone=false;renderRPRound()}
+function renderRPRound(){const scene=RP[S.rpScene];const round=scene.rounds[S.rpRound];const el=document.getElementById('practice-area');
+const prog=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px"><span class="ptag" style="background:var(--primary-bg);color:var(--primary)">${scene.name}</span><span style="font-size:12px;color:var(--text-sec)">第${S.rpRound+1}/${scene.rounds.length}轮</span><div style="flex:1"><div class="rp-score-bar"><div class="rp-score-fill" style="width:${S.rpTotal?Math.round(S.rpScore/S.rpTotal*100):0}%;background:var(--success)"></div></div></div></div>`;
+el.innerHTML=`<div class="rp-scene">${prog}<div class="rp-msg rp-merchant"><strong>🧑 商户：</strong>${round.merchant}</div><div style="font-size:12px;color:var(--text-sec);margin:12px 0 8px">选择你的回应：</div><div class="rp-opts" id="rp-opts">${round.opts.map((o,i)=>`<div class="rp-opt" data-i="${i}" onclick="selRP(this,${i})">${o.text}</div>`).join('')}</div><div id="rp-fb"></div></div>`}
+function selRP(el,idx){const round=RP[S.rpScene].rounds[S.rpRound];const opt=round.opts[idx];S.rpScore+=opt.score;S.rpTotal+=10;
+document.querySelectorAll('.rp-opt').forEach(o=>{const i=parseInt(o.dataset.i);o.classList.add('disabled');const score=round.opts[i].score;if(score>=8)o.classList.add('best');else if(score>=3)o.classList.add('ok');else o.classList.add('bad')});
+document.getElementById('rp-fb').innerHTML=`<div class="rp-feedback"><strong>${opt.score>=8?'✅ 最佳回应！':opt.score>=3?'⚠️ 可以更好':'❌ 不推荐'}</strong><br>${opt.fb}</div><div class="btn-group"><button class="btn btn-primary btn-sm" onclick="nextRPRound()">${S.rpRound>=RP[S.rpScene].rounds.length-1?'查看成绩':'下一轮 →'}</button></div>`}
+function nextRPRound(){if(S.rpRound>=RP[S.rpScene].rounds.length-1){S.rpDone=true;renderPractice()}else{S.rpRound++;renderRPRound()}}
+
+// ===== DASHBOARD =====
+function renderDash(){const total=DASH.reduce((a,r)=>a+r.deals,0);const totalAmt=DASH.reduce((a,r)=>a+r.amount,0);const avgCombo=Math.round(DASH.reduce((a,r)=>a+r.comboRate,0)/DASH.length);const avgArpu=Math.round(DASH.reduce((a,r)=>a+r.arpu,0)/DASH.length);
+document.getElementById('dash-stats').innerHTML=`<div class="ds-card"><div class="dv">${total}</div><div class="dl">总签约单数</div><div class="dc up">↑12%</div></div><div class="ds-card"><div class="dv">¥${(totalAmt/10000).toFixed(0)}万</div><div class="dl">总签约金额</div><div class="dc up">↑8%</div></div><div class="ds-card"><div class="dv">${avgCombo}%</div><div class="dl">平均组合购渗透率</div><div class="dc ${avgCombo>=15?'up':'down'}">${avgCombo>=15?'↑':'↓'}目标20%</div></div><div class="ds-card"><div class="dv">¥${avgArpu}</div><div class="dl">平均ARPU</div><div class="dc up">↑5%</div></div><div class="ds-card"><div class="dv">${DASH.length}</div><div class="dl">大区数</div></div>`;
+document.getElementById('dash-rank').innerHTML=`<table class="rank-table"><thead><tr><th>排名</th><th>大区</th><th>单数</th><th>金额</th><th>渗透率</th><th>ARPU</th></tr></thead><tbody>${[...DASH].sort((a,b)=>b.amount-a.amount).map((r,i)=>`<tr><td>${i+1}</td><td><strong>${r.name}</strong></td><td>${r.deals}</td><td>¥${(r.amount/10000).toFixed(1)}万</td><td class="${r.comboRate>=15?'good-cell':r.comboRate<10?'warn-cell':''}">${r.comboRate}%</td><td>¥${r.arpu}</td></tr>`).join('')}</tbody></table>`;
+document.getElementById('dash-combo').innerHTML=`<div style="display:flex;flex-direction:column;gap:12px">${DASH.map(r=>`<div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>${r.name}</span><span class="${r.comboRate>=15?'':'warn-cell'}">${r.comboRate}%</span></div><div class="rp-score-bar"><div class="rp-score-fill" style="width:${r.comboRate*2}%;background:${r.comboRate>=20?'var(--success)':r.comboRate>=10?'var(--warning)':'var(--danger)'}"></div></div></div>`).join('')}</div><div style="margin-top:16px;padding:10px 14px;background:var(--bg);border-radius:var(--radius-sm);font-size:12px;color:var(--text-sec)"><strong>洞察：</strong>华西组合购渗透率45%远超其他大区，华东仅5%需重点提升。获客宝占比从67%降至54%，效果广告占比升至31%。</div>`}
+
+// ===== GALLERY =====
+let galleryFilter='all';
+function renderGallery(){const filters=['all','中餐','火锅','烧烤','茶饮','海鲜','西餐','快餐'];
+document.getElementById('gallery-filters').innerHTML=filters.map(f=>`<div class="gf-opt ${galleryFilter===f?'on':''}" onclick="galleryFilter='${f}';renderGallery()">${f==='all'?'全部':f}</div>`).join('');
+const cases=galleryFilter==='all'?DEMO_CASES:DEMO_CASES.filter(c=>c.cat===galleryFilter);
+document.getElementById('gallery-grid').innerHTML=cases.map(c=>{const theme=TH[c.cat]||TH['中餐'];const pi=PD[c.pkg];return`<div class="gallery-item" onclick="viewCase('${c.cat}','${c.pkg}')"><div style="padding:20px;background:linear-gradient(180deg,${theme.bg},#030712);text-align:center"><div style="font-size:28px;font-weight:900;color:${theme.ac}">${c.headline}</div><div style="font-size:12px;opacity:.7">${c.sub}</div><div style="font-size:11px;opacity:.5;margin-top:4px">${theme.em} 某${c.cat}门店</div></div><div class="gallery-meta"><span class="gallery-tag ${pi.b}">${pi.name}</span><div class="gallery-info">${c.pain}</div></div></div>`}).join('')||'<div class="empty"><div class="ei">🏛️</div><p>暂无该品类案例</p></div>'}
+function viewCase(cat,pkg){switchTab('casegen');document.getElementById('c-cat').value=cat;document.getElementById('c-pkg').value=pkg;const dc=DEMO_CASES.find(c=>c.cat===cat&&c.pkg===pkg);if(dc){document.getElementById('c-m1v').value=dc.headline;document.getElementById('c-m1d').value=dc.sub;document.getElementById('c-pain').value=dc.pain;document.getElementById('c-slogan').value=dc.slogan;document.getElementById('c-strat').value=dc.strat}updCase()}
 
 // ===== INIT =====
-renderObjections();updateCasePreview();
-// Demo data
+renderObj();updCase();
 addDeal('老王火锅·8店','火锅','growth',2);addDeal('鲜茶道·3店','茶饮','starter',1);addDeal('川味坊·5店','中餐','starter',3);
 S.pipeline[0].followups=[{date:'6月10日',text:'首次拜访，老板对AI接待感兴趣'},{date:'6月11日',text:'发送方案，等待回复'}];
 </script>
